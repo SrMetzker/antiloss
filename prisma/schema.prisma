@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  createdBy String
+
+  establishments EstablishmentUser[]
+}
+
+model Establishment {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  createdBy String
+
+  users    EstablishmentUser[]
+  products Product[]
+}
+
+model EstablishmentUser {
+  id              String @id @default(uuid())
+  userId          String
+  establishmentId String
+
+  user          User          @relation(fields: [userId], references: [id])
+  establishment Establishment @relation(fields: [establishmentId], references: [id])
+
+  @@unique([userId, establishmentId])
+}
+
+model Product {
+  id              String   @id @default(uuid())
+  name            String
+  sku             String?
+  price           Float
+  establishmentId String
+  createdAt       DateTime @default(now())
+  createdBy String
+
+  establishment Establishment   @relation(fields: [establishmentId], references: [id])
+  stockMovements StockMovement[]
+}
+
+model StockMovement {
+  id        String   @id @default(uuid())
+  productId String
+  type      MovementType
+  quantity  Int
+  note      String?
+  createdAt DateTime @default(now())
+  createdBy String
+
+  product Product @relation(fields: [productId], references: [id])
+}
+
+enum MovementType {
+  IN
+  OUT
+  SALE
+  LOSS
+  ADJUSTMENT
+}
