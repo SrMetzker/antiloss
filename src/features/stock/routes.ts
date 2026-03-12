@@ -12,10 +12,12 @@ import {
 	enforceProductAccessFromBody,
 	enforceRecipeAccessByProductParam
 } from '../../middleware/authorization'
+import { getStockMovements } from './controllers/GetStockMovementsController'
 
 const router = Router()
 
 router.get('/', authorizeRoles('ADMIN', 'MANAGER', 'CHEF'), enforceEstablishmentScope('query'), getIngredients)
+router.get('/movements', authorizeRoles('ADMIN', 'MANAGER', 'CHEF'), enforceEstablishmentScope('query'), getStockMovements)
 router.post('/', authorizeRoles('ADMIN', 'MANAGER'), enforceEstablishmentScope('body'), createIngredient)
 router.put('/:id', authorizeRoles('ADMIN', 'MANAGER'), enforceIngredientAccessFromParam('id'), updateIngredient)
 router.delete('/:id', authorizeRoles('ADMIN', 'MANAGER'), enforceIngredientAccessFromParam('id'), deleteIngredient)
