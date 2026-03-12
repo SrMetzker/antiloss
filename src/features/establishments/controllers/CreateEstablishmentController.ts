@@ -6,7 +6,8 @@ const service = new CreateEstablishmentService()
 
 export const createEstablishment = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, createdBy } = req.body
+    const { name, createdBy: bodyCreatedBy } = req.body
+    const createdBy = req.user?.userId ?? bodyCreatedBy
 
     if (!name) {
       throw new ValidationError('O nome do estabelecimento é obrigatório!')

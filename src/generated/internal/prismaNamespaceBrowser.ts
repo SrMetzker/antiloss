@@ -55,7 +55,13 @@ export const ModelName = {
   Establishment: 'Establishment',
   EstablishmentUser: 'EstablishmentUser',
   Product: 'Product',
-  StockMovement: 'StockMovement'
+  Recipe: 'Recipe',
+  RecipeItem: 'RecipeItem',
+  Ingredient: 'Ingredient',
+  StockMovement: 'StockMovement',
+  Table: 'Table',
+  Order: 'Order',
+  OrderItem: 'OrderItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -79,6 +85,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   name: 'name',
+  role: 'role',
   createdAt: 'createdAt',
   createdBy: 'createdBy'
 } as const
@@ -118,9 +125,44 @@ export const ProductScalarFieldEnum = {
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
 
 
+export const RecipeScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy'
+} as const
+
+export type RecipeScalarFieldEnum = (typeof RecipeScalarFieldEnum)[keyof typeof RecipeScalarFieldEnum]
+
+
+export const RecipeItemScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  ingredientId: 'ingredientId',
+  quantity: 'quantity'
+} as const
+
+export type RecipeItemScalarFieldEnum = (typeof RecipeItemScalarFieldEnum)[keyof typeof RecipeItemScalarFieldEnum]
+
+
+export const IngredientScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  unit: 'unit',
+  currentStock: 'currentStock',
+  minimumStock: 'minimumStock',
+  establishmentId: 'establishmentId',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy'
+} as const
+
+export type IngredientScalarFieldEnum = (typeof IngredientScalarFieldEnum)[keyof typeof IngredientScalarFieldEnum]
+
+
 export const StockMovementScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
+  ingredientId: 'ingredientId',
   type: 'type',
   quantity: 'quantity',
   note: 'note',
@@ -129,6 +171,38 @@ export const StockMovementScalarFieldEnum = {
 } as const
 
 export type StockMovementScalarFieldEnum = (typeof StockMovementScalarFieldEnum)[keyof typeof StockMovementScalarFieldEnum]
+
+
+export const TableScalarFieldEnum = {
+  id: 'id',
+  number: 'number',
+  establishmentId: 'establishmentId',
+  createdAt: 'createdAt'
+} as const
+
+export type TableScalarFieldEnum = (typeof TableScalarFieldEnum)[keyof typeof TableScalarFieldEnum]
+
+
+export const OrderScalarFieldEnum = {
+  id: 'id',
+  tableId: 'tableId',
+  status: 'status',
+  total: 'total',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+export const OrderItemScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  productId: 'productId',
+  quantity: 'quantity',
+  price: 'price'
+} as const
+
+export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
 
 
 export const SortOrder = {

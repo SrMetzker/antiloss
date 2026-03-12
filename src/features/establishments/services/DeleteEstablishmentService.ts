@@ -12,10 +12,64 @@ export class DeleteEstablishmentService {
       throw new NotFoundError('Estabelecimento não encontrado!')
     }
 
-    // Remover produtos vinculados e, em seguida, o estabelecimento em uma transação
+    // Remover entidades relacionadas e o estabelecimento em uma transação
     await prisma.$transaction(async (tx) => {
+      await tx.recipeItem.deleteMany({
+        where: {
+          recipe: {
+            product: {
+              establishmentId: EstablishmentId
+            }
+          }
+        }
+      })
+
+      // deletar recipes e produtos antes de establishment
+      await tx.recipe.deleteMany({
+        where: {
+          product: {
+            establishmentId: EstablishmentId
+          }
+        }
+      })
+
       await tx.product.deleteMany({
         where: { establishmentId: EstablishmentId }
+      })
+
+      await tx.ingredient.deleteMany({
+        where: { establishmentId: EstablishmentId }
+      })
+
+      await tx.orderItem.deleteMany({
+        where: {
+          order: {
+            table: {
+              establishmentId: EstablishmentId
+            }
+          }
+        }
+      })
+
+      await tx.order.deleteMany({
+        where: {
+          table: {
+            establishmentId: EstablishmentId
+          }
+        }
+      })
+
+      await tx.table.deleteMany({
+        where: { establishmentId: EstablishmentId }
+      })
+
+      await tx.stockMovement.deleteMany({
+        where: {
+          OR: [
+            { ingredient: { establishmentId: EstablishmentId } },
+            { product: { establishmentId: EstablishmentId } }
+          ]
+        }
       })
 
       await tx.establishment.delete({

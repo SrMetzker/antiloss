@@ -2,9 +2,13 @@ import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import { AppError } from '../utils/errors'
 
+export type UserRole = 'ADMIN' | 'MANAGER' | 'BARTENDER' | 'CHEF'
+
 interface JwtPayload {
   userId: string
   email: string
+  role: UserRole
+  establishmentIds: string[]
   iat: number
   exp: number
 }

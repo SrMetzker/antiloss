@@ -1,11 +1,13 @@
 import { prisma } from '../../../config/database'
-import { NotFoundError } from '../../../utils/errors'
+import { InternalServerError, NotFoundError } from '../../../utils/errors'
 import bcrypt from 'bcryptjs'
 
 interface UpdateUserInput {
   email?: string
   password?: string
   name?: string
+  role?: 'ADMIN' | 'MANAGER' | 'BARTENDER' | 'CHEF' | undefined
+  establishmentIds?: string[] | undefined
 }
 
 export class UpdateUserService {
@@ -20,28 +22,57 @@ export class UpdateUserService {
     }
 
     // Se a senha for fornecida, faz hash dela
-    let hashedPassword
+    let hashedPassword: string
     if (input.password) {
       hashedPassword = await bcrypt.hash(input.password, 10)
     }
 
     // Atualiza apenas os campos fornecidos
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: {
-        ...(input.email && { email: input.email }),
-        ...(hashedPassword && { password: hashedPassword }),
-        ...(input.name && { name: input.name })
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        createdAt: true,
-        createdBy: true,
-        establishments: true
+    const updatedUser = await prisma.$transaction(async (tx) => {
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          ...(input.email && { email: input.email }),
+          ...(hashedPassword && { password: hashedPassword }),
+          ...(input.name && { name: input.name }),
+          ...(input.role && { role: input.role })
+        }
+      })
+
+      if (input.establishmentIds) {
+        await tx.establishmentUser.deleteMany({ where: { userId } })
+        if (input.establishmentIds.length > 0) {
+          await tx.establishmentUser.createMany({
+            data: input.establishmentIds.map((establishmentId) => ({
+              userId,
+              establishmentId
+            })),
+            skipDuplicates: true
+          })
+        }
       }
+
+      return tx.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          createdAt: true,
+          createdBy: true,
+          establishments: {
+            include: {
+              establishment: true
+            }
+          }
+        }
+      })
     })
+
+    if (!updatedUser) {
+      throw new InternalServerError('Falha ao atualizar usuario')
+    }
 
     return updatedUser
   }

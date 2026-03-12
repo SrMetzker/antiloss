@@ -1,12 +1,44 @@
 import { Request, Response, NextFunction } from 'express'
 import { CreateUserService } from '../services/CreateUserService'
-import { ValidationError } from '../../../utils/errors'
+import { AppError, ValidationError } from '../../../utils/errors'
 
 const service = new CreateUserService()
 
+const normalizeRole = (value: unknown): 'ADMIN' | 'MANAGER' | 'BARTENDER' | 'CHEF' | undefined => {
+  if (typeof value !== 'string' || !value.trim()) return undefined
+
+  const normalized = value.trim().toUpperCase()
+  if (normalized === 'ADMIN' || normalized === 'MANAGER' || normalized === 'BARTENDER' || normalized === 'CHEF') {
+    return normalized
+  }
+
+  throw new ValidationError('Role invalida. Use ADMIN, MANAGER, BARTENDER ou CHEF')
+}
+
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password, name, createdBy } = req.body
+    const { email, password, name, role, establishmentIds, createdBy: bodyCreatedBy } = req.body
+    const createdBy = req.user?.userId ?? bodyCreatedBy
+
+    let scopedRole = normalizeRole(role)
+    let scopedEstablishmentIds = establishmentIds as string[] | undefined
+
+    if (req.user?.role === 'MANAGER') {
+      if (role === 'ADMIN' || role === 'MANAGER') {
+        throw new AppError(403, 'Manager nao pode criar usuario com role ADMIN ou MANAGER')
+      }
+
+      const allowed = new Set(req.user.establishmentIds)
+      scopedEstablishmentIds = (establishmentIds as string[] | undefined)?.length
+        ? (establishmentIds as string[]).filter((id) => allowed.has(id))
+        : [...allowed]
+
+      if (!scopedEstablishmentIds.length) {
+        throw new AppError(403, 'Usuario deve ser vinculado a pelo menos um estabelecimento do manager')
+      }
+
+      scopedRole = role ?? 'BARTENDER'
+    }
 
     if (!email) {
       throw new ValidationError('O email é obrigatório!')
@@ -22,10 +54,12 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
     }
 
     const user = await service.execute({
-      email,
-      password,
-      name,
-      createdBy
+      email: email as string,
+      password: password as string,
+      name: name as string,
+      role: scopedRole,
+      establishmentIds: scopedEstablishmentIds,
+      createdBy: createdBy as string
     })
 
     res.status(201).json(user)

@@ -9,6 +9,27 @@
 * 🟢 You can import this file directly.
 */
 
+export const UserRole = {
+  ADMIN: 'ADMIN',
+  MANAGER: 'MANAGER',
+  BARTENDER: 'BARTENDER',
+  CHEF: 'CHEF'
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const UnitType = {
+  UNIT: 'UNIT',
+  ML: 'ML',
+  L: 'L',
+  G: 'G',
+  KG: 'KG'
+} as const
+
+export type UnitType = (typeof UnitType)[keyof typeof UnitType]
+
+
 export const MovementType = {
   IN: 'IN',
   OUT: 'OUT',
@@ -18,3 +39,12 @@ export const MovementType = {
 } as const
 
 export type MovementType = (typeof MovementType)[keyof typeof MovementType]
+
+
+export const OrderStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+  CANCELED: 'CANCELED'
+} as const
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
