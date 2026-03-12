@@ -6,7 +6,8 @@ const service = new CreateProductService()
 
 export const createProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, sku, price, establishmentId, createdBy } = req.body
+    const { name, sku, price, establishmentId, createdBy: bodyCreatedBy } = req.body
+    const createdBy = req.user?.userId ?? bodyCreatedBy
 
     if (!name) {
       throw new ValidationError('O nome do produto é obrigatório!')

@@ -60,7 +60,37 @@ export type EstablishmentUser = Prisma.EstablishmentUserModel
  */
 export type Product = Prisma.ProductModel
 /**
+ * Model Recipe
+ * 
+ */
+export type Recipe = Prisma.RecipeModel
+/**
+ * Model RecipeItem
+ * 
+ */
+export type RecipeItem = Prisma.RecipeItemModel
+/**
+ * Model Ingredient
+ * 
+ */
+export type Ingredient = Prisma.IngredientModel
+/**
  * Model StockMovement
  * 
  */
 export type StockMovement = Prisma.StockMovementModel
+/**
+ * Model Table
+ * 
+ */
+export type Table = Prisma.TableModel
+/**
+ * Model Order
+ * 
+ */
+export type Order = Prisma.OrderModel
+/**
+ * Model OrderItem
+ * 
+ */
+export type OrderItem = Prisma.OrderItemModel

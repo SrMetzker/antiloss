@@ -5,7 +5,7 @@ const service = new GetEstablishmentService()
 
 export const getEstablishments = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const establishments = await service.execute()
+    const establishments = await service.execute(req.user?.userId, req.user?.role)
     res.json(establishments)
   } catch (error) {
     next(error)

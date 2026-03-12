@@ -6,13 +6,30 @@ interface GetUsersInput {
 
 export class GetUsersService {
   async execute(input?: GetUsersInput) {
-    const where: any = {};
+    const where: any = {}
 
     if (input?.establishmentId) {
-      where.establishmentId = input.establishmentId
+      where.establishments = {
+        some: {
+          establishmentId: input.establishmentId
+        }
+      }
     }
 
     const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        createdBy: true,
+        establishments: {
+          include: {
+            establishment: true
+          }
+        }
+      },
       where,
       orderBy: { createdAt: 'desc' }
     })

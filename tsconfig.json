@@ -19,5 +19,8 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "esModuleInterop": true
-  }
+  },
+  "exclude": [
+    "prisma.config.ts"
+  ]
 }

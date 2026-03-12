@@ -22,6 +22,7 @@ export class LoginService {
         email: true,
         password: true,
         name: true,
+        role: true,
         establishments: {
           include: {
             establishment: true
@@ -44,7 +45,9 @@ export class LoginService {
     const token = jwt.sign(
       {
         userId: user.id,
-        email: user.email
+        email: user.email,
+        role: user.role,
+        establishmentIds: user.establishments.map((item) => item.establishmentId)
       },
       process.env.JWT_SECRET || 'default-secret',
       { expiresIn: '24h' }

@@ -12,10 +12,18 @@ model User {
   email     String   @unique
   password  String
   name      String
+  role      UserRole @default(BARTENDER)
   createdAt DateTime @default(now())
   createdBy String
 
   establishments EstablishmentUser[]
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  BARTENDER
+  CHEF
 }
 
 model Establishment {
@@ -46,22 +54,75 @@ model Product {
   price           Float
   establishmentId String
   createdAt       DateTime @default(now())
-  createdBy String
+  createdBy       String
+
+  recipe Recipe?
+  orderItems OrderItem[]
 
   establishment Establishment   @relation(fields: [establishmentId], references: [id])
   stockMovements StockMovement[]
 }
 
-model StockMovement {
-  id        String   @id @default(uuid())
-  productId String
-  type      MovementType
-  quantity  Int
-  note      String?
+model Recipe {
+  id        String @id @default(uuid())
+  productId String @unique
   createdAt DateTime @default(now())
   createdBy String
 
   product Product @relation(fields: [productId], references: [id])
+
+  items RecipeItem[]
+}
+
+model RecipeItem {
+  id           String  @id @default(uuid())
+  recipeId     String
+  ingredientId String
+  quantity     Float
+
+  recipe     Recipe     @relation(fields: [recipeId], references: [id])
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@unique([recipeId, ingredientId])
+}
+
+model Ingredient {
+  id              String   @id @default(uuid())
+  name            String
+  unit            UnitType
+  currentStock    Float    @default(0)
+  minimumStock    Float?
+  establishmentId String
+
+  createdAt DateTime @default(now())
+  createdBy String
+
+  stockMovements StockMovement[]
+  recipeItems    RecipeItem[]
+
+  @@unique([name, establishmentId])
+}
+
+enum UnitType {
+  UNIT
+  ML
+  L
+  G
+  KG
+}
+
+model StockMovement {
+  id           String     @id @default(uuid())
+  productId    String?
+  ingredientId String?
+  type         MovementType
+  quantity     Float
+  note         String?
+  createdAt    DateTime   @default(now())
+  createdBy    String
+
+  product    Product?    @relation(fields: [productId], references: [id])
+  ingredient Ingredient? @relation(fields: [ingredientId], references: [id])
 }
 
 enum MovementType {
@@ -70,4 +131,44 @@ enum MovementType {
   SALE
   LOSS
   ADJUSTMENT
+}
+
+model Table {
+  id              String   @id @default(uuid())
+  number          Int
+  establishmentId String
+  createdAt       DateTime @default(now())
+
+  orders Order[]
+
+  @@unique([number, establishmentId])
+}
+
+model Order {
+  id        String   @id @default(uuid())
+  tableId   String
+  status    OrderStatus
+  total     Float
+  createdAt DateTime @default(now())
+
+  table Table @relation(fields: [tableId], references: [id])
+
+  items OrderItem[]
+}
+
+enum OrderStatus {
+  OPEN
+  CLOSED
+  CANCELED
+}
+
+model OrderItem {
+  id        String @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Float
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
 }
