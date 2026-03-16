@@ -17,7 +17,7 @@ export interface User {
   id: string
   name: string
   email: string
-  role?: 'admin' | 'bartender' | 'manager'
+  role?: 'admin' | 'bartender' | 'manager' | 'chef'
   createdAt?: string
   createdBy?: string
   establishments?: UserEstablishmentLink[]
