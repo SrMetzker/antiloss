@@ -5,8 +5,22 @@ export class GetTablesService {
     const where = establishmentId ? { establishmentId } : {}
     const tables = await prisma.table.findMany({
       where,
-      orderBy: { number: 'asc' }
+      orderBy: { number: 'asc' },
+      select: {
+        id: true,
+        number: true,
+        establishmentId: true,
+        orders: {
+          where: { status: 'OPEN' },
+          select: { id: true },
+          take: 1,
+        },
+      }
     })
-    return tables
+
+    return tables.map(({ orders, ...table }) => ({
+      ...table,
+      activeOrderId: orders[0]?.id ?? null,
+    }))
   }
 }

@@ -245,6 +245,9 @@ export const useRemoveItemFromOpenOrder = () => {
 export const useAllOrders = () =>
   useQuery({ queryKey: ['orders'], queryFn: ordersApi.getAllOrders })
 
+export const useKitchenOrders = () =>
+  useQuery({ queryKey: ['kitchen-orders'], queryFn: ordersApi.getKitchenOrders, refetchInterval: 10000 })
+
 // Reports
 export const useReports = () =>
   useQuery({ queryKey: ['reports'], queryFn: reportsApi.getSummary })

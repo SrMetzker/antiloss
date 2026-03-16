@@ -6,17 +6,20 @@ import { useAuthStore } from '@/store/authStore'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { toast } from '@/store/toastStore'
+import { getDefaultRouteForRole } from '@/utils/rbac'
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate()
-  const { login, isAuthenticated } = useAuthStore()
+  const { login, isAuthenticated, user } = useAuthStore()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  if (isAuthenticated) return <Navigate to="/dashboard" replace />
+  const defaultRoute = getDefaultRouteForRole(user?.role)
+
+  if (isAuthenticated && defaultRoute !== '/login') return <Navigate to={defaultRoute} replace />
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,7 +29,7 @@ export const LoginPage: React.FC = () => {
       const { user, token } = await authApi.login({ email, password })
       login(user, token)
       toast.success(`Welcome back, ${user.name}!`)
-      navigate('/dashboard', { replace: true })
+      navigate(getDefaultRouteForRole(user.role), { replace: true })
     } catch (error) {
       setError(extractApiErrorMessage(error, 'Email ou senha inválidos'))
     } finally {

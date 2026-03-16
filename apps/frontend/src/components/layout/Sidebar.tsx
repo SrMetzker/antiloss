@@ -2,6 +2,7 @@ import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard,
+  ChefHat,
   UtensilsCrossed,
   Package,
   BookOpen,
@@ -15,22 +16,25 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
+import { hasAnyRole, ROUTE_ROLE_MAP, type AppRole } from '@/utils/rbac'
 
 interface NavItem {
   path: string
   icon: React.ReactNode
   label: string
+  allowedRoles: readonly AppRole[]
 }
 
 const navItems: NavItem[] = [
-  { path: '/dashboard', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard' },
-  { path: '/tables', icon: <UtensilsCrossed className="w-5 h-5" />, label: 'Tables' },
-  { path: '/products', icon: <Package className="w-5 h-5" />, label: 'Products' },
-  { path: '/recipes', icon: <BookOpen className="w-5 h-5" />, label: 'Recipes' },
-  { path: '/inventory', icon: <Warehouse className="w-5 h-5" />, label: 'Inventory' },
-  { path: '/reports', icon: <BarChart3 className="w-5 h-5" />, label: 'Reports' },
-  { path: '/establishments', icon: <Building2 className="w-5 h-5" />, label: 'Establishments' },
-  { path: '/users', icon: <Users className="w-5 h-5" />, label: 'Users' },
+  { path: '/dashboard', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard', allowedRoles: ROUTE_ROLE_MAP['/dashboard'] },
+  { path: '/kitchen', icon: <ChefHat className="w-5 h-5" />, label: 'Kitchen', allowedRoles: ROUTE_ROLE_MAP['/kitchen'] },
+  { path: '/tables', icon: <UtensilsCrossed className="w-5 h-5" />, label: 'Tables', allowedRoles: ROUTE_ROLE_MAP['/tables'] },
+  { path: '/products', icon: <Package className="w-5 h-5" />, label: 'Products', allowedRoles: ROUTE_ROLE_MAP['/products'] },
+  { path: '/recipes', icon: <BookOpen className="w-5 h-5" />, label: 'Recipes', allowedRoles: ROUTE_ROLE_MAP['/recipes'] },
+  { path: '/inventory', icon: <Warehouse className="w-5 h-5" />, label: 'Inventory', allowedRoles: ROUTE_ROLE_MAP['/inventory'] },
+  { path: '/reports', icon: <BarChart3 className="w-5 h-5" />, label: 'Reports', allowedRoles: ROUTE_ROLE_MAP['/reports'] },
+  { path: '/establishments', icon: <Building2 className="w-5 h-5" />, label: 'Establishments', allowedRoles: ROUTE_ROLE_MAP['/establishments'] },
+  { path: '/users', icon: <Users className="w-5 h-5" />, label: 'Users', allowedRoles: ROUTE_ROLE_MAP['/users'] },
 ]
 
 interface SidebarProps {
@@ -41,6 +45,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
   const { user, logout, activeEstablishmentId, setActiveEstablishmentId } = useAuthStore()
   const navigate = useNavigate()
+  const visibleNavItems = navItems.filter((item) => hasAnyRole(user?.role, item.allowedRoles))
 
   const handleLogout = () => {
     logout()
@@ -72,7 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
 
       {/* Nav */}
       <nav className="flex-1 px-2 py-4 flex flex-col gap-1">
-        {navItems.map((item) => (
+        {visibleNavItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}

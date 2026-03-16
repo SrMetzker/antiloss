@@ -6,6 +6,7 @@ type BackendTable = {
   id: string
   number: number
   establishmentId: string
+  activeOrderId?: string | null
 }
 
 type BackendOrder = {
@@ -67,22 +68,11 @@ export const ordersApi = {
       number: table.number,
       establishmentId: table.establishmentId,
       capacity: 4,
-      status: 'free' as const,
-      activeOrderId: undefined,
+      status: table.activeOrderId ? 'occupied' as const : 'free' as const,
+      activeOrderId: table.activeOrderId ?? undefined,
     }))
 
-    const orders = await ordersApi.getAllOrders()
-    const openByTable = new Map(
-      orders
-        .filter((order) => order.status === 'open')
-        .map((order) => [order.tableId, order.id])
-    )
-
-    return tables.map((table) => ({
-      ...table,
-      status: openByTable.has(table.id) ? 'occupied' : 'free',
-      activeOrderId: openByTable.get(table.id),
-    }))
+    return tables
   },
 
   createTable: async (number: number): Promise<Table> => {
@@ -170,5 +160,18 @@ export const ordersApi = {
       const source = response.data.find((item) => item.id === order.id)
       return source?.table?.establishmentId === establishmentId
     })
+  },
+
+  getKitchenOrders: async (): Promise<Order[]> => {
+    const { establishmentId } = getContext()
+    if (!establishmentId) {
+      throw new Error('Estabelecimento não selecionado')
+    }
+
+    const response = await apiClient.get<BackendOrder[]>('/orders/kitchen', {
+      params: { establishmentId },
+    })
+
+    return response.data.map(mapOrder)
   },
 }

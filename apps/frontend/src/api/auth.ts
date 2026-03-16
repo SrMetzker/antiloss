@@ -1,6 +1,7 @@
 import axios from 'axios'
 import type { AuthResponse, LoginCredentials, User } from '@/types'
 import apiClient from '@/api/client'
+import { normalizeRole } from '@/utils/rbac'
 
 type AuthPayload = AuthResponse | { data: AuthResponse }
 
@@ -16,8 +17,7 @@ const toUser = (value: unknown): User => {
   if (!value || typeof value !== 'object') return fallback
 
   const v = value as Record<string, unknown>
-  const role = v.role
-  const normalizedRole = role === 'admin' || role === 'manager' || role === 'bartender' ? role : 'bartender'
+  const normalizedRole = normalizeRole(v.role) ?? 'bartender'
 
   const rawEstablishments = Array.isArray(v.establishments) ? v.establishments : []
   const establishments = rawEstablishments

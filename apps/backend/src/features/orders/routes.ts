@@ -17,10 +17,10 @@ import {
 
 const router = Router()
 
-router.get('/tables', authorizeRoles('ADMIN', 'MANAGER', 'BARTENDER', 'CHEF'), enforceEstablishmentScope('query'), getTables)
+router.get('/tables', authorizeRoles('ADMIN', 'MANAGER', 'BARTENDER'), enforceEstablishmentScope('query'), getTables)
 router.post('/tables', authorizeRoles('ADMIN', 'MANAGER', 'BARTENDER'), enforceEstablishmentScope('body'), createTable)
 
-router.get('/', authorizeRoles('ADMIN', 'MANAGER', 'BARTENDER', 'CHEF'), enforceEstablishmentScope('query'), enforceTableAccessFromQuery('tableId'), getOrders)
+router.get('/', authorizeRoles('ADMIN', 'MANAGER', 'BARTENDER'), enforceEstablishmentScope('query'), enforceTableAccessFromQuery('tableId'), getOrders)
 router.get('/kitchen', authorizeRoles('ADMIN', 'MANAGER', 'CHEF'), enforceEstablishmentScope('query'), getKitchenOrders)
 router.post('/', authorizeRoles('ADMIN', 'MANAGER', 'BARTENDER'), enforceTableAccessFromBody('tableId'), createOrder)
 router.post('/:id/items', authorizeRoles('ADMIN', 'MANAGER', 'BARTENDER'), enforceOrderAccessFromParam('id'), addOrderItem)
