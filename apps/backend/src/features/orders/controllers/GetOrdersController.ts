@@ -5,11 +5,12 @@ const service = new GetOrdersService()
 
 export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { tableId, establishmentId } = req.query
+    const { tableId, establishmentId, status } = req.query
 
     const orders = await service.execute({
       tableId: tableId as string,
-      establishmentId: establishmentId as string
+      establishmentId: establishmentId as string,
+      status: status as string
     })
     res.json(orders)
   } catch (error) {
