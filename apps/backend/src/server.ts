@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { errorHandler } from './middleware/errorHandler'
 import { authenticateToken } from './middleware/auth'
+import { ensureSubscriptionAccess } from './middleware/subscription'
 import establishmentsRoutes from './features/establishments/routes'
 import productsRoutes from './features/products/routes'
 import usersRoutes from './features/users/routes'
@@ -17,11 +18,11 @@ app.use(cors())
 app.use(express.json())
 
 // Routes
-app.use('/establishments', authenticateToken, establishmentsRoutes)
-app.use('/products', authenticateToken, productsRoutes)
-app.use('/stock', authenticateToken, stockRoutes)
-app.use('/orders', authenticateToken, ordersRoutes)
-app.use('/recipes', authenticateToken, recipesRoutes)
+app.use('/establishments', authenticateToken, ensureSubscriptionAccess, establishmentsRoutes)
+app.use('/products', authenticateToken, ensureSubscriptionAccess, productsRoutes)
+app.use('/stock', authenticateToken, ensureSubscriptionAccess, stockRoutes)
+app.use('/orders', authenticateToken, ensureSubscriptionAccess, ordersRoutes)
+app.use('/recipes', authenticateToken, ensureSubscriptionAccess, recipesRoutes)
 app.use('/users', usersRoutes) // Login não precisa de auth
 
 // Error handling

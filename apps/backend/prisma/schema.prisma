@@ -32,8 +32,9 @@ model Establishment {
   createdAt DateTime @default(now())
   createdBy String
 
-  users    EstablishmentUser[]
-  products Product[]
+  users        EstablishmentUser[]
+  products     Product[]
+  subscription Subscription?
 }
 
 model EstablishmentUser {
@@ -171,4 +172,88 @@ model OrderItem {
 
   order   Order   @relation(fields: [orderId], references: [id])
   product Product @relation(fields: [productId], references: [id])
+}
+
+model Plan {
+  id            String   @id @default(uuid())
+  code          String   @unique
+  name          String
+  description   String?
+  priceCents    Int
+  currency      String   @default("EUR")
+  billingCycle  BillingCycle @default(MONTHLY)
+  trialDays     Int      @default(14)
+  maxUsers      Int
+  maxProducts   Int
+  maxTables     Int?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  subscriptions Subscription[]
+}
+
+enum BillingCycle {
+  MONTHLY
+  YEARLY
+}
+
+model Subscription {
+  id                 String   @id @default(uuid())
+  establishmentId    String   @unique
+  planId             String
+  status             SubscriptionStatus
+  startedAt          DateTime @default(now())
+  trialEndsAt        DateTime?
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+  canceledAt         DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  establishment Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+  plan          Plan          @relation(fields: [planId], references: [id])
+  billings      BillingHistory[]
+
+  @@index([status])
+  @@index([planId])
+}
+
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  SUSPENDED
+  CANCELLED
+}
+
+model BillingHistory {
+  id                String        @id @default(uuid())
+  subscriptionId    String
+  provider          PaymentProvider
+  providerReference String?
+  amountCents       Int
+  currency          String        @default("EUR")
+  status            BillingStatus
+  dueAt             DateTime?
+  paidAt            DateTime?
+  createdAt         DateTime      @default(now())
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId, createdAt])
+  @@index([status])
+}
+
+enum BillingStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentProvider {
+  MANUAL
+  STRIPE
+  MOLLIE
+  ADYEN
 }

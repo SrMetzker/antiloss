@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate, Navigate } from 'react-router-dom'
+import { useNavigate, Navigate, Link } from 'react-router-dom'
 import { Wine, Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { authApi, extractApiErrorMessage } from '@/api/auth'
 import { useAuthStore } from '@/store/authStore'
@@ -106,6 +106,12 @@ export const LoginPage: React.FC = () => {
 
         <p className="text-center text-xs text-gray-500 mt-4">
           Use as suas credenciais para entrar.
+        </p>
+        <p className="text-center text-xs text-gray-400 mt-2">
+          Ainda nao tem conta?{' '}
+          <Link to="/register" className="text-brand hover:text-brand-light transition-colors">
+            Criar conta
+          </Link>
         </p>
       </div>
     </div>

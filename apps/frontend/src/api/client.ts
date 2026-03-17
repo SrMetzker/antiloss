@@ -22,6 +22,13 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (res) => res,
   (error: AxiosError) => {
+    if (error.response?.status === 402) {
+      if (window.location.pathname !== '/subscription') {
+        window.location.href = '/subscription'
+      }
+      return Promise.reject(error)
+    }
+
     if (error.response?.status === 401 || error.response?.status === 403) {
       useAuthStore.getState().logout()
       window.location.href = '/login'

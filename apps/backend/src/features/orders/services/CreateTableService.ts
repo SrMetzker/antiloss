@@ -1,5 +1,5 @@
 import { prisma } from '../../../config/database'
-import { NotFoundError } from '../../../utils/errors'
+import { enforceTableLimit } from '../../../utils/planLimits'
 
 interface CreateTableInput {
   number: number
@@ -18,6 +18,8 @@ export class CreateTableService {
     if (exists) {
       throw new Error('Table already exists for this establishment')
     }
+
+    await enforceTableLimit(input.establishmentId)
 
     const table = await prisma.table.create({
       data: {

@@ -1251,6 +1251,11 @@ export type RecipeItemFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Skip the first `n` RecipeItems.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of RecipeItems.
+   */
   distinct?: Prisma.RecipeItemScalarFieldEnum | Prisma.RecipeItemScalarFieldEnum[]
 }
 

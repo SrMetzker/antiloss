@@ -1,6 +1,7 @@
 import { prisma } from '../../../config/database'
 import bcrypt from 'bcryptjs'
 import { InternalServerError } from '../../../utils/errors'
+import { enforceUserLimitForEstablishments } from '../../../utils/planLimits'
 
 interface CreateUserInput {
   email: string
@@ -13,6 +14,10 @@ interface CreateUserInput {
 
 export class CreateUserService {
   async execute(input: CreateUserInput) {
+    if (input.establishmentIds?.length) {
+      await enforceUserLimitForEstablishments(input.establishmentIds)
+    }
+
     // Faz hash da senha com salt rounds de 10
     const hashedPassword = await bcrypt.hash(input.password, 10)
 

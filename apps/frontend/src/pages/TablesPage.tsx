@@ -298,7 +298,7 @@ export const TablesPage: React.FC = () => {
 
   const [selectedTable, setSelectedTable] = useState<Table | null>(null)
   const [showCreateTable, setShowCreateTable] = useState(false)
-  const [newTableNumber, setNewTableNumber] = useState<number>(1)
+  const [newTableNumber, setNewTableNumber] = useState<number>(0)
 
   const freeTables = tables?.filter((item) => item.status === 'free').length ?? 0
   const occupiedTables = tables?.filter((item) => item.status === 'occupied').length ?? 0
@@ -368,7 +368,7 @@ export const TablesPage: React.FC = () => {
           type="number"
           min={1}
           value={newTableNumber}
-          onChange={(event) => setNewTableNumber(Number(event.target.value) || 1)}
+          onChange={(event) => setNewTableNumber(Number(event.target.value) || 0)}
         />
       </Modal>
     </div>

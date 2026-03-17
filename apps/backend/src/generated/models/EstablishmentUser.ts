@@ -1166,6 +1166,11 @@ export type EstablishmentUserFindManyArgs<ExtArgs extends runtime.Types.Extensio
    * Skip the first `n` EstablishmentUsers.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of EstablishmentUsers.
+   */
   distinct?: Prisma.EstablishmentUserScalarFieldEnum | Prisma.EstablishmentUserScalarFieldEnum[]
 }
 

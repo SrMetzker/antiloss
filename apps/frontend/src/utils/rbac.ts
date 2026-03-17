@@ -12,6 +12,7 @@ type AppRoute =
   | '/reports'
   | '/establishments'
   | '/users'
+  | '/subscription'
 
 const SALES_ROLES: readonly AppRole[] = ['admin', 'manager']
 
@@ -25,6 +26,7 @@ export const ROUTE_ROLE_MAP: Record<AppRoute, readonly AppRole[]> = {
   '/reports': SALES_ROLES,
   '/establishments': ['admin', 'manager', 'bartender', 'chef'],
   '/users': ['admin', 'manager'],
+  '/subscription': ['admin', 'manager'],
 }
 
 export const normalizeRole = (value: unknown): AppRole | null => {

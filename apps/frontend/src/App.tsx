@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Layout } from '@/components/layout/Layout'
 import { ToastContainer } from '@/components/ui/Toast'
 import { LoginPage } from '@/pages/LoginPage'
+import { RegisterPage } from '@/pages/RegisterPage'
 import { DashboardPage } from '@/pages/DashboardPage'
 import { KitchenPage } from '@/pages/KitchenPage'
 import { TablesPage } from '@/pages/TablesPage'
@@ -12,6 +13,7 @@ import { InventoryPage } from '@/pages/InventoryPage'
 import { ReportsPage } from '@/pages/ReportsPage'
 import { EstablishmentsPage } from '@/pages/EstablishmentsPage'
 import { UsersPage } from '@/pages/UsersPage'
+import { SubscriptionPage } from '@/pages/SubscriptionPage'
 import { RoleGuard } from '@/components/auth/RoleGuard'
 import { useAuthStore } from '@/store/authStore'
 import { getDefaultRouteForRole, ROUTE_ROLE_MAP } from '@/utils/rbac'
@@ -32,6 +34,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route element={<Layout />}>
             <Route path="/" element={<HomeRedirect />} />
             <Route
@@ -103,6 +106,14 @@ export default function App() {
               element={
                 <RoleGuard allowedRoles={ROUTE_ROLE_MAP['/users']}>
                   <UsersPage />
+                </RoleGuard>
+              }
+            />
+            <Route
+              path="/subscription"
+              element={
+                <RoleGuard allowedRoles={ROUTE_ROLE_MAP['/subscription']}>
+                  <SubscriptionPage />
                 </RoleGuard>
               }
             />

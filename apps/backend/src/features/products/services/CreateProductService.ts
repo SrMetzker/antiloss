@@ -1,5 +1,6 @@
 import { prisma } from '../../../config/database'
 import { NotFoundError } from '../../../utils/errors'
+import { enforceProductLimit } from '../../../utils/planLimits'
 
 interface CreateProductInput {
   name: string
@@ -18,6 +19,8 @@ export class CreateProductService {
     if (!establishment) {
       throw new NotFoundError('Não foi possível identificar o estabelecimento para o produto!')
     }
+
+    await enforceProductLimit(input.establishmentId)
 
     const product = await prisma.product.create({
       data: {

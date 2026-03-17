@@ -10,6 +10,7 @@ import {
   Warehouse,
   Building2,
   Users,
+  CreditCard,
   LogOut,
   Wine,
   ChevronLeft,
@@ -35,6 +36,7 @@ const navItems: NavItem[] = [
   { path: '/reports', icon: <BarChart3 className="w-5 h-5" />, label: 'Reports', allowedRoles: ROUTE_ROLE_MAP['/reports'] },
   { path: '/establishments', icon: <Building2 className="w-5 h-5" />, label: 'Establishments', allowedRoles: ROUTE_ROLE_MAP['/establishments'] },
   { path: '/users', icon: <Users className="w-5 h-5" />, label: 'Users', allowedRoles: ROUTE_ROLE_MAP['/users'] },
+  { path: '/subscription', icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', allowedRoles: ROUTE_ROLE_MAP['/subscription'] },
 ]
 
 interface SidebarProps {

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { AuthResponse, LoginCredentials, User } from '@/types'
+import type { AuthResponse, LoginCredentials, PublicPlan, RegisterPayload, User } from '@/types'
 import apiClient from '@/api/client'
 import { normalizeRole } from '@/utils/rbac'
 
@@ -111,6 +111,16 @@ export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     const response = await apiClient.post<AuthPayload>('/users/login', credentials)
     return toAuthResponse(response.data)
+  },
+
+  register: async (payload: RegisterPayload): Promise<AuthResponse> => {
+    const response = await apiClient.post<AuthPayload>('/users/register', payload)
+    return toAuthResponse(response.data)
+  },
+
+  getPublicPlans: async (): Promise<PublicPlan[]> => {
+    const response = await apiClient.get<PublicPlan[]>('/users/plans/public')
+    return response.data
   },
 
   logout: async (): Promise<void> => {

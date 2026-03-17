@@ -40,6 +40,51 @@ export interface AuthResponse {
   expiresIn?: string
 }
 
+export type BillingCycle = 'MONTHLY' | 'YEARLY'
+
+export interface PublicPlan {
+  id: string
+  code: string
+  name: string
+  description?: string | null
+  priceCents: number
+  currency: string
+  billingCycle: BillingCycle
+  trialDays: number
+  maxUsers: number
+  maxProducts: number
+  maxTables?: number | null
+}
+
+export interface RegisterPayload {
+  email: string
+  password: string
+  name: string
+  establishmentName: string
+  planCode?: string
+}
+
+export interface SubscriptionStatusResponse {
+  id: string
+  establishmentId: string
+  planId: string
+  status: 'TRIAL' | 'ACTIVE' | 'SUSPENDED' | 'CANCELLED'
+  trialEndsAt?: string | null
+  currentPeriodEnd?: string | null
+  plan: {
+    code: string
+    name: string
+    priceCents: number
+    currency: string
+    billingCycle: BillingCycle
+    trialDays: number
+  }
+  establishment: {
+    id: string
+    name: string
+  }
+}
+
 // ─── Products ────────────────────────────────────────────────────────────────
 export type ProductCategory =
   | 'spirits'
@@ -173,12 +218,16 @@ export interface UserCreateInput {
   name: string
   email: string
   password: string
+  role?: 'admin' | 'manager' | 'bartender' | 'chef'
+  establishmentIds?: string[]
 }
 
 export interface UserUpdateInput {
   name?: string
   email?: string
   password?: string
+  role?: 'admin' | 'manager' | 'bartender' | 'chef'
+  establishmentIds?: string[]
 }
 
 export interface EstablishmentCreateInput {
