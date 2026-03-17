@@ -3,32 +3,50 @@ import { Edit2, Plus, Trash2, UserRound } from 'lucide-react'
 import {
   useCreateUser,
   useDeleteUser,
+  useEstablishments,
   useUpdateUser,
   useUsers,
 } from '@/hooks'
+import { useAuthStore } from '@/store/authStore'
 import { Button } from '@/components/ui/Button'
 import { ConfirmModal, Modal } from '@/components/ui/Modal'
 import { EmptyState, PageLoader } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
+import { toast } from '@/store/toastStore'
 import type { User } from '@/types'
 
 type FormState = {
   name: string
   email: string
   password: string
+  role: 'admin' | 'manager' | 'bartender' | 'chef'
+  establishmentIds: string[]
 }
 
 const defaultForm: FormState = {
   name: '',
   email: '',
   password: '',
+  role: 'bartender',
+  establishmentIds: [],
+}
+
+const ROLE_LABELS: Record<FormState['role'], string> = {
+  admin: 'Administrador',
+  manager: 'Gerente',
+  bartender: 'Atendente',
+  chef: 'Chef de Cozinha',
 }
 
 export const UsersPage: React.FC = () => {
+  const { user: loggedUser, activeEstablishmentId } = useAuthStore()
   const { data, isLoading } = useUsers()
+  const { data: establishments } = useEstablishments()
   const createMutation = useCreateUser()
   const updateMutation = useUpdateUser()
   const deleteMutation = useDeleteUser()
+
+  const isAdmin = loggedUser?.role === 'admin'
 
   const [modalOpen, setModalOpen] = useState(false)
   const [confirmId, setConfirmId] = useState<string | null>(null)
@@ -37,7 +55,14 @@ export const UsersPage: React.FC = () => {
 
   const openCreate = () => {
     setEditing(null)
-    setForm(defaultForm)
+    setForm({
+      ...defaultForm,
+      establishmentIds: isAdmin
+        ? []
+        : activeEstablishmentId
+          ? [activeEstablishmentId]
+          : [],
+    })
     setModalOpen(true)
   }
 
@@ -47,12 +72,19 @@ export const UsersPage: React.FC = () => {
       name: item.name,
       email: item.email,
       password: '',
+      role: item.role ?? 'bartender',
+      establishmentIds: item.establishments?.map((link) => link.establishmentId) ?? [],
     })
     setModalOpen(true)
   }
 
   const handleSubmit = async (event?: React.FormEvent) => {
     event?.preventDefault()
+
+    if (isAdmin && form.establishmentIds.length === 0) {
+      toast.error('Selecione ao menos um estabelecimento para o usuário')
+      return
+    }
 
     if (editing) {
       await updateMutation.mutateAsync({
@@ -61,6 +93,8 @@ export const UsersPage: React.FC = () => {
           name: form.name,
           email: form.email,
           password: form.password || undefined,
+          role: form.role,
+          establishmentIds: form.establishmentIds,
         },
       })
     } else {
@@ -104,6 +138,11 @@ export const UsersPage: React.FC = () => {
               <div>
                 <p className="text-white font-semibold">{item.name}</p>
                 <p className="text-xs text-gray-400">{item.email}</p>
+                {item.role && (
+                  <span className="inline-block mt-1 text-xs bg-brand-muted text-brand px-2 py-0.5 rounded-full">
+                    {ROLE_LABELS[item.role]}
+                  </span>
+                )}
               </div>
               <div className="flex items-center gap-1">
                 <button
@@ -160,6 +199,62 @@ export const UsersPage: React.FC = () => {
             onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
             required={!editing}
           />
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="user-role" className="label">Cargo</label>
+            <select
+              id="user-role"
+              value={form.role}
+              onChange={(event) =>
+                setForm((prev) => ({
+                  ...prev,
+                  role: event.target.value as FormState['role'],
+                }))
+              }
+              className="input-field"
+            >
+              <option value="bartender">Atendente</option>
+              <option value="chef">Chef de Cozinha</option>
+              <option value="manager">Gerente</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="label">Estabelecimentos</label>
+            {isAdmin ? (
+              <div className="card-elevated p-3 max-h-40 overflow-auto space-y-2">
+                {establishments?.map((establishment) => {
+                  const checked = form.establishmentIds.includes(establishment.id)
+                  return (
+                    <label key={establishment.id} className="flex items-center gap-2 text-sm text-gray-200">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={(event) => {
+                          const isChecked = event.target.checked
+                          setForm((prev) => ({
+                            ...prev,
+                            establishmentIds: isChecked
+                              ? [...prev.establishmentIds, establishment.id]
+                              : prev.establishmentIds.filter((id) => id !== establishment.id),
+                          }))
+                        }}
+                      />
+                      <span>{establishment.name}</span>
+                    </label>
+                  )
+                })}
+
+                {!establishments?.length && (
+                  <p className="text-xs text-gray-400">Nenhum estabelecimento disponível</p>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-400">
+                Usuários criados por manager são vinculados ao estabelecimento ativo.
+              </p>
+            )}
+          </div>
         </form>
       </Modal>
 

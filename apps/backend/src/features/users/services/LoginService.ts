@@ -25,7 +25,24 @@ export class LoginService {
         role: true,
         establishments: {
           include: {
-            establishment: true
+            establishment: {
+              include: {
+                subscription: {
+                  include: {
+                    plan: {
+                      select: {
+                        code: true,
+                        name: true,
+                        priceCents: true,
+                        currency: true,
+                        billingCycle: true,
+                        trialDays: true
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

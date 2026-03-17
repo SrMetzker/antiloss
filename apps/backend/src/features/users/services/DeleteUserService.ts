@@ -12,9 +12,15 @@ export class DeleteUserService {
       throw new NotFoundError('Usuário não encontrado!')
     }
 
-    // Deleta o usuário
-    await prisma.user.delete({
-      where: { id: userId }
+    // Remove vínculos do usuário com estabelecimentos para respeitar FK RESTRICT.
+    await prisma.$transaction(async (tx) => {
+      await tx.establishmentUser.deleteMany({
+        where: { userId }
+      })
+
+      await tx.user.delete({
+        where: { id: userId }
+      })
     })
 
     return { message: 'Usuário Deletado com sucesso!' }

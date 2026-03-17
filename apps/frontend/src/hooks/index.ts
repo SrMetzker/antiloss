@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
 import { productsApi } from '@/api/products'
 import { inventoryApi } from '@/api/inventory'
 import { recipesApi } from '@/api/recipes'
@@ -18,6 +19,23 @@ import type {
 } from '@/types'
 
 const onErrorMessage = (message: string) => (error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    const responseData = error.response?.data
+
+    if (responseData && typeof responseData === 'object') {
+      const data = responseData as Record<string, unknown>
+      const apiMessage =
+        (typeof data.error === 'string' && data.error) ||
+        (typeof data.message === 'string' && data.message) ||
+        undefined
+
+      if (apiMessage) {
+        toast.error(apiMessage)
+        return
+      }
+    }
+  }
+
   const fallback = error instanceof Error && error.message ? error.message : message
   toast.error(fallback)
 }

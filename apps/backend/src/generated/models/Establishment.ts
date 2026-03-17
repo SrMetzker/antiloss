@@ -176,6 +176,7 @@ export type EstablishmentWhereInput = {
   createdBy?: Prisma.StringFilter<"Establishment"> | string
   users?: Prisma.EstablishmentUserListRelationFilter
   products?: Prisma.ProductListRelationFilter
+  subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
 }
 
 export type EstablishmentOrderByWithRelationInput = {
@@ -185,6 +186,7 @@ export type EstablishmentOrderByWithRelationInput = {
   createdBy?: Prisma.SortOrder
   users?: Prisma.EstablishmentUserOrderByRelationAggregateInput
   products?: Prisma.ProductOrderByRelationAggregateInput
+  subscription?: Prisma.SubscriptionOrderByWithRelationInput
 }
 
 export type EstablishmentWhereUniqueInput = Prisma.AtLeast<{
@@ -197,6 +199,7 @@ export type EstablishmentWhereUniqueInput = Prisma.AtLeast<{
   createdBy?: Prisma.StringFilter<"Establishment"> | string
   users?: Prisma.EstablishmentUserListRelationFilter
   products?: Prisma.ProductListRelationFilter
+  subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
 }, "id">
 
 export type EstablishmentOrderByWithAggregationInput = {
@@ -226,6 +229,7 @@ export type EstablishmentCreateInput = {
   createdBy: string
   users?: Prisma.EstablishmentUserCreateNestedManyWithoutEstablishmentInput
   products?: Prisma.ProductCreateNestedManyWithoutEstablishmentInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutEstablishmentInput
 }
 
 export type EstablishmentUncheckedCreateInput = {
@@ -235,6 +239,7 @@ export type EstablishmentUncheckedCreateInput = {
   createdBy: string
   users?: Prisma.EstablishmentUserUncheckedCreateNestedManyWithoutEstablishmentInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutEstablishmentInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutEstablishmentInput
 }
 
 export type EstablishmentUpdateInput = {
@@ -244,6 +249,7 @@ export type EstablishmentUpdateInput = {
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
   users?: Prisma.EstablishmentUserUpdateManyWithoutEstablishmentNestedInput
   products?: Prisma.ProductUpdateManyWithoutEstablishmentNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutEstablishmentNestedInput
 }
 
 export type EstablishmentUncheckedUpdateInput = {
@@ -253,6 +259,7 @@ export type EstablishmentUncheckedUpdateInput = {
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
   users?: Prisma.EstablishmentUserUncheckedUpdateManyWithoutEstablishmentNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutEstablishmentNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutEstablishmentNestedInput
 }
 
 export type EstablishmentCreateManyInput = {
@@ -330,12 +337,27 @@ export type EstablishmentUpdateOneRequiredWithoutProductsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EstablishmentUpdateToOneWithWhereWithoutProductsInput, Prisma.EstablishmentUpdateWithoutProductsInput>, Prisma.EstablishmentUncheckedUpdateWithoutProductsInput>
 }
 
+export type EstablishmentCreateNestedOneWithoutSubscriptionInput = {
+  create?: Prisma.XOR<Prisma.EstablishmentCreateWithoutSubscriptionInput, Prisma.EstablishmentUncheckedCreateWithoutSubscriptionInput>
+  connectOrCreate?: Prisma.EstablishmentCreateOrConnectWithoutSubscriptionInput
+  connect?: Prisma.EstablishmentWhereUniqueInput
+}
+
+export type EstablishmentUpdateOneRequiredWithoutSubscriptionNestedInput = {
+  create?: Prisma.XOR<Prisma.EstablishmentCreateWithoutSubscriptionInput, Prisma.EstablishmentUncheckedCreateWithoutSubscriptionInput>
+  connectOrCreate?: Prisma.EstablishmentCreateOrConnectWithoutSubscriptionInput
+  upsert?: Prisma.EstablishmentUpsertWithoutSubscriptionInput
+  connect?: Prisma.EstablishmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EstablishmentUpdateToOneWithWhereWithoutSubscriptionInput, Prisma.EstablishmentUpdateWithoutSubscriptionInput>, Prisma.EstablishmentUncheckedUpdateWithoutSubscriptionInput>
+}
+
 export type EstablishmentCreateWithoutUsersInput = {
   id?: string
   name: string
   createdAt?: Date | string
   createdBy: string
   products?: Prisma.ProductCreateNestedManyWithoutEstablishmentInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutEstablishmentInput
 }
 
 export type EstablishmentUncheckedCreateWithoutUsersInput = {
@@ -344,6 +366,7 @@ export type EstablishmentUncheckedCreateWithoutUsersInput = {
   createdAt?: Date | string
   createdBy: string
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutEstablishmentInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutEstablishmentInput
 }
 
 export type EstablishmentCreateOrConnectWithoutUsersInput = {
@@ -368,6 +391,7 @@ export type EstablishmentUpdateWithoutUsersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
   products?: Prisma.ProductUpdateManyWithoutEstablishmentNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutEstablishmentNestedInput
 }
 
 export type EstablishmentUncheckedUpdateWithoutUsersInput = {
@@ -376,6 +400,7 @@ export type EstablishmentUncheckedUpdateWithoutUsersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
   products?: Prisma.ProductUncheckedUpdateManyWithoutEstablishmentNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutEstablishmentNestedInput
 }
 
 export type EstablishmentCreateWithoutProductsInput = {
@@ -384,6 +409,7 @@ export type EstablishmentCreateWithoutProductsInput = {
   createdAt?: Date | string
   createdBy: string
   users?: Prisma.EstablishmentUserCreateNestedManyWithoutEstablishmentInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutEstablishmentInput
 }
 
 export type EstablishmentUncheckedCreateWithoutProductsInput = {
@@ -392,6 +418,7 @@ export type EstablishmentUncheckedCreateWithoutProductsInput = {
   createdAt?: Date | string
   createdBy: string
   users?: Prisma.EstablishmentUserUncheckedCreateNestedManyWithoutEstablishmentInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutEstablishmentInput
 }
 
 export type EstablishmentCreateOrConnectWithoutProductsInput = {
@@ -416,6 +443,7 @@ export type EstablishmentUpdateWithoutProductsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
   users?: Prisma.EstablishmentUserUpdateManyWithoutEstablishmentNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutEstablishmentNestedInput
 }
 
 export type EstablishmentUncheckedUpdateWithoutProductsInput = {
@@ -424,6 +452,59 @@ export type EstablishmentUncheckedUpdateWithoutProductsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
   users?: Prisma.EstablishmentUserUncheckedUpdateManyWithoutEstablishmentNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutEstablishmentNestedInput
+}
+
+export type EstablishmentCreateWithoutSubscriptionInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  createdBy: string
+  users?: Prisma.EstablishmentUserCreateNestedManyWithoutEstablishmentInput
+  products?: Prisma.ProductCreateNestedManyWithoutEstablishmentInput
+}
+
+export type EstablishmentUncheckedCreateWithoutSubscriptionInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  createdBy: string
+  users?: Prisma.EstablishmentUserUncheckedCreateNestedManyWithoutEstablishmentInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutEstablishmentInput
+}
+
+export type EstablishmentCreateOrConnectWithoutSubscriptionInput = {
+  where: Prisma.EstablishmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.EstablishmentCreateWithoutSubscriptionInput, Prisma.EstablishmentUncheckedCreateWithoutSubscriptionInput>
+}
+
+export type EstablishmentUpsertWithoutSubscriptionInput = {
+  update: Prisma.XOR<Prisma.EstablishmentUpdateWithoutSubscriptionInput, Prisma.EstablishmentUncheckedUpdateWithoutSubscriptionInput>
+  create: Prisma.XOR<Prisma.EstablishmentCreateWithoutSubscriptionInput, Prisma.EstablishmentUncheckedCreateWithoutSubscriptionInput>
+  where?: Prisma.EstablishmentWhereInput
+}
+
+export type EstablishmentUpdateToOneWithWhereWithoutSubscriptionInput = {
+  where?: Prisma.EstablishmentWhereInput
+  data: Prisma.XOR<Prisma.EstablishmentUpdateWithoutSubscriptionInput, Prisma.EstablishmentUncheckedUpdateWithoutSubscriptionInput>
+}
+
+export type EstablishmentUpdateWithoutSubscriptionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.StringFieldUpdateOperationsInput | string
+  users?: Prisma.EstablishmentUserUpdateManyWithoutEstablishmentNestedInput
+  products?: Prisma.ProductUpdateManyWithoutEstablishmentNestedInput
+}
+
+export type EstablishmentUncheckedUpdateWithoutSubscriptionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.StringFieldUpdateOperationsInput | string
+  users?: Prisma.EstablishmentUserUncheckedUpdateManyWithoutEstablishmentNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutEstablishmentNestedInput
 }
 
 
@@ -473,6 +554,7 @@ export type EstablishmentSelect<ExtArgs extends runtime.Types.Extensions.Interna
   createdBy?: boolean
   users?: boolean | Prisma.Establishment$usersArgs<ExtArgs>
   products?: boolean | Prisma.Establishment$productsArgs<ExtArgs>
+  subscription?: boolean | Prisma.Establishment$subscriptionArgs<ExtArgs>
   _count?: boolean | Prisma.EstablishmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["establishment"]>
 
@@ -501,6 +583,7 @@ export type EstablishmentOmit<ExtArgs extends runtime.Types.Extensions.InternalA
 export type EstablishmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.Establishment$usersArgs<ExtArgs>
   products?: boolean | Prisma.Establishment$productsArgs<ExtArgs>
+  subscription?: boolean | Prisma.Establishment$subscriptionArgs<ExtArgs>
   _count?: boolean | Prisma.EstablishmentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EstablishmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -511,6 +594,7 @@ export type $EstablishmentPayload<ExtArgs extends runtime.Types.Extensions.Inter
   objects: {
     users: Prisma.$EstablishmentUserPayload<ExtArgs>[]
     products: Prisma.$ProductPayload<ExtArgs>[]
+    subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -913,6 +997,7 @@ export interface Prisma__EstablishmentClient<T, Null = never, ExtArgs extends ru
   readonly [Symbol.toStringTag]: "PrismaPromise"
   users<T extends Prisma.Establishment$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Establishment$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EstablishmentUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.Establishment$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Establishment$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscription<T extends Prisma.Establishment$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Establishment$subscriptionArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1142,6 +1227,11 @@ export type EstablishmentFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` Establishments.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Establishments.
+   */
   distinct?: Prisma.EstablishmentScalarFieldEnum | Prisma.EstablishmentScalarFieldEnum[]
 }
 
@@ -1379,6 +1469,25 @@ export type Establishment$productsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.ProductScalarFieldEnum | Prisma.ProductScalarFieldEnum[]
+}
+
+/**
+ * Establishment.subscription
+ */
+export type Establishment$subscriptionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Subscription
+   */
+  select?: Prisma.SubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Subscription
+   */
+  omit?: Prisma.SubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionWhereInput
 }
 
 /**

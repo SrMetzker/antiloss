@@ -12,9 +12,33 @@ export class DeleteProductService {
       throw new NotFoundError('Produto não encontrado!')
     }
 
-    // Deleta o produto
-    await prisma.product.delete({
-      where: { id: productId }
+    await prisma.$transaction(async (tx) => {
+      await tx.orderItem.deleteMany({
+        where: { productId }
+      })
+
+      const recipe = await tx.recipe.findUnique({
+        where: { productId },
+        select: { id: true }
+      })
+
+      if (recipe) {
+        await tx.recipeItem.deleteMany({
+          where: { recipeId: recipe.id }
+        })
+
+        await tx.recipe.delete({
+          where: { id: recipe.id }
+        })
+      }
+
+      await tx.stockMovement.deleteMany({
+        where: { productId }
+      })
+
+      await tx.product.delete({
+        where: { id: productId }
+      })
     })
 
     return { message: 'Produto Deletado com sucesso!' }

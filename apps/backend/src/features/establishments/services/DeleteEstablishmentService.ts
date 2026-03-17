@@ -2,10 +2,10 @@ import { prisma } from '../../../config/database'
 import { NotFoundError } from '../../../utils/errors'
 
 export class DeleteEstablishmentService {
-  async execute(EstablishmentId: string) {
+  async execute(establishmentId: string) {
     // Verifica se o estabelecimento existe
     const establishmentExists = await prisma.establishment.findUnique({
-      where: { id: EstablishmentId }
+      where: { id: establishmentId }
     })
 
     if (!establishmentExists) {
@@ -14,38 +14,43 @@ export class DeleteEstablishmentService {
 
     // Remover entidades relacionadas e o estabelecimento em uma transação
     await prisma.$transaction(async (tx) => {
+      await tx.establishmentUser.deleteMany({
+        where: { establishmentId: establishmentId }
+      })
+
+      await tx.stockMovement.deleteMany({
+        where: {
+          OR: [
+            { ingredient: { establishmentId: establishmentId } },
+            { product: { establishmentId: establishmentId } }
+          ]
+        }
+      })
+
       await tx.recipeItem.deleteMany({
         where: {
-          recipe: {
-            product: {
-              establishmentId: EstablishmentId
+          OR: [
+            {
+              recipe: {
+                product: {
+                  establishmentId: establishmentId
+                }
+              }
+            },
+            {
+              ingredient: {
+                establishmentId: establishmentId
+              }
             }
-          }
+          ]
         }
-      })
-
-      // deletar recipes e produtos antes de establishment
-      await tx.recipe.deleteMany({
-        where: {
-          product: {
-            establishmentId: EstablishmentId
-          }
-        }
-      })
-
-      await tx.product.deleteMany({
-        where: { establishmentId: EstablishmentId }
-      })
-
-      await tx.ingredient.deleteMany({
-        where: { establishmentId: EstablishmentId }
       })
 
       await tx.orderItem.deleteMany({
         where: {
           order: {
             table: {
-              establishmentId: EstablishmentId
+              establishmentId: establishmentId
             }
           }
         }
@@ -54,26 +59,34 @@ export class DeleteEstablishmentService {
       await tx.order.deleteMany({
         where: {
           table: {
-            establishmentId: EstablishmentId
+            establishmentId: establishmentId
           }
         }
       })
 
       await tx.table.deleteMany({
-        where: { establishmentId: EstablishmentId }
+        where: { establishmentId: establishmentId }
       })
 
-      await tx.stockMovement.deleteMany({
+      // deletar recipes e produtos antes de establishment
+      await tx.recipe.deleteMany({
         where: {
-          OR: [
-            { ingredient: { establishmentId: EstablishmentId } },
-            { product: { establishmentId: EstablishmentId } }
-          ]
+          product: {
+            establishmentId: establishmentId
+          }
         }
       })
 
+      await tx.product.deleteMany({
+        where: { establishmentId: establishmentId }
+      })
+
+      await tx.ingredient.deleteMany({
+        where: { establishmentId: establishmentId }
+      })
+
       await tx.establishment.delete({
-        where: { id: EstablishmentId }
+        where: { id: establishmentId }
       })
     })
 

@@ -1149,6 +1149,11 @@ export type RecipeFindManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Skip the first `n` Recipes.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Recipes.
+   */
   distinct?: Prisma.RecipeScalarFieldEnum | Prisma.RecipeScalarFieldEnum[]
 }
 

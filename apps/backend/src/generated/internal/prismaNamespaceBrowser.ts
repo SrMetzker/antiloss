@@ -61,7 +61,10 @@ export const ModelName = {
   StockMovement: 'StockMovement',
   Table: 'Table',
   Order: 'Order',
-  OrderItem: 'OrderItem'
+  OrderItem: 'OrderItem',
+  Plan: 'Plan',
+  Subscription: 'Subscription',
+  BillingHistory: 'BillingHistory'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -203,6 +206,59 @@ export const OrderItemScalarFieldEnum = {
 } as const
 
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
+
+
+export const PlanScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  priceCents: 'priceCents',
+  currency: 'currency',
+  billingCycle: 'billingCycle',
+  trialDays: 'trialDays',
+  maxUsers: 'maxUsers',
+  maxProducts: 'maxProducts',
+  maxTables: 'maxTables',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+
+
+export const SubscriptionScalarFieldEnum = {
+  id: 'id',
+  establishmentId: 'establishmentId',
+  planId: 'planId',
+  status: 'status',
+  startedAt: 'startedAt',
+  trialEndsAt: 'trialEndsAt',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  canceledAt: 'canceledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const BillingHistoryScalarFieldEnum = {
+  id: 'id',
+  subscriptionId: 'subscriptionId',
+  provider: 'provider',
+  providerReference: 'providerReference',
+  amountCents: 'amountCents',
+  currency: 'currency',
+  status: 'status',
+  dueAt: 'dueAt',
+  paidAt: 'paidAt',
+  createdAt: 'createdAt'
+} as const
+
+export type BillingHistoryScalarFieldEnum = (typeof BillingHistoryScalarFieldEnum)[keyof typeof BillingHistoryScalarFieldEnum]
 
 
 export const SortOrder = {

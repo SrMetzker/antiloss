@@ -1,0 +1,28 @@
+import { Request, Response, NextFunction } from 'express'
+import { RegisterService } from '../services/RegisterService'
+import { ValidationError } from '../../../utils/errors'
+
+const service = new RegisterService()
+
+export const register = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email, password, name, establishmentName, planCode } = req.body
+
+    if (!email) throw new ValidationError('O email e obrigatorio')
+    if (!password) throw new ValidationError('A senha e obrigatoria')
+    if (!name) throw new ValidationError('O nome e obrigatorio')
+    if (!establishmentName) throw new ValidationError('O nome do estabelecimento e obrigatorio')
+
+    const result = await service.execute({
+      email,
+      password,
+      name,
+      establishmentName,
+      planCode
+    })
+
+    res.status(201).json(result)
+  } catch (error) {
+    next(error)
+  }
+}

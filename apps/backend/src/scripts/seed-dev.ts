@@ -4,6 +4,36 @@ import { prisma } from '../config/database'
 async function main() {
   const passwordHash = await bcrypt.hash('123456', 10)
 
+  const starterPlan = await prisma.plan.create({
+    data: {
+      code: 'starter',
+      name: 'Iniciante',
+      description: 'Plano inicial para operacao basica',
+      priceCents: 1490,
+      currency: 'EUR',
+      billingCycle: 'MONTHLY',
+      trialDays: 14,
+      maxUsers: 3,
+      maxProducts: 50,
+      maxTables: 4
+    }
+  })
+
+  await prisma.plan.create({
+    data: {
+      code: 'pro',
+      name: 'Profissional',
+      description: 'Plano para bares e restaurantes em crescimento',
+      priceCents: 3490,
+      currency: 'EUR',
+      billingCycle: 'MONTHLY',
+      trialDays: 14,
+      maxUsers: 10,
+      maxProducts: 200,
+      maxTables: 15
+    }
+  })
+
   const admin = await prisma.user.create({
     data: {
       email: 'admin@anti-loss.com',
@@ -56,6 +86,33 @@ async function main() {
       name: 'Bar Jardim',
       createdBy: admin.id
     }
+  })
+
+  const trialStart = new Date()
+  const trialEnd = new Date(trialStart)
+  trialEnd.setDate(trialEnd.getDate() + 14)
+
+  await prisma.subscription.createMany({
+    data: [
+      {
+        establishmentId: est1.id,
+        planId: starterPlan.id,
+        status: 'TRIAL',
+        startedAt: trialStart,
+        trialEndsAt: trialEnd,
+        currentPeriodStart: trialStart,
+        currentPeriodEnd: trialEnd
+      },
+      {
+        establishmentId: est2.id,
+        planId: starterPlan.id,
+        status: 'TRIAL',
+        startedAt: trialStart,
+        trialEndsAt: trialEnd,
+        currentPeriodStart: trialStart,
+        currentPeriodEnd: trialEnd
+      }
+    ]
   })
 
   await prisma.establishmentUser.createMany({
