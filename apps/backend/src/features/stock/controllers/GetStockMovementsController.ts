@@ -8,7 +8,8 @@ export const getStockMovements = async (req: Request, res: Response, next: NextF
     const { productId } = req.query
 
     const stockMovements = await service.execute({
-      productId: productId as string
+      productId: productId as string,
+      establishmentId: req.user?.establishmentIds[0] as string
     })
 
     res.json(stockMovements)

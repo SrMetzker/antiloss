@@ -25,7 +25,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 
     if (req.user?.role === 'MANAGER') {
       if (role === 'ADMIN' || role === 'MANAGER') {
-        throw new AppError(403, 'Manager nao pode atribuir role ADMIN ou MANAGER')
+        throw new AppError(400, 'Usuário sem permissão para atribuir o papel informado!')
       }
 
       if (scopedEstablishmentIds) {
@@ -33,7 +33,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
         scopedEstablishmentIds = scopedEstablishmentIds.filter((item) => allowed.has(item))
 
         if (!scopedEstablishmentIds.length) {
-          throw new AppError(403, 'Vinculo de estabelecimento fora do escopo do manager')
+          throw new AppError(400, 'Vinculo de estabelecimento fora do escopo do usuário!')
         }
       }
     }

@@ -1,10 +1,19 @@
 export class AppError extends Error {
+  public code?: string
+  public details?: unknown
+
   constructor(
     public statusCode: number,
-    message: string
+    message: string,
+    options?: {
+      code?: string
+      details?: unknown
+    }
   ) {
     super(message)
     this.name = 'AppError'
+    this.code = options?.code || 'VALIDATION_ERROR'
+    this.details = options?.details
   }
 }
 

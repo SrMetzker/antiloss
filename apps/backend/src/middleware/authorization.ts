@@ -29,7 +29,7 @@ export const authorizeRoles = (...roles: UserRole[]) => {
   return (req: Request, _res: Response, next: NextFunction) => {
     const userRole = req.user?.role
     if (!userRole || !roles.includes(userRole)) {
-      throw new AppError(403, 'Sem permissao para esta operacao')
+      throw new AppError(400, 'Usuário sem permissão para acessar este recurso!')
     }
     next()
   }

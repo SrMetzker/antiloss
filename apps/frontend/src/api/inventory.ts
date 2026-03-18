@@ -100,15 +100,37 @@ export const inventoryApi = {
 
   createMovement: async (data: StockMovementFormData): Promise<StockMovement> => {
     const ingredients = await inventoryApi.getIngredients()
-    const ingredient = ingredients.find((item) => item.id === data.ingredientId)
-    const { createdBy } = getContext()
+    const { createdBy, establishmentId } = getContext()
 
-    if (!ingredient) {
-      throw new Error('Ingredient not found')
+    if (!createdBy || !establishmentId) {
+      throw new Error('Usuário não autenticado ou estabelecimento não selecionado')
     }
 
-    if (!createdBy) {
-      throw new Error('Usuário não autenticado')
+    const typedName = data.ingredientName.trim()
+    if (!typedName) {
+      throw new Error('Ingrediente é obrigatório')
+    }
+
+    let ingredient =
+      (data.ingredientId
+        ? ingredients.find((item) => item.id === data.ingredientId)
+        : undefined) ??
+      ingredients.find((item) => item.name.toLowerCase() === typedName.toLowerCase())
+
+    if (!ingredient) {
+      if (data.type === 'OUT' || data.type === 'LOSS') {
+        throw new Error('Não é possível dar baixa em um ingrediente que ainda não existe')
+      }
+
+      ingredient = await inventoryApi.createIngredient({
+        name: typedName,
+        unit: data.unit,
+        currentStock: 0,
+        minStock: data.minimumStock ?? 0,
+        establishmentId,
+        costPerUnit: 0,
+        category: 'geral',
+      })
     }
 
     const nextStock =
@@ -120,6 +142,8 @@ export const inventoryApi = {
 
     await apiClient.put(`/stock/${ingredient.id}`, {
       currentStock: nextStock,
+      minimumStock: data.minimumStock,
+      establishmentId,
       createdBy,
     })
 

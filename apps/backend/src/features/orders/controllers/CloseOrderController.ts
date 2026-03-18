@@ -7,7 +7,7 @@ const service = new CloseOrderService()
 export const closeOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params
-    const { createdBy: bodyCreatedBy } = req.body
+    const { createdBy: bodyCreatedBy, allowNegativeStock } = req.body
     const createdBy = req.user?.userId ?? bodyCreatedBy
 
     if (!id) {
@@ -20,7 +20,8 @@ export const closeOrder = async (req: Request, res: Response, next: NextFunction
 
     const order = await service.execute({
       orderId: id as string,
-      createdBy
+      createdBy,
+      allowNegativeStock: Boolean(allowNegativeStock),
     })
 
     res.json(order)

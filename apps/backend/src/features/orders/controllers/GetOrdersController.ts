@@ -9,7 +9,7 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
     const { tableId, establishmentId, status } = req.query
 
     if (req.user?.role === 'BARTENDER' && !tableId) {
-      throw new AppError(403, 'Bartender so pode consultar o pedido aberto de uma mesa especifica')
+      throw new AppError(400, 'Usuário sem permissão para acessar pedidos sem informar a mesa!')
     }
 
     const orders = await service.execute({

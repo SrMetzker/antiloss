@@ -1,4 +1,5 @@
 import { prisma } from '../../../config/database'
+import { AppError } from '../../../utils/errors'
 import { enforceTableLimit } from '../../../utils/planLimits'
 
 interface CreateTableInput {
@@ -16,7 +17,7 @@ export class CreateTableService {
     })
 
     if (exists) {
-      throw new Error('Table already exists for this establishment')
+      throw new AppError(400, 'Table already exists for this establishment')
     }
 
     await enforceTableLimit(input.establishmentId)

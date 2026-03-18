@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import axios from 'axios'
 import { CheckCircle, Plus, ShoppingCart, Users } from 'lucide-react'
 import {
   useAddItemToOpenOrder,
@@ -6,6 +7,7 @@ import {
   useCreateOrder,
   useCreateTable,
   useProducts,
+  useRecipes,
   useRemoveItemFromOpenOrder,
   useTableOrder,
   useTables,
@@ -47,6 +49,7 @@ const TableCard: React.FC<{ table: Table; onClick: () => void }> = ({ table, onC
 const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, onClose }) => {
   const { data: order, isLoading } = useTableOrder(table.id)
   const { data: products } = useProducts()
+  const { data: recipes } = useRecipes()
   const createOrderMutation = useCreateOrder()
   const addOrderItemMutation = useAddItemToOpenOrder()
   const removeOrderItemMutation = useRemoveItemFromOpenOrder()
@@ -55,12 +58,18 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
   const [search, setSearch] = useState('')
   const [showProducts, setShowProducts] = useState(false)
   const [confirmClose, setConfirmClose] = useState(false)
+  const [confirmNegativeStock, setConfirmNegativeStock] = useState(false)
+  const [negativeStockMessage, setNegativeStockMessage] = useState('')
   const [cart, setCart] = useState<Record<string, number>>({})
 
   const filteredProducts = useMemo(() => {
     const term = search.toLowerCase()
-    return (products ?? []).filter((item) => item.name.toLowerCase().includes(term))
-  }, [products, search])
+    const sellableProductIds = new Set((recipes ?? []).map((recipe) => recipe.productId))
+
+    return (products ?? []).filter((item) =>
+      sellableProductIds.has(item.id) && item.name.toLowerCase().includes(term)
+    )
+  }, [products, recipes, search])
 
   const cartItems = useMemo(() => {
     return Object.entries(cart)
@@ -110,8 +119,52 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
 
   const handleCloseOrder = async () => {
     if (!order) return
-    await closeOrderMutation.mutateAsync(order.id)
-    setConfirmClose(false)
+
+    try {
+      await closeOrderMutation.mutateAsync({ orderId: order.id })
+      setConfirmClose(false)
+      onClose()
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const responseData = error.response?.data as
+          | {
+              code?: string
+              error?: string
+              details?: {
+                shortages?: Array<{
+                  ingredientName: string
+                  shortBy: number
+                }>
+              }
+            }
+          | undefined
+
+        if (responseData?.code === 'INSUFFICIENT_STOCK') {
+          const shortages = responseData.details?.shortages ?? []
+          const summary = shortages.length
+            ? shortages.map((item) => `${item.ingredientName} (-${item.shortBy})`).join(', ')
+            : 'Alguns ingredientes ficarão negativos.'
+
+          setNegativeStockMessage(summary)
+          setConfirmClose(false)
+          setConfirmNegativeStock(true)
+          return
+        }
+      }
+
+      throw error
+    }
+  }
+
+  const handleCloseOrderAllowNegative = async () => {
+    if (!order) return
+
+    await closeOrderMutation.mutateAsync({
+      orderId: order.id,
+      allowNegativeStock: true,
+    })
+
+    setConfirmNegativeStock(false)
     onClose()
   }
 
@@ -195,6 +248,16 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
             title="Fechar pedido"
             message={`Confirmar fechamento do pedido da mesa ${table.number}?`}
             confirmLabel="Fechar"
+            loading={closeOrderMutation.isPending}
+          />
+
+          <ConfirmModal
+            isOpen={confirmNegativeStock}
+            onClose={() => setConfirmNegativeStock(false)}
+            onConfirm={handleCloseOrderAllowNegative}
+            title="Estoque ficará negativo"
+            message={`Os seguintes ingredientes ficarão com saldo negativo: ${negativeStockMessage}. Deseja fechar o pedido mesmo assim?`}
+            confirmLabel="Fechar mesmo assim"
             loading={closeOrderMutation.isPending}
           />
         </>
@@ -286,6 +349,12 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
               <p className="text-brand font-display font-bold mt-1">{formatCurrency(product.price)}</p>
             </button>
           ))}
+
+          {!filteredProducts.length && (
+            <div className="col-span-2 card p-3 text-sm text-gray-400 text-center">
+              Nenhum produto com receita cadastrado para venda.
+            </div>
+          )}
         </div>
       </Modal>
     </div>
