@@ -78,7 +78,7 @@ export const ordersApi = {
   createTable: async (number: number): Promise<Table> => {
     const { establishmentId } = getContext()
     if (!establishmentId) {
-      throw new Error('Estabelecimento não selecionado')
+      throw new Error('Establishment not selected')
     }
 
     const response = await apiClient.post<BackendTable>('/orders/tables', {
@@ -123,7 +123,7 @@ export const ordersApi = {
 
   closeOrder: async (orderId: string, options?: { allowNegativeStock?: boolean }): Promise<Order> => {
     const { createdBy } = getContext()
-    if (!createdBy) throw new Error('Usuário não autenticado')
+    if (!createdBy) throw new Error('User not authenticated')
 
     const response = await apiClient.patch<BackendOrder>(`/orders/${orderId}/close`, {
       createdBy,
@@ -166,7 +166,7 @@ export const ordersApi = {
   getKitchenOrders: async (): Promise<Order[]> => {
     const { establishmentId } = getContext()
     if (!establishmentId) {
-      throw new Error('Estabelecimento não selecionado')
+      throw new Error('Establishment not selected')
     }
 
     const response = await apiClient.get<BackendOrder[]>('/orders/kitchen', {

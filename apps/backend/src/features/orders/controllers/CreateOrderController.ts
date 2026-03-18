@@ -9,11 +9,11 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
     const { tableId, items } = req.body
 
     if (!tableId) {
-      throw new ValidationError('Não foi possível identificar a mesa para a qual o pedido será criado!')
+      throw new ValidationError('¡No fue posible identificar la mesa para crear el pedido!')
     }
 
     if (!items || !Array.isArray(items) || items.length === 0) {
-      throw new ValidationError('O pedido deve conter pelo menos um item!')
+      throw new ValidationError('¡El pedido debe contener al menos un ítem!')
     }
 
     const order = await service.execute({ tableId, items })

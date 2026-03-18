@@ -26,7 +26,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
   const token = authHeader && authHeader.split(' ')[1] // Bearer TOKEN
 
   if (!token) {
-    throw new AppError(401, 'Access token required')
+    throw new AppError(401, 'Se requiere token de acceso')
   }
 
   try {
@@ -34,6 +34,6 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     req.user = decoded
     next()
   } catch (error) {
-    throw new AppError(403, 'Invalid or expired token')
+    throw new AppError(403, 'Token inválido o expirado')
   }
 }

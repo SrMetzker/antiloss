@@ -10,7 +10,7 @@ export const updateIngredient = async (req: Request, res: Response, next: NextFu
     const { name, unit, currentStock, minimumStock, createdBy } = req.body
 
     if (!id) {
-      throw new ValidationError('Ingredient ID is required')
+      throw new ValidationError('El ID del ingrediente es obligatorio')
     }
 
     const updated = await service.execute(id, { name, unit, currentStock, minimumStock, createdBy })

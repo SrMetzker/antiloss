@@ -16,11 +16,11 @@ export class RemoveOrderItemService {
     })
 
     if (!order) {
-      throw new NotFoundError('Pedido nao encontrado')
+      throw new NotFoundError('Pedido no encontrado')
     }
 
     if (order.status !== 'OPEN') {
-      throw new ValidationError('Somente pedidos em aberto podem ser editados')
+      throw new ValidationError('Solo los pedidos abiertos pueden ser editados')
     }
 
     const orderItem = await prisma.orderItem.findUnique({
@@ -28,7 +28,7 @@ export class RemoveOrderItemService {
     })
 
     if (!orderItem || orderItem.orderId !== order.id) {
-      throw new NotFoundError('Item de pedido nao encontrado')
+      throw new NotFoundError('Ítem de pedido no encontrado')
     }
 
     const updated = await prisma.$transaction(async (tx) => {

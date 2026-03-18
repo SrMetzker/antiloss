@@ -16,7 +16,7 @@ export class UpdateProductService {
     })
 
     if (!existingProduct) {
-      throw new NotFoundError('Não foi possível identificar o produto para atualização!')
+      throw new NotFoundError('¡No fue posible identificar el producto para actualización!')
     }
 
     // Atualiza apenas os campos fornecidos

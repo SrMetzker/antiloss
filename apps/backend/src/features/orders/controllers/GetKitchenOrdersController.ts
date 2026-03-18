@@ -11,7 +11,7 @@ export const getKitchenOrders = async (req: Request, res: Response, next: NextFu
       : undefined
 
     if (!establishmentId) {
-      throw new ValidationError('establishmentId e obrigatorio para visualizar pedidos da cozinha')
+      throw new ValidationError('establishmentId es obligatorio para ver los pedidos de cocina')
     }
 
     const orders = await service.execute(establishmentId)

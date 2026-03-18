@@ -10,15 +10,15 @@ export const createRecipe = async (req: Request, res: Response, next: NextFuncti
     const createdBy = req.user?.userId ?? bodyCreatedBy
 
     if (!productId) {
-      throw new ValidationError('O productId é obrigatório!')
+      throw new ValidationError('¡El productId es obligatorio!')
     }
 
     if (!items || !Array.isArray(items) || items.length === 0) {
-      throw new ValidationError('Os itens da receita são obrigatórios!')
+      throw new ValidationError('¡Los ítems de la receta son obligatorios!')
     }
 
     if (!createdBy) {
-      throw new ValidationError('Não foi possível identificar o usuário criador da receita!')
+      throw new ValidationError('¡No fue posible identificar al usuario creador de la receta!')
     }
 
     const recipe = await service.execute({

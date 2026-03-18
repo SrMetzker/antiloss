@@ -71,7 +71,7 @@ export const usersApi = {
 
   create: async (data: UserCreateInput): Promise<User> => {
     const { createdBy, establishmentId, role } = getContext()
-    if (!createdBy) throw new Error('Usuário não autenticado')
+    if (!createdBy) throw new Error('User not authenticated')
 
     const payload: Record<string, unknown> = {
       ...data,

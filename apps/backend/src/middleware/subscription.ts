@@ -27,7 +27,7 @@ export const ensureSubscriptionAccess = async (req: Request, _res: Response, nex
 
     const establishmentIds = req.user?.establishmentIds ?? []
     if (!establishmentIds.length) {
-      throw new AppError(403, 'Usuario sem vinculo de estabelecimento')
+      throw new AppError(403, 'Usuario sin vinculación a establecimiento')
     }
 
     const subscriptions = await prisma.subscription.findMany({
@@ -47,7 +47,7 @@ export const ensureSubscriptionAccess = async (req: Request, _res: Response, nex
     )
 
     if (!accessibleEstablishments.size) {
-      throw new AppError(402, 'Assinatura inativa ou trial expirado para este estabelecimento')
+      throw new AppError(402, 'Suscripción inactiva o prueba expirada para este establecimiento')
     }
 
     const requestEstablishmentId =
@@ -56,7 +56,7 @@ export const ensureSubscriptionAccess = async (req: Request, _res: Response, nex
       parseString(req.params?.establishmentId)
 
     if (requestEstablishmentId && !accessibleEstablishments.has(requestEstablishmentId)) {
-      throw new AppError(402, 'Assinatura inativa para o estabelecimento informado')
+      throw new AppError(402, 'Suscripción inactiva para el establecimiento indicado')
     }
 
     next()

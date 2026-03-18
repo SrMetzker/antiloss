@@ -29,11 +29,11 @@ export class CloseOrderService {
     })
 
     if (!order) {
-      throw new NotFoundError('Pedido nao encontrado')
+      throw new NotFoundError('Pedido no encontrado')
     }
 
     if (order.status !== 'OPEN') {
-      throw new ValidationError('Apenas pedidos em aberto podem ser finalizados')
+      throw new ValidationError('Solo los pedidos abiertos pueden ser finalizados')
     }
 
     const ingredientAdjustments: { id: string; decrement: number }[] = []
@@ -41,7 +41,7 @@ export class CloseOrderService {
     for (const orderItem of order.items) {
       const recipe = orderItem.product.recipe
       if (!recipe) {
-        throw new ValidationError(`Produto ${orderItem.product.name} sem receita configurada`)
+        throw new ValidationError(`Producto ${orderItem.product.name} sin receta configurada`)
       }
 
       for (const recipeItem of recipe.items) {
@@ -71,7 +71,7 @@ export class CloseOrderService {
     for (const adj of ingredientAdjustments) {
       const ingredient = ingredients.find((i) => i.id === adj.id)
       if (!ingredient) {
-        throw new NotFoundError(`Ingrediente ${adj.id} nao encontrado`)
+        throw new NotFoundError(`Ingrediente ${adj.id} no encontrado`)
       }
 
       if (ingredient.currentStock < adj.decrement) {
@@ -89,7 +89,7 @@ export class CloseOrderService {
       const names = shortages.map((item) => item.ingredientName).join(', ')
       throw new AppError(
         409,
-        `Estoque insuficiente para: ${names}. Confirme para fechar com estoque negativo.`,
+        `Stock insuficiente para: ${names}. Confirme para cerrar con stock negativo.`,
         {
           code: 'INSUFFICIENT_STOCK',
           details: {

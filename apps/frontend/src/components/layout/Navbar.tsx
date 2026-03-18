@@ -94,7 +94,7 @@ export const Navbar: React.FC = () => {
                     className="w-full flex items-center gap-2.5 px-2 py-2.5 rounded-lg text-left text-sm text-gray-300 hover:bg-bg-elevated hover:text-white transition-colors"
                   >
                     <Users className="w-4 h-4" />
-                    Usuários
+                    Users
                   </button>
                 )}
 

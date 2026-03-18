@@ -10,11 +10,11 @@ export const removeOrderItem = async (req: Request, res: Response, next: NextFun
     const itemId = Array.isArray(req.params.itemId) ? req.params.itemId[0] : req.params.itemId
 
     if (!id) {
-      throw new ValidationError('Nao foi possivel identificar o pedido')
+      throw new ValidationError('No fue posible identificar el pedido')
     }
 
     if (!itemId) {
-      throw new ValidationError('itemId e obrigatorio')
+      throw new ValidationError('itemId es obligatorio')
     }
 
     const order = await service.execute({

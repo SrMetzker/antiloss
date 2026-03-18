@@ -12,7 +12,7 @@ const normalizeRole = (value: unknown): 'ADMIN' | 'MANAGER' | 'BARTENDER' | 'CHE
     return normalized
   }
 
-  throw new ValidationError('Role invalida. Use ADMIN, MANAGER, BARTENDER ou CHEF')
+  throw new ValidationError('Rol inválido. Use ADMIN, MANAGER, BARTENDER o CHEF')
 }
 
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -25,7 +25,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 
     if (req.user?.role === 'MANAGER') {
       if (role === 'ADMIN' || role === 'MANAGER') {
-        throw new AppError(400, 'Usuário sem permissão para atribuir o papel informado!')
+        throw new AppError(400, '¡Usuario sin permiso para asignar el rol indicado!')
       }
 
       if (scopedEstablishmentIds) {
@@ -33,17 +33,17 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
         scopedEstablishmentIds = scopedEstablishmentIds.filter((item) => allowed.has(item))
 
         if (!scopedEstablishmentIds.length) {
-          throw new AppError(400, 'Vinculo de estabelecimento fora do escopo do usuário!')
+          throw new AppError(400, '¡Vínculo de establecimiento fuera del alcance del usuario!')
         }
       }
     }
 
     if (!id) {
-      throw new ValidationError('Não foi possível identificar o usuário para atualização!')
+      throw new ValidationError('¡No fue posible identificar al usuario para actualización!')
     }
 
     if (!email && !password && !name && !role && !establishmentIds) {
-      throw new ValidationError('Pelo menos um campo deve ser fornecido para a atualização!')
+      throw new ValidationError('¡Al menos un campo debe ser proporcionado para la actualización!')
     }
 
     const updatedUser = await service.execute(id as string, {

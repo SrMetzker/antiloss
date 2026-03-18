@@ -11,11 +11,11 @@ export const closeOrder = async (req: Request, res: Response, next: NextFunction
     const createdBy = req.user?.userId ?? bodyCreatedBy
 
     if (!id) {
-      throw new ValidationError('Nao foi possivel identificar o pedido para finalizar')
+      throw new ValidationError('No fue posible identificar el pedido para finalizar')
     }
 
     if (!createdBy) {
-      throw new ValidationError('createdBy e obrigatorio para registrar movimentacao de estoque')
+      throw new ValidationError('createdBy es obligatorio para registrar movimiento de inventario')
     }
 
     const order = await service.execute({

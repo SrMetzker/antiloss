@@ -18,7 +18,7 @@ export class UpdateUserService {
     })
 
     if (!existingUser) {
-      throw new NotFoundError('Não foi possível identificar o usuário para atualização!')
+      throw new NotFoundError('¡No fue posible identificar al usuario para actualización!')
     }
 
     // Se a senha for fornecida, faz hash dela
@@ -71,7 +71,7 @@ export class UpdateUserService {
     })
 
     if (!updatedUser) {
-      throw new InternalServerError('Falha ao atualizar usuario')
+      throw new InternalServerError('Error al actualizar usuario')
     }
 
     return updatedUser

@@ -12,7 +12,7 @@ const normalizeRole = (value: unknown): 'ADMIN' | 'MANAGER' | 'BARTENDER' | 'CHE
     return normalized
   }
 
-  throw new ValidationError('Role invalida. Use ADMIN, MANAGER, BARTENDER ou CHEF')
+  throw new ValidationError('Rol inválido. Use ADMIN, MANAGER, BARTENDER o CHEF')
 }
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -25,7 +25,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
 
     if (req.user?.role === 'MANAGER') {
       if (role === 'ADMIN' || role === 'MANAGER') {
-        throw new AppError(400, 'Usuário sem permissão para atribuir o papel informado!')
+        throw new AppError(400, '¡Usuario sin permiso para asignar el rol indicado!')
       }
 
       const allowed = new Set(req.user.establishmentIds)
@@ -34,23 +34,23 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
         : [...allowed]
 
       if (!scopedEstablishmentIds.length) {
-        throw new AppError(400, 'Usuário deve ser vinculado a pelo menos um estabelecimento!')
+        throw new AppError(400, '¡El usuario debe estar vinculado a al menos un establecimiento!')
       }
 
       scopedRole = role ?? 'BARTENDER'
     }
 
     if (!email) {
-      throw new ValidationError('O email é obrigatório!')
+      throw new ValidationError('¡El email es obligatorio!')
     }
     if (!password) {
-      throw new ValidationError('A senha é obrigatória!')
+      throw new ValidationError('¡La contraseña es obligatoria!')
     }
     if (!name) {
-      throw new ValidationError('O nome é obrigatório!')
+      throw new ValidationError('¡El nombre es obligatorio!')
     }
     if (!createdBy) {
-      throw new ValidationError('Não foi possível identificar o usuário criador do novo usuário!')
+      throw new ValidationError('¡No fue posible identificar al usuario creador del nuevo usuario!')
     }
 
     const user = await service.execute({

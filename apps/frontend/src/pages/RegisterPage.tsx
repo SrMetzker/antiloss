@@ -18,7 +18,7 @@ const formatPrice = (priceCents: number, currency: string) => {
 }
 
 const billingLabel = (cycle: PublicPlan['billingCycle']) => {
-  return cycle === 'YEARLY' ? 'ano' : 'mes'
+  return cycle === 'YEARLY' ? 'yr' : 'mo'
 }
 
 export const RegisterPage: React.FC = () => {
@@ -49,12 +49,12 @@ export const RegisterPage: React.FC = () => {
           setSelectedPlanCode((prev) => prev || data[0]?.code || '')
 
           if (!data.length) {
-            setError('Nenhum plano ativo foi encontrado. Tente novamente em instantes.')
+            setError('No active plan found. Please try again in a moment.')
           }
         }
       } catch (err) {
         if (!cancelled) {
-          setError(extractApiErrorMessage(err, 'Nao foi possivel carregar os planos'))
+          setError(extractApiErrorMessage(err, 'Could not load plans'))
         }
       } finally {
         if (!cancelled) {
@@ -94,10 +94,10 @@ export const RegisterPage: React.FC = () => {
       })
 
       login(result.user, result.token)
-      toast.success('Conta criada com sucesso! Trial iniciado.')
+      toast.success('Account created successfully! Trial started.')
       navigate('/subscription', { replace: true })
     } catch (err) {
-      setError(extractApiErrorMessage(err, 'Nao foi possivel criar a conta'))
+      setError(extractApiErrorMessage(err, 'Could not create account'))
     } finally {
       setSubmitting(false)
     }
@@ -115,17 +115,17 @@ export const RegisterPage: React.FC = () => {
           <div className="w-16 h-16 rounded-2xl bg-brand shadow-glow-amber flex items-center justify-center mb-4">
             <Wine className="w-8 h-8 text-black" />
           </div>
-          <h1 className="text-3xl font-display font-bold text-white">Criar conta</h1>
-          <p className="text-gray-400 text-sm mt-1">Comece o trial do seu restaurante em minutos</p>
+          <h1 className="text-3xl font-display font-bold text-white">Create account</h1>
+          <p className="text-gray-400 text-sm mt-1">Start your restaurant trial in minutes</p>
         </div>
 
         <div className="card p-6 md:p-8">
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
-              label="Nome"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Seu nome"
+              label="Name"
+              placeholder="Your name"
               leftIcon={<User2 className="w-4 h-4" />}
               required
             />
@@ -141,32 +141,32 @@ export const RegisterPage: React.FC = () => {
             />
 
             <Input
-              label="Senha"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="No minimo 6 caracteres"
+              label="Password"
+              placeholder="At least 6 characters"
               leftIcon={<ShieldCheck className="w-4 h-4" />}
               minLength={6}
               required
             />
 
             <Input
-              label="Nome do estabelecimento"
               value={establishmentName}
               onChange={(e) => setEstablishmentName(e.target.value)}
+              label="Establishment name"
               placeholder="Bar Central"
               leftIcon={<Building2 className="w-4 h-4" />}
               required
             />
 
             <div className="md:col-span-2 mt-2">
-              <p className="label mb-3">Escolha o plano</p>
+              <p className="label mb-3">Choose a plan</p>
               {loadingPlans ? (
-                <div className="card-elevated p-4 text-sm text-gray-300">Carregando planos...</div>
+                <div className="card-elevated p-4 text-sm text-gray-300">Loading plans...</div>
               ) : plans.length === 0 ? (
                 <div className="card-elevated p-4 text-sm text-gray-300">
-                  Nenhum plano disponivel no momento.
+                  No plans available at the moment.
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -184,11 +184,11 @@ export const RegisterPage: React.FC = () => {
                         }`}
                       >
                         <p className="text-white font-display font-semibold">{plan.name}</p>
-                        <p className="text-gray-400 text-xs mt-1 min-h-[30px]">{plan.description ?? 'Plano sem descricao'}</p>
+                        <p className="text-gray-400 text-xs mt-1 min-h-[30px]">{plan.description ?? 'No description'}</p>
                         <p className="text-brand font-bold mt-3">
                           {formatPrice(plan.priceCents, plan.currency)}/{billingLabel(plan.billingCycle)}
                         </p>
-                        <p className="text-gray-400 text-xs mt-1">Trial: {plan.trialDays} dias</p>
+                        <p className="text-gray-400 text-xs mt-1">Trial: {plan.trialDays} days</p>
                       </button>
                     )
                   })}
@@ -198,12 +198,12 @@ export const RegisterPage: React.FC = () => {
 
             {selectedPlan && (
               <div className="md:col-span-2 card-elevated p-4 text-sm text-gray-200">
-                <p className="font-semibold text-white mb-2">Resumo do plano {selectedPlan.name}</p>
+                <p className="font-semibold text-white mb-2">Plan summary — {selectedPlan.name}</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-                  <span>Usuarios: {selectedPlan.maxUsers}</span>
-                  <span>Produtos: {selectedPlan.maxProducts}</span>
-                  <span>Mesas: {selectedPlan.maxTables ?? 'Ilimitado'}</span>
-                  <span>Trial: {selectedPlan.trialDays} dias</span>
+                  <span>Users: {selectedPlan.maxUsers}</span>
+                  <span>Products: {selectedPlan.maxProducts}</span>
+                  <span>Tables: {selectedPlan.maxTables ?? 'Unlimited'}</span>
+                  <span>Trial: {selectedPlan.trialDays} days</span>
                 </div>
               </div>
             )}
@@ -216,10 +216,10 @@ export const RegisterPage: React.FC = () => {
 
             <div className="md:col-span-2 mt-2 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
               <Button type="submit" loading={submitting} size="lg">
-                Criar conta e iniciar trial
+                Create account and start trial
               </Button>
               <Link to="/login" className="text-sm text-gray-400 hover:text-white transition-colors">
-                Ja tem conta? Entrar
+                Already have an account? Sign in
               </Link>
             </div>
           </form>

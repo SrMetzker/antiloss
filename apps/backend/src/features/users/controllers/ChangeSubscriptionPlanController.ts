@@ -6,12 +6,12 @@ const service = new ChangeSubscriptionPlanService()
 
 export const changeSubscriptionPlan = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) throw new ValidationError('Usuario nao autenticado')
+    if (!req.user) throw new ValidationError('Usuario no autenticado')
 
     const { establishmentId, planCode } = req.body
 
     if (typeof planCode !== 'string' || !planCode.trim()) {
-      throw new ValidationError('planCode e obrigatorio')
+      throw new ValidationError('planCode es obligatorio')
     }
 
     const payload: Parameters<ChangeSubscriptionPlanService['execute']>[0] = {

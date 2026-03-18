@@ -26,7 +26,7 @@ export const establishmentsApi = {
 
   create: async (data: EstablishmentCreateInput): Promise<Establishment> => {
     const { createdBy } = getContext()
-    if (!createdBy) throw new Error('Usuário não autenticado')
+    if (!createdBy) throw new Error('User not authenticated')
 
     const response = await apiClient.post<Establishment>('/establishments', {
       name: data.name,

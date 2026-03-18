@@ -9,7 +9,7 @@ export class DeleteUserService {
     })
 
     if (!existingUser) {
-      throw new NotFoundError('Usuário não encontrado!')
+      throw new NotFoundError('¡Usuario no encontrado!')
     }
 
     // Remove vínculos do usuário com estabelecimentos para respeitar FK RESTRICT.
@@ -23,6 +23,6 @@ export class DeleteUserService {
       })
     })
 
-    return { message: 'Usuário Deletado com sucesso!' }
+    return { message: '¡Usuario eliminado con éxito!' }
   }
 }

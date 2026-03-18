@@ -31,7 +31,7 @@ export const LoginPage: React.FC = () => {
       toast.success(`Welcome back, ${user.name}!`)
       navigate(getDefaultRouteForRole(user.role), { replace: true })
     } catch (error) {
-      setError(extractApiErrorMessage(error, 'Email ou senha inválidos'))
+      setError(extractApiErrorMessage(error, 'Invalid email or password'))
     } finally {
       setLoading(false)
     }
@@ -105,12 +105,12 @@ export const LoginPage: React.FC = () => {
         </div>
 
         <p className="text-center text-xs text-gray-500 mt-4">
-          Use as suas credenciais para entrar.
+          Use your credentials to sign in.
         </p>
         <p className="text-center text-xs text-gray-400 mt-2">
-          Ainda nao tem conta?{' '}
+          Don't have an account yet?{' '}
           <Link to="/register" className="text-brand hover:text-brand-light transition-colors">
-            Criar conta
+            Sign up
           </Link>
         </p>
       </div>

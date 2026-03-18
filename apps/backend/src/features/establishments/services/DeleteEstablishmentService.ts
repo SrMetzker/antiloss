@@ -9,7 +9,7 @@ export class DeleteEstablishmentService {
     })
 
     if (!establishmentExists) {
-      throw new NotFoundError('Estabelecimento não encontrado!')
+      throw new NotFoundError('¡Establecimiento no encontrado!')
     }
 
     // Remover entidades relacionadas e o estabelecimento em uma transação
@@ -90,6 +90,6 @@ export class DeleteEstablishmentService {
       })
     })
 
-    return { message: 'Estabelecimento e produtos vinculados excluídos com sucesso!'}
+    return { message: '¡Establecimiento y productos vinculados eliminados con éxito!' }
   }
 }

@@ -9,7 +9,7 @@ export class UpdateEstablishmentService {
     })
 
     if (!establishmentExists) {
-      throw new NotFoundError('Estabelecimento não encontrado!')
+      throw new NotFoundError('¡Establecimiento no encontrado!')
     }
 
     const establishment = await prisma.establishment.update({

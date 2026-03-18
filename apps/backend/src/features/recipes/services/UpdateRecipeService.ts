@@ -13,7 +13,7 @@ interface UpdateRecipeInput {
 export class UpdateRecipeService {
   async execute(productId: string, input: UpdateRecipeInput) {
     if (!input.items || input.items.length === 0) {
-      throw new ValidationError('items sao obrigatorios')
+      throw new ValidationError('items son obligatorios')
     }
 
     const recipe = await prisma.recipe.findUnique({
@@ -21,7 +21,7 @@ export class UpdateRecipeService {
     })
 
     if (!recipe) {
-      throw new NotFoundError('Receita nao encontrada')
+      throw new NotFoundError('Receta no encontrada')
     }
 
     const updatedRecipe = await prisma.$transaction(async (tx) => {

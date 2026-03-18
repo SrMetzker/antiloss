@@ -21,9 +21,9 @@ import type { Table } from '@/types'
 
 const TableCard: React.FC<{ table: Table; onClick: () => void }> = ({ table, onClick }) => {
   const config = {
-    free: { label: 'Livre', color: 'text-green-400', dot: 'bg-green-400' },
-    occupied: { label: 'Ocupada', color: 'text-brand', dot: 'bg-brand' },
-    reserved: { label: 'Reservada', color: 'text-blue-400', dot: 'bg-blue-400' },
+    free: { label: 'Free', color: 'text-green-400', dot: 'bg-green-400' },
+    occupied: { label: 'Occupied', color: 'text-brand', dot: 'bg-brand' },
+    reserved: { label: 'Reserved', color: 'text-blue-400', dot: 'bg-blue-400' },
   }
 
   const status = config[table.status]
@@ -39,7 +39,7 @@ const TableCard: React.FC<{ table: Table; onClick: () => void }> = ({ table, onC
       </div>
       <div className="text-xs text-gray-400 flex items-center gap-1.5">
         <Users className="w-3.5 h-3.5" />
-        Capacidade padrão
+        Default capacity
       </div>
       <p className={`text-xs font-semibold mt-1.5 ${status.color}`}>{status.label}</p>
     </button>
@@ -190,7 +190,7 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
   return (
     <div className="flex flex-col h-full">
       <div className="mb-4">
-        <h3 className="font-display font-bold text-white">Mesa {table.number}</h3>
+        <h3 className="font-display font-bold text-white">Table {table.number}</h3>
       </div>
 
       {order ? (
@@ -207,7 +207,7 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
                   <button
                     onClick={() => void handleRemoveItemFromOpenOrder(item.id)}
                     className="w-7 h-7 rounded-lg bg-red-500/15 text-red-300"
-                    title="Remover item"
+                    title="Remove item"
                   >
                     -
                   </button>
@@ -228,7 +228,7 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
                 onClick={() => setShowProducts(true)}
                 loading={addOrderItemMutation.isPending}
               >
-                Adicionar itens
+                Add items
               </Button>
               <Button
                 icon={<CheckCircle className="w-4 h-4" />}
@@ -236,7 +236,7 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
                 onClick={() => setConfirmClose(true)}
                 loading={closeOrderMutation.isPending}
               >
-                Fechar pedido
+                Close order
               </Button>
             </div>
           </div>
@@ -245,9 +245,9 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
             isOpen={confirmClose}
             onClose={() => setConfirmClose(false)}
             onConfirm={handleCloseOrder}
-            title="Fechar pedido"
-            message={`Confirmar fechamento do pedido da mesa ${table.number}?`}
-            confirmLabel="Fechar"
+            title="Close order"
+            message={`Confirm closing the order for table ${table.number}?`}
+            confirmLabel="Close"
             loading={closeOrderMutation.isPending}
           />
 
@@ -255,9 +255,9 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
             isOpen={confirmNegativeStock}
             onClose={() => setConfirmNegativeStock(false)}
             onConfirm={handleCloseOrderAllowNegative}
-            title="Estoque ficará negativo"
-            message={`Os seguintes ingredientes ficarão com saldo negativo: ${negativeStockMessage}. Deseja fechar o pedido mesmo assim?`}
-            confirmLabel="Fechar mesmo assim"
+            title="Stock will become negative"
+            message={`The following ingredients will end up with negative stock: ${negativeStockMessage}. Do you want to close the order anyway?`}
+            confirmLabel="Close anyway"
             loading={closeOrderMutation.isPending}
           />
         </>
@@ -267,8 +267,8 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
             {cartItems.length === 0 ? (
               <EmptyState
                 icon={<ShoppingCart className="w-6 h-6" />}
-                title="Sem itens"
-                description="Adicione produtos para criar o pedido"
+                title="No items"
+                description="Add products to create the order"
               />
             ) : (
               cartItems.map((item) => (
@@ -304,7 +304,7 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
             </div>
             <div className="flex gap-2">
               <Button variant="secondary" className="flex-1" onClick={() => setShowProducts(true)}>
-                Adicionar itens
+                Add items
               </Button>
               <Button
                 className="flex-1"
@@ -312,7 +312,7 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
                 loading={createOrderMutation.isPending}
                 disabled={cartItems.length === 0}
               >
-                Criar pedido
+                Create order
               </Button>
             </div>
           </div>
@@ -323,11 +323,11 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
       <Modal
         isOpen={showProducts}
         onClose={() => setShowProducts(false)}
-        title="Adicionar produtos"
+        title="Add products"
         size="md"
       >
         <Input
-          placeholder="Buscar produto..."
+          placeholder="Search products..."
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           className="mb-4"
@@ -352,7 +352,7 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
 
           {!filteredProducts.length && (
             <div className="col-span-2 card p-3 text-sm text-gray-400 text-center">
-              Nenhum produto com receita cadastrado para venda.
+              No products with recipes are available for sale.
             </div>
           )}
         </div>
@@ -383,19 +383,19 @@ export const TablesPage: React.FC = () => {
     <div className="p-4 md:p-6 max-w-5xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="page-title">Mesas</h1>
+          <h1 className="page-title">Tables</h1>
           <div className="flex gap-4 mt-2">
-            <span className="text-xs text-gray-400"><span className="text-green-400 font-bold">{freeTables}</span> livres</span>
-            <span className="text-xs text-gray-400"><span className="text-brand font-bold">{occupiedTables}</span> ocupadas</span>
+            <span className="text-xs text-gray-400"><span className="text-green-400 font-bold">{freeTables}</span> free</span>
+            <span className="text-xs text-gray-400"><span className="text-brand font-bold">{occupiedTables}</span> occupied</span>
           </div>
         </div>
         <Button icon={<Plus className="w-4 h-4" />} onClick={() => setShowCreateTable(true)}>
-          Nova mesa
+          New table
         </Button>
       </div>
 
       {!tables?.length ? (
-        <EmptyState title="Nenhuma mesa cadastrada" description="Crie a primeira mesa para começar" />
+        <EmptyState title="No tables registered" description="Create the first table to get started" />
       ) : (
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
           {tables.map((table) => (
@@ -420,7 +420,7 @@ export const TablesPage: React.FC = () => {
       <Modal
         isOpen={showCreateTable}
         onClose={() => setShowCreateTable(false)}
-        title="Nova mesa"
+        title="New table"
         size="sm"
         footer={
           <Button
@@ -428,12 +428,12 @@ export const TablesPage: React.FC = () => {
             onClick={() => void handleCreateTable()}
             loading={createTableMutation.isPending}
           >
-            Criar mesa
+            Create table
           </Button>
         }
       >
         <Input
-          label="Número"
+          label="Number"
           type="number"
           min={1}
           value={newTableNumber}

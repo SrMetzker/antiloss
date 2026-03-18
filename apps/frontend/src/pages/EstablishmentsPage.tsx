@@ -59,20 +59,20 @@ export const EstablishmentsPage: React.FC = () => {
     <div className="p-4 md:p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="page-title">Estabelecimentos</h1>
-          <p className="text-gray-400 text-sm mt-0.5">{data?.length ?? 0} cadastrados</p>
+          <h1 className="page-title">Establishments</h1>
+          <p className="text-gray-400 text-sm mt-0.5">{data?.length ?? 0} registered</p>
         </div>
         <Button icon={<Plus className="w-4 h-4" />} onClick={openCreate}>
-          Novo
+          New
         </Button>
       </div>
 
       {!data?.length ? (
         <EmptyState
           icon={<Building2 className="w-6 h-6" />}
-          title="Nenhum estabelecimento"
-          description="Cadastre o primeiro estabelecimento para começar"
-          action={<Button onClick={openCreate}>Criar estabelecimento</Button>}
+          title="No establishments"
+          description="Register the first establishment to get started"
+          action={<Button onClick={openCreate}>Create establishment</Button>}
         />
       ) : (
         <div className="space-y-2">
@@ -104,7 +104,7 @@ export const EstablishmentsPage: React.FC = () => {
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={editing ? 'Editar estabelecimento' : 'Novo estabelecimento'}
+        title={editing ? 'Edit establishment' : 'New establishment'}
         size="sm"
         footer={
           <Button
@@ -112,13 +112,13 @@ export const EstablishmentsPage: React.FC = () => {
             onClick={() => void handleSubmit()}
             loading={createMutation.isPending || updateMutation.isPending}
           >
-            {editing ? 'Salvar' : 'Criar'}
+            {editing ? 'Save' : 'Create'}
           </Button>
         }
       >
         <form onSubmit={handleSubmit}>
           <Input
-            label="Nome"
+            label="Name"
             value={name}
             onChange={(event) => setName(event.target.value)}
             required
@@ -130,9 +130,9 @@ export const EstablishmentsPage: React.FC = () => {
         isOpen={Boolean(confirmId)}
         onClose={() => setConfirmId(null)}
         onConfirm={handleDelete}
-        title="Excluir estabelecimento"
-        message="Essa ação remove também os dados relacionados desse estabelecimento."
-        confirmLabel="Excluir"
+        title="Delete establishment"
+        message="This action also removes all related data from this establishment."
+        confirmLabel="Delete"
         loading={deleteMutation.isPending}
       />
     </div>

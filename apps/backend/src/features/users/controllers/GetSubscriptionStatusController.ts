@@ -6,7 +6,7 @@ const service = new GetSubscriptionStatusService()
 
 export const getSubscriptionStatus = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) throw new ValidationError('Usuario nao autenticado')
+    if (!req.user) throw new ValidationError('Usuario no autenticado')
 
     const establishmentId =
       typeof req.query.establishmentId === 'string' ? req.query.establishmentId : undefined

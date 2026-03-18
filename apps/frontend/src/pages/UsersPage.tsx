@@ -32,10 +32,10 @@ const defaultForm: FormState = {
 }
 
 const ROLE_LABELS: Record<FormState['role'], string> = {
-  admin: 'Administrador',
-  manager: 'Gerente',
-  bartender: 'Atendente',
-  chef: 'Chef de Cozinha',
+  admin: 'Administrator',
+  manager: 'Manager',
+  bartender: 'Bartender',
+  chef: 'Chef',
 }
 
 export const UsersPage: React.FC = () => {
@@ -82,7 +82,7 @@ export const UsersPage: React.FC = () => {
     event?.preventDefault()
 
     if (isAdmin && form.establishmentIds.length === 0) {
-      toast.error('Selecione ao menos um estabelecimento para o usuário')
+      toast.error('Select at least one establishment for the user')
       return
     }
 
@@ -116,20 +116,20 @@ export const UsersPage: React.FC = () => {
     <div className="p-4 md:p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="page-title">Usuários</h1>
-          <p className="text-gray-400 text-sm mt-0.5">{data?.length ?? 0} cadastrados</p>
+          <h1 className="page-title">Users</h1>
+          <p className="text-gray-400 text-sm mt-0.5">{data?.length ?? 0} registered</p>
         </div>
         <Button icon={<Plus className="w-4 h-4" />} onClick={openCreate}>
-          Novo
+          New
         </Button>
       </div>
 
       {!data?.length ? (
         <EmptyState
           icon={<UserRound className="w-6 h-6" />}
-          title="Nenhum usuário"
-          description="Cadastre usuários para acesso ao sistema"
-          action={<Button onClick={openCreate}>Criar usuário</Button>}
+          title="No users"
+          description="Register users for system access"
+          action={<Button onClick={openCreate}>Create user</Button>}
         />
       ) : (
         <div className="space-y-2">
@@ -166,7 +166,7 @@ export const UsersPage: React.FC = () => {
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={editing ? 'Editar usuário' : 'Novo usuário'}
+        title={editing ? 'Edit user' : 'New user'}
         size="sm"
         footer={
           <Button
@@ -174,13 +174,13 @@ export const UsersPage: React.FC = () => {
             onClick={() => void handleSubmit()}
             loading={createMutation.isPending || updateMutation.isPending}
           >
-            {editing ? 'Salvar' : 'Criar'}
+            {editing ? 'Save' : 'Create'}
           </Button>
         }
       >
         <form onSubmit={handleSubmit} className="space-y-3">
           <Input
-            label="Nome"
+            label="Name"
             value={form.name}
             onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
             required
@@ -193,14 +193,14 @@ export const UsersPage: React.FC = () => {
             required
           />
           <Input
-            label={editing ? 'Nova senha (opcional)' : 'Senha'}
+            label={editing ? 'New password (optional)' : 'Password'}
             type="password"
             value={form.password}
             onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
             required={!editing}
           />
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="user-role" className="label">Cargo</label>
+            <label htmlFor="user-role" className="label">Role</label>
             <select
               id="user-role"
               value={form.role}
@@ -212,15 +212,15 @@ export const UsersPage: React.FC = () => {
               }
               className="input-field"
             >
-              <option value="bartender">Atendente</option>
-              <option value="chef">Chef de Cozinha</option>
-              <option value="manager">Gerente</option>
-              <option value="admin">Administrador</option>
+              <option value="bartender">Bartender</option>
+              <option value="chef">Chef</option>
+              <option value="manager">Manager</option>
+              <option value="admin">Administrator</option>
             </select>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="label">Estabelecimentos</label>
+            <label className="label">Establishments</label>
             {isAdmin ? (
               <div className="card-elevated p-3 max-h-40 overflow-auto space-y-2">
                 {establishments?.map((establishment) => {
@@ -246,12 +246,12 @@ export const UsersPage: React.FC = () => {
                 })}
 
                 {!establishments?.length && (
-                  <p className="text-xs text-gray-400">Nenhum estabelecimento disponível</p>
+                  <p className="text-xs text-gray-400">No establishments available</p>
                 )}
               </div>
             ) : (
               <p className="text-sm text-gray-400">
-                Usuários criados por manager são vinculados ao estabelecimento ativo.
+                Users created by a manager are linked to the active establishment.
               </p>
             )}
           </div>
@@ -262,9 +262,9 @@ export const UsersPage: React.FC = () => {
         isOpen={Boolean(confirmId)}
         onClose={() => setConfirmId(null)}
         onConfirm={handleDelete}
-        title="Excluir usuário"
-        message="Tem certeza que deseja excluir este usuário?"
-        confirmLabel="Excluir"
+        title="Delete user"
+        message="Are you sure you want to delete this user?"
+        confirmLabel="Delete"
         loading={deleteMutation.isPending}
       />
     </div>

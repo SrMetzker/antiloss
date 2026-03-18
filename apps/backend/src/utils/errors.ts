@@ -32,7 +32,7 @@ export class NotFoundError extends AppError {
 }
 
 export class InternalServerError extends AppError {
-  constructor(message: string = 'Internal server error') {
+  constructor(message: string = 'Error interno del servidor') {
     super(500, message)
     this.name = 'InternalServerError'
   }

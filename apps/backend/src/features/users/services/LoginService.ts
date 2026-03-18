@@ -11,7 +11,7 @@ interface LoginInput {
 export class LoginService {
   async execute(input: LoginInput) {
     if (!input.email || !input.password) {
-      throw new ValidationError('Email e senha são obrigatórios!')
+      throw new ValidationError('¡El email y la contraseña son obligatorios!')
     }
 
     // Busca usuário por email
@@ -49,13 +49,13 @@ export class LoginService {
     })
 
     if (!user) {
-      throw new NotFoundError('Invalid credentials')
+      throw new NotFoundError('Credenciales inválidas')
     }
 
     // Verifica senha
     const isPasswordValid = await bcrypt.compare(input.password, user.password)
     if (!isPasswordValid) {
-      throw new ValidationError('Invalid credentials')
+      throw new ValidationError('Credenciales inválidas')
     }
 
     // Gera token JWT

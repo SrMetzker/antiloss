@@ -17,7 +17,7 @@ export class CreateProductService {
       where: { id: input.establishmentId }
     });
     if (!establishment) {
-      throw new NotFoundError('Não foi possível identificar o estabelecimento para o produto!')
+      throw new NotFoundError('¡No fue posible identificar el establecimiento para el producto!')
     }
 
     await enforceProductLimit(input.establishmentId)

@@ -10,7 +10,7 @@ export const createIngredient = async (req: Request, res: Response, next: NextFu
     const createdBy = req.user?.userId ?? bodyCreatedBy
 
     if (!name || !unit || currentStock === undefined || !establishmentId || !createdBy) {
-      throw new ValidationError('name, unit, currentStock, establishmentId e createdBy são obrigatórios')
+      throw new ValidationError('name, unit, currentStock, establishmentId y createdBy son obligatorios')
     }
 
     const ingredient = await service.execute({

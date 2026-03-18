@@ -18,11 +18,11 @@ export class AddOrderItemService {
     })
 
     if (!order) {
-      throw new NotFoundError('Pedido nao encontrado')
+      throw new NotFoundError('Pedido no encontrado')
     }
 
     if (order.status !== 'OPEN') {
-      throw new ValidationError('Somente pedidos em aberto podem ser editados')
+      throw new ValidationError('Solo los pedidos abiertos pueden ser editados')
     }
 
     const product = await prisma.product.findUnique({
@@ -33,15 +33,15 @@ export class AddOrderItemService {
     })
 
     if (!product) {
-      throw new NotFoundError('Produto nao encontrado')
+      throw new NotFoundError('Producto no encontrado')
     }
 
     if (!product.recipe) {
-      throw new ValidationError(`Produto ${product.name} sem receita configurada`)
+      throw new ValidationError(`Producto ${product.name} sin receta configurada`)
     }
 
     if (product.establishmentId !== order.table.establishmentId) {
-      throw new ValidationError('Produto de estabelecimento diferente do pedido')
+      throw new ValidationError('Producto de establecimiento diferente al pedido')
     }
 
     const updated = await prisma.$transaction(async (tx) => {

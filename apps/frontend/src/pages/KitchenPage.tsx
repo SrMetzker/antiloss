@@ -26,10 +26,10 @@ export const KitchenPage: React.FC = () => {
       <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="page-title">Kitchen Queue</h1>
-          <p className="text-gray-400 text-sm mt-0.5">Pedidos abertos em preparo na cozinha</p>
+          <p className="text-gray-400 text-sm mt-0.5">Open orders being prepared in the kitchen</p>
         </div>
         <Badge variant="amber" className="!text-xs">
-          Atualiza automaticamente a cada 10s
+          Auto-updates every 10s
         </Badge>
       </div>
 
@@ -55,8 +55,8 @@ export const KitchenPage: React.FC = () => {
       {kitchenOrders.length === 0 ? (
         <EmptyState
           icon={<Flame className="w-7 h-7" />}
-          title="Nenhum pedido na fila"
-          description="Quando um novo pedido for aberto, ele aparece aqui para a cozinha."
+          title="No orders in queue"
+          description="When a new order is opened, it will appear here for the kitchen."
         />
       ) : (
         <div className="grid lg:grid-cols-2 gap-4">
@@ -64,8 +64,8 @@ export const KitchenPage: React.FC = () => {
             <Card key={order.id} className="p-4">
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div>
-                  <h2 className="font-display font-bold text-white text-lg">Mesa {order.tableNumber}</h2>
-                  <p className="text-xs text-gray-500">Iniciado {formatRelativeTime(order.createdAt)}</p>
+                  <h2 className="font-display font-bold text-white text-lg">Table {order.tableNumber}</h2>
+                  <p className="text-xs text-gray-500">Started {formatRelativeTime(order.createdAt)}</p>
                 </div>
                 <div className="text-right">
                   <Badge variant="amber">OPEN</Badge>
