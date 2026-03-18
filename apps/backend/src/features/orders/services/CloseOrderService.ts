@@ -1,9 +1,10 @@
 import { prisma } from '../../../config/database'
-import { NotFoundError, ValidationError } from '../../../utils/errors'
+import { AppError, NotFoundError, ValidationError } from '../../../utils/errors'
 
 interface CloseOrderInput {
   orderId: string
   createdBy: string
+  allowNegativeStock?: boolean
 }
 
 export class CloseOrderService {
@@ -59,6 +60,14 @@ export class CloseOrderService {
       where: { id: { in: ingredientAdjustments.map((adj) => adj.id) } }
     })
 
+    const shortages: Array<{
+      ingredientId: string
+      ingredientName: string
+      currentStock: number
+      required: number
+      shortBy: number
+    }> = []
+
     for (const adj of ingredientAdjustments) {
       const ingredient = ingredients.find((i) => i.id === adj.id)
       if (!ingredient) {
@@ -66,8 +75,28 @@ export class CloseOrderService {
       }
 
       if (ingredient.currentStock < adj.decrement) {
-        throw new ValidationError(`Estoque insuficiente para ${ingredient.name}`)
+        shortages.push({
+          ingredientId: ingredient.id,
+          ingredientName: ingredient.name,
+          currentStock: ingredient.currentStock,
+          required: adj.decrement,
+          shortBy: adj.decrement - ingredient.currentStock,
+        })
       }
+    }
+
+    if (shortages.length > 0 && !input.allowNegativeStock) {
+      const names = shortages.map((item) => item.ingredientName).join(', ')
+      throw new AppError(
+        409,
+        `Estoque insuficiente para: ${names}. Confirme para fechar com estoque negativo.`,
+        {
+          code: 'INSUFFICIENT_STOCK',
+          details: {
+            shortages,
+          },
+        }
+      )
     }
 
     const closedOrder = await prisma.$transaction(async (tx) => {

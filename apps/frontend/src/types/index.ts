@@ -114,7 +114,6 @@ export interface ProductFormData {
   price: number
   sku: string
   category: ProductCategory
-  lowStockThreshold?: number
 }
 
 // ─── Ingredients / Inventory ─────────────────────────────────────────────────
@@ -146,7 +145,10 @@ export interface StockMovement {
 }
 
 export interface StockMovementFormData {
-  ingredientId: string
+  ingredientId?: string
+  ingredientName: string
+  unit: StockUnit
+  minimumStock?: number
   type: MovementType
   quantity: number
   reason?: string

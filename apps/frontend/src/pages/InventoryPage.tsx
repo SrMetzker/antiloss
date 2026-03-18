@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { Input, Select } from '@/components/ui/Input'
 import { Badge, EmptyState, PageLoader } from '@/components/ui/Card'
 import { formatRelativeTime, movementLabel, movementColor } from '@/utils/format'
-import type { MovementType, StockMovementFormData } from '@/types'
+import type { MovementType, StockMovementFormData, StockUnit } from '@/types'
 
 const MOVEMENT_TYPES: { value: MovementType; label: string; icon: React.ReactNode; color: string }[] = [
   { value: 'IN', label: 'Stock In', icon: <TrendingUp className="w-4 h-4" />, color: 'bg-green-500/10 border-green-500/20 text-green-400' },
@@ -15,7 +15,17 @@ const MOVEMENT_TYPES: { value: MovementType; label: string; icon: React.ReactNod
   { value: 'ADJUSTMENT', label: 'Adjustment', icon: <RefreshCw className="w-4 h-4" />, color: 'bg-amber-500/10 border-amber-500/20 text-amber-400' },
 ]
 
-const defaultForm: StockMovementFormData = { ingredientId: '', type: 'IN', quantity: 0, reason: '' }
+const UNITS: StockUnit[] = ['unit', 'bottle', 'ml', 'cl', 'l', 'g', 'kg']
+
+const defaultForm: StockMovementFormData = {
+  ingredientId: undefined,
+  ingredientName: '',
+  unit: 'unit',
+  minimumStock: 0,
+  type: 'IN',
+  quantity: 0,
+  reason: '',
+}
 
 export const InventoryPage: React.FC = () => {
   const { data: ingredients, isLoading: loadingIng } = useIngredients()
@@ -29,8 +39,13 @@ export const InventoryPage: React.FC = () => {
   const lowStockIngredients = ingredients?.filter((i: any) => i.currentStock <= i.minStock) ?? []
 
   const openModal = (type: MovementType = 'IN', ingredientId?: string) => {
+    const selectedIngredient = ingredients?.find((item: any) => item.id === ingredientId)
+
     setForm({
-      ingredientId: ingredientId ?? ingredients?.[0]?.id ?? '',
+      ingredientId: selectedIngredient?.id,
+      ingredientName: selectedIngredient?.name ?? '',
+      unit: selectedIngredient?.unit ?? 'unit',
+      minimumStock: selectedIngredient?.minStock ?? 0,
       type,
       quantity: 0,
       reason: '',
@@ -187,12 +202,52 @@ export const InventoryPage: React.FC = () => {
         }
       >
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <Select
+          <Input
             label="Ingredient"
-            value={form.ingredientId}
-            onChange={(e) => setForm({ ...form, ingredientId: e.target.value })}
-            options={ingredients?.map((i: any) => ({ value: i.id, label: `${i.name} (${i.currentStock} ${i.unit})` })) ?? []}
+            value={form.ingredientName}
+            onChange={(e) => {
+              const typed = e.target.value
+              const existing = ingredients?.find((item: any) => item.name.toLowerCase() === typed.toLowerCase())
+
+              setForm({
+                ...form,
+                ingredientName: typed,
+                ingredientId: existing?.id,
+                unit: existing?.unit ?? form.unit,
+                minimumStock: existing?.minStock ?? form.minimumStock,
+              })
+            }}
+            list="ingredient-options"
+            placeholder="Digite para buscar ou criar ingrediente"
+            required
           />
+
+          <datalist id="ingredient-options">
+            {(ingredients ?? []).map((item: any) => (
+              <option key={item.id} value={item.name}>
+                {item.name} ({item.currentStock} {item.unit})
+              </option>
+            ))}
+          </datalist>
+
+          <div className="grid grid-cols-2 gap-3">
+            <Select
+              label="Unit"
+              value={form.unit}
+              onChange={(e) => setForm({ ...form, unit: e.target.value as StockUnit })}
+              options={UNITS.map((unit) => ({ value: unit, label: unit }))}
+            />
+            <Input
+              disabled={form.ingredientId !== undefined}
+              label="Minimum Stock"
+              type="number"
+              min="0"
+              step="0.1"
+              value={form.minimumStock ?? 0}
+              onChange={(e) => setForm({ ...form, minimumStock: parseFloat(e.target.value) || 0 })}
+            />
+          </div>
+
           <div className="grid grid-cols-2 gap-2">
             {MOVEMENT_TYPES.map((mt) => (
               <button

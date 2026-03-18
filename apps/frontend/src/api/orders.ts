@@ -121,12 +121,13 @@ export const ordersApi = {
     return open.find((order) => order.id === response.data.id) ?? mapOrder(response.data)
   },
 
-  closeOrder: async (orderId: string): Promise<Order> => {
+  closeOrder: async (orderId: string, options?: { allowNegativeStock?: boolean }): Promise<Order> => {
     const { createdBy } = getContext()
     if (!createdBy) throw new Error('Usuário não autenticado')
 
     const response = await apiClient.patch<BackendOrder>(`/orders/${orderId}/close`, {
       createdBy,
+      allowNegativeStock: options?.allowNegativeStock ?? false,
     })
 
     return mapOrder(response.data)

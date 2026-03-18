@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
-import { Plus, Search, Edit2, Trash2, Package } from 'lucide-react'
-import { useProducts, useCreateProduct, useUpdateProduct, useDeleteProduct } from '@/hooks'
+import { useNavigate } from 'react-router-dom'
+import { Plus, Search, Edit2, Trash2, Package, BookOpen } from 'lucide-react'
+import { useProducts, useCreateProduct, useUpdateProduct, useDeleteProduct, useRecipes } from '@/hooks'
 import { Modal, ConfirmModal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { Input, Select } from '@/components/ui/Input'
@@ -16,11 +17,13 @@ const categoryColors: Record<ProductCategory, 'green' | 'blue' | 'amber' | 'gray
 }
 
 const defaultForm: ProductFormData = {
-  name: '', price: 0, sku: '', category: 'cocktails', lowStockThreshold: 10,
+  name: '', price: 0, sku: '', category: 'cocktails',
 }
 
 export const ProductsPage: React.FC = () => {
+  const navigate = useNavigate()
   const { data: products, isLoading, isError, refetch } = useProducts()
+  const { data: recipes } = useRecipes()
   const createMutation = useCreateProduct()
   const updateMutation = useUpdateProduct()
   const deleteMutation = useDeleteProduct()
@@ -42,6 +45,11 @@ export const ProductsPage: React.FC = () => {
     })
   }, [products, search, filterCat])
 
+  const recipeProductIds = useMemo(
+    () => new Set((recipes ?? []).map((recipe) => recipe.productId)),
+    [recipes]
+  )
+
   const openCreate = () => {
     setEditingProduct(null)
     setForm(defaultForm)
@@ -55,7 +63,6 @@ export const ProductsPage: React.FC = () => {
       price: product.price,
       sku: product.sku,
       category: product.category,
-      lowStockThreshold: product.lowStockThreshold,
     })
     setModalOpen(true)
   }
@@ -125,10 +132,7 @@ export const ProductsPage: React.FC = () => {
       ) : (
         <div className="flex flex-col gap-2">
           {filtered.map((product) => {
-            const isLowStock =
-              product.stock !== undefined &&
-              product.lowStockThreshold !== undefined &&
-              product.stock <= product.lowStockThreshold
+            const hasRecipe = recipeProductIds.has(product.id)
 
             return (
               <div
@@ -147,7 +151,9 @@ export const ProductsPage: React.FC = () => {
                     <Badge variant={categoryColors[product.category]}>
                       {categoryLabel(product.category)}
                     </Badge>
-                    {isLowStock && <Badge variant="red">Low stock</Badge>}
+                    <Badge variant={hasRecipe ? 'green' : 'red'}>
+                      {hasRecipe ? 'Com receita' : 'Sem receita'}
+                    </Badge>
                   </div>
                   <p className="text-xs text-gray-500 mt-0.5">SKU: {product.sku}</p>
                 </div>
@@ -155,15 +161,17 @@ export const ProductsPage: React.FC = () => {
                 {/* Price */}
                 <div className="text-right flex-shrink-0 hidden sm:block">
                   <p className="font-display font-bold text-brand">{formatCurrency(product.price)}</p>
-                  {product.stock !== undefined && (
-                    <p className={`text-xs ${isLowStock ? 'text-red-400' : 'text-gray-500'}`}>
-                      {product.stock} in stock
-                    </p>
-                  )}
                 </div>
 
                 {/* Actions */}
                 <div className="flex items-center gap-1 flex-shrink-0">
+                  <button
+                    onClick={() => navigate('/recipes', { state: { productId: product.id } })}
+                    className="p-2 rounded-xl text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all"
+                    title="Cadastrar/editar receita"
+                  >
+                    <BookOpen className="w-4 h-4" />
+                  </button>
                   <button
                     onClick={() => openEdit(product)}
                     className="p-2 rounded-xl text-gray-400 hover:text-brand hover:bg-brand-muted transition-all"
@@ -230,14 +238,6 @@ export const ProductsPage: React.FC = () => {
             value={form.category}
             onChange={(e) => setForm({ ...form, category: e.target.value as ProductCategory })}
             options={CATEGORIES.map((c) => ({ value: c, label: categoryLabel(c) }))}
-          />
-          <Input
-            label="Low Stock Threshold"
-            type="number"
-            min="0"
-            value={form.lowStockThreshold ?? 10}
-            onChange={(e) => setForm({ ...form, lowStockThreshold: parseInt(e.target.value) || 0 })}
-            hint="Alert when stock falls below this number"
           />
         </form>
       </Modal>

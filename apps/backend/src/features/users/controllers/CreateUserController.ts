@@ -25,7 +25,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
 
     if (req.user?.role === 'MANAGER') {
       if (role === 'ADMIN' || role === 'MANAGER') {
-        throw new AppError(403, 'Manager nao pode criar usuario com role ADMIN ou MANAGER')
+        throw new AppError(400, 'Usuário sem permissão para atribuir o papel informado!')
       }
 
       const allowed = new Set(req.user.establishmentIds)
@@ -34,7 +34,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
         : [...allowed]
 
       if (!scopedEstablishmentIds.length) {
-        throw new AppError(403, 'Usuario deve ser vinculado a pelo menos um estabelecimento do manager')
+        throw new AppError(400, 'Usuário deve ser vinculado a pelo menos um estabelecimento!')
       }
 
       scopedRole = role ?? 'BARTENDER'

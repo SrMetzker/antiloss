@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Plus, BookOpen, Edit2, Trash2, ChevronDown, ChevronUp, Beaker, X } from 'lucide-react'
 import { useRecipes, useCreateRecipe, useUpdateRecipe, useDeleteRecipe, useProducts, useIngredients } from '@/hooks'
 import { Modal, ConfirmModal } from '@/components/ui/Modal'
@@ -81,6 +82,7 @@ const RecipeCard: React.FC<{
 }
 
 export const RecipesPage: React.FC = () => {
+  const location = useLocation()
   const { data: recipes, isLoading } = useRecipes()
   const { data: products } = useProducts()
   const { data: ingredients } = useIngredients()
@@ -92,6 +94,23 @@ export const RecipesPage: React.FC = () => {
   const [confirmId, setConfirmId] = useState<string | null>(null)
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null)
   const [form, setForm] = useState<RecipeFormData>(defaultForm)
+
+  useEffect(() => {
+    const stateProductId = (location.state as { productId?: string } | null)?.productId
+    if (!stateProductId || !products || recipes === undefined) return
+
+    const existingRecipe = (recipes ?? []).find((recipe) => recipe.productId === stateProductId)
+
+    if (existingRecipe) {
+      openEdit(existingRecipe)
+      return
+    }
+
+    setEditingRecipe(null)
+    setForm({ ...defaultForm, productId: stateProductId })
+    setModalOpen(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state, products, recipes])
 
   const openCreate = () => {
     setEditingRecipe(null)
@@ -226,18 +245,11 @@ export const RecipesPage: React.FC = () => {
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="label">Ingredients</label>
-              <button
-                type="button"
-                onClick={addIngredientRow}
-                className="text-xs text-brand font-semibold flex items-center gap-1 hover:underline"
-              >
-                <Plus className="w-3 h-3" /> Add
-              </button>
             </div>
 
             {form.ingredients.length === 0 ? (
               <div className="card p-4 text-center text-gray-500 text-sm">
-                No ingredients. Click "Add" to add ingredients.
+                No ingredients. Click "Add Ingredient" to add ingredients.
               </div>
             ) : (
               <div className="flex flex-col gap-2">
@@ -280,6 +292,17 @@ export const RecipesPage: React.FC = () => {
                 ))}
               </div>
             )}
+
+            <Button
+              type="button"
+              variant="secondary"
+              fullWidth
+              className="mt-3"
+              onClick={addIngredientRow}
+              icon={<Plus className="w-4 h-4" />}
+            >
+              Add Ingredient
+            </Button>
           </div>
         </form>
       </Modal>

@@ -224,12 +224,13 @@ export const SubscriptionPage: React.FC = () => {
             <div className="card p-5 space-y-3">
               <p className="label">Plano da assinatura</p>
               <p className="text-sm text-gray-400">
-                Managers e admins podem trocar o plano do estabelecimento.
+                Somente o administrador pode trocar o plano do estabelecimento.
               </p>
 
               <Select
                 label="Selecionar plano"
                 value={selectedPlanCode}
+                disabled={!isAdmin}
                 onChange={(event) => setSelectedPlanCode(event.target.value)}
                 options={plans.map((plan) => ({
                   value: plan.code,
@@ -250,7 +251,7 @@ export const SubscriptionPage: React.FC = () => {
               <div className="card p-5 space-y-3">
                 <p className="label">Ativacao manual</p>
                 <p className="text-sm text-gray-400">
-                  Use quando o cliente pagar por transferencia, MB Way, PIX ou dinheiro.
+                  Use quando o cliente pagar por transferencia, MB Way, Bizum ou dinheiro.
                 </p>
 
                 <Input

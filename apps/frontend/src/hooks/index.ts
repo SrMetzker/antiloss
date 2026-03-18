@@ -220,7 +220,8 @@ export const useCreateOrder = () => {
 export const useCloseOrder = () => {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (orderId: string) => ordersApi.closeOrder(orderId),
+    mutationFn: ({ orderId, allowNegativeStock }: { orderId: string; allowNegativeStock?: boolean }) =>
+      ordersApi.closeOrder(orderId, { allowNegativeStock }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['tables'] })
       qc.invalidateQueries({ queryKey: ['table-order'] })
