@@ -9,7 +9,7 @@ export class DeleteRecipeService {
       })
 
       if (!recipe) {
-        throw new NotFoundError('Receita nao encontrada')
+        throw new NotFoundError('Receta no encontrada')
       }
 
       await tx.recipeItem.deleteMany({
@@ -21,6 +21,6 @@ export class DeleteRecipeService {
       })
     })
 
-    return { message: 'Receita excluida com sucesso' }
+    return { message: 'Receta eliminada con éxito' }
   }
 }

@@ -103,12 +103,12 @@ export const inventoryApi = {
     const { createdBy, establishmentId } = getContext()
 
     if (!createdBy || !establishmentId) {
-      throw new Error('Usuário não autenticado ou estabelecimento não selecionado')
+      throw new Error('User not authenticated or establishment not selected')
     }
 
     const typedName = data.ingredientName.trim()
     if (!typedName) {
-      throw new Error('Ingrediente é obrigatório')
+      throw new Error('Ingredient is required')
     }
 
     let ingredient =
@@ -119,7 +119,7 @@ export const inventoryApi = {
 
     if (!ingredient) {
       if (data.type === 'OUT' || data.type === 'LOSS') {
-        throw new Error('Não é possível dar baixa em um ingrediente que ainda não existe')
+        throw new Error('Cannot subtract stock from an ingredient that does not exist yet')
       }
 
       ingredient = await inventoryApi.createIngredient({
@@ -164,7 +164,7 @@ export const inventoryApi = {
     const { establishmentId, createdBy } = getContext()
 
     if (!establishmentId || !createdBy) {
-      throw new Error('Usuário não autenticado ou estabelecimento não selecionado')
+      throw new Error('User not authenticated or establishment not selected')
     }
 
     const response = await apiClient.post<BackendIngredient>('/stock', {

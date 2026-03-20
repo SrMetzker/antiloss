@@ -9,7 +9,7 @@ export const getRecipe = async (req: Request, res: Response, next: NextFunction)
     const { productId } = req.params
 
     if (!productId) {
-      throw new ValidationError('O productId e obrigatorio!')
+      throw new ValidationError('¡El productId es obligatorio!')
     }
 
     const recipe = await service.execute(productId as string)

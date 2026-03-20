@@ -50,9 +50,9 @@ export const useCreateProduct = () => {
     mutationFn: (data: ProductFormData) => productsApi.create(data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['products'] })
-      toast.success('Produto criado com sucesso')
+      toast.success('Product created successfully')
     },
-    onError: onErrorMessage('Falha ao criar produto'),
+    onError: onErrorMessage('Failed to create product'),
   })
 }
 
@@ -63,9 +63,9 @@ export const useUpdateProduct = () => {
       productsApi.update(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['products'] })
-      toast.success('Produto atualizado')
+      toast.success('Product updated')
     },
-    onError: onErrorMessage('Falha ao atualizar produto'),
+    onError: onErrorMessage('Failed to update product'),
   })
 }
 
@@ -75,9 +75,9 @@ export const useDeleteProduct = () => {
     mutationFn: (id: string) => productsApi.delete(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['products'] })
-      toast.success('Produto removido')
+      toast.success('Product removed')
     },
-    onError: onErrorMessage('Falha ao remover produto'),
+    onError: onErrorMessage('Failed to remove product'),
   })
 }
 
@@ -95,9 +95,9 @@ export const useCreateMovement = () => {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['ingredients'] })
       qc.invalidateQueries({ queryKey: ['movements'] })
-      toast.success('Estoque atualizado')
+      toast.success('Stock updated')
     },
-    onError: onErrorMessage('Falha ao atualizar estoque'),
+    onError: onErrorMessage('Failed to update stock'),
   })
 }
 
@@ -107,9 +107,9 @@ export const useCreateIngredient = () => {
     mutationFn: inventoryApi.createIngredient,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['ingredients'] })
-      toast.success('Ingrediente criado')
+      toast.success('Ingredient created')
     },
-    onError: onErrorMessage('Falha ao criar ingrediente'),
+    onError: onErrorMessage('Failed to create ingredient'),
   })
 }
 
@@ -120,9 +120,9 @@ export const useUpdateIngredient = () => {
       inventoryApi.updateIngredient(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['ingredients'] })
-      toast.success('Ingrediente atualizado')
+      toast.success('Ingredient updated')
     },
-    onError: onErrorMessage('Falha ao atualizar ingrediente'),
+    onError: onErrorMessage('Failed to update ingredient'),
   })
 }
 
@@ -132,9 +132,9 @@ export const useDeleteIngredient = () => {
     mutationFn: inventoryApi.deleteIngredient,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['ingredients'] })
-      toast.success('Ingrediente removido')
+      toast.success('Ingredient removed')
     },
-    onError: onErrorMessage('Falha ao remover ingrediente'),
+    onError: onErrorMessage('Failed to remove ingredient'),
   })
 }
 
@@ -149,9 +149,9 @@ export const useCreateRecipe = () => {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['recipes'] })
       qc.invalidateQueries({ queryKey: ['products'] })
-      toast.success('Receita criada')
+      toast.success('Recipe created')
     },
-    onError: onErrorMessage('Falha ao criar receita'),
+    onError: onErrorMessage('Failed to create recipe'),
   })
 }
 
@@ -161,9 +161,9 @@ export const useUpdateRecipe = () => {
     mutationFn: ({ id, data }: { id: string; data: Partial<RecipeFormData> }) => recipesApi.update(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['recipes'] })
-      toast.success('Receita atualizada')
+      toast.success('Recipe updated')
     },
-    onError: onErrorMessage('Falha ao atualizar receita'),
+    onError: onErrorMessage('Failed to update recipe'),
   })
 }
 
@@ -173,9 +173,9 @@ export const useDeleteRecipe = () => {
     mutationFn: (id: string) => recipesApi.delete(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['recipes'] })
-      toast.success('Receita removida')
+      toast.success('Recipe removed')
     },
-    onError: onErrorMessage('Falha ao remover receita'),
+    onError: onErrorMessage('Failed to remove recipe'),
   })
 }
 
@@ -189,9 +189,9 @@ export const useCreateTable = () => {
     mutationFn: (number: number) => ordersApi.createTable(number),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['tables'] })
-      toast.success('Mesa criada')
+      toast.success('Table created')
     },
-    onError: onErrorMessage('Falha ao criar mesa'),
+    onError: onErrorMessage('Failed to create table'),
   })
 }
 
@@ -211,9 +211,9 @@ export const useCreateOrder = () => {
       qc.invalidateQueries({ queryKey: ['tables'] })
       qc.invalidateQueries({ queryKey: ['table-order'] })
       qc.invalidateQueries({ queryKey: ['reports'] })
-      toast.success('Pedido criado')
+      toast.success('Order created')
     },
-    onError: onErrorMessage('Falha ao criar pedido'),
+    onError: onErrorMessage('Failed to create order'),
   })
 }
 
@@ -227,9 +227,9 @@ export const useCloseOrder = () => {
       qc.invalidateQueries({ queryKey: ['table-order'] })
       qc.invalidateQueries({ queryKey: ['ingredients'] })
       qc.invalidateQueries({ queryKey: ['reports'] })
-      toast.success('Pedido finalizado')
+      toast.success('Order closed')
     },
-    onError: onErrorMessage('Falha ao finalizar pedido'),
+    onError: onErrorMessage('Failed to close order'),
   })
 }
 
@@ -241,9 +241,9 @@ export const useAddItemToOpenOrder = () => {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['tables'] })
       qc.invalidateQueries({ queryKey: ['table-order'] })
-      toast.success('Item adicionado ao pedido')
+      toast.success('Item added to order')
     },
-    onError: onErrorMessage('Falha ao adicionar item ao pedido'),
+    onError: onErrorMessage('Failed to add item to order'),
   })
 }
 
@@ -255,9 +255,9 @@ export const useRemoveItemFromOpenOrder = () => {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['tables'] })
       qc.invalidateQueries({ queryKey: ['table-order'] })
-      toast.success('Item removido do pedido')
+      toast.success('Item removed from order')
     },
-    onError: onErrorMessage('Falha ao remover item do pedido'),
+    onError: onErrorMessage('Failed to remove item from order'),
   })
 }
 
@@ -281,9 +281,9 @@ export const useCreateEstablishment = () => {
     mutationFn: (data: EstablishmentCreateInput) => establishmentsApi.create(data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['establishments'] })
-      toast.success('Estabelecimento criado')
+      toast.success('Establishment created')
     },
-    onError: onErrorMessage('Falha ao criar estabelecimento'),
+    onError: onErrorMessage('Failed to create establishment'),
   })
 }
 
@@ -294,9 +294,9 @@ export const useUpdateEstablishment = () => {
       establishmentsApi.update(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['establishments'] })
-      toast.success('Estabelecimento atualizado')
+      toast.success('Establishment updated')
     },
-    onError: onErrorMessage('Falha ao atualizar estabelecimento'),
+    onError: onErrorMessage('Failed to update establishment'),
   })
 }
 
@@ -306,9 +306,9 @@ export const useDeleteEstablishment = () => {
     mutationFn: (id: string) => establishmentsApi.delete(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['establishments'] })
-      toast.success('Estabelecimento removido')
+      toast.success('Establishment removed')
     },
-    onError: onErrorMessage('Falha ao remover estabelecimento'),
+    onError: onErrorMessage('Failed to remove establishment'),
   })
 }
 
@@ -322,9 +322,9 @@ export const useCreateUser = () => {
     mutationFn: (data: UserCreateInput) => usersApi.create(data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['users'] })
-      toast.success('Usuário criado')
+      toast.success('User created')
     },
-    onError: onErrorMessage('Falha ao criar usuário'),
+    onError: onErrorMessage('Failed to create user'),
   })
 }
 
@@ -334,9 +334,9 @@ export const useUpdateUser = () => {
     mutationFn: ({ id, data }: { id: string; data: UserUpdateInput }) => usersApi.update(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['users'] })
-      toast.success('Usuário atualizado')
+      toast.success('User updated')
     },
-    onError: onErrorMessage('Falha ao atualizar usuário'),
+    onError: onErrorMessage('Failed to update user'),
   })
 }
 
@@ -346,8 +346,8 @@ export const useDeleteUser = () => {
     mutationFn: (id: string) => usersApi.delete(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['users'] })
-      toast.success('Usuário removido')
+      toast.success('User removed')
     },
-    onError: onErrorMessage('Falha ao remover usuário'),
+    onError: onErrorMessage('Failed to remove user'),
   })
 }

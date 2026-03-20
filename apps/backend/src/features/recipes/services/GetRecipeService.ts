@@ -16,7 +16,7 @@ export class GetRecipeService {
     })
 
     if (!recipe) {
-      throw new NotFoundError('Receita nao encontrada')
+      throw new NotFoundError('Receta no encontrada')
     }
 
     return recipe

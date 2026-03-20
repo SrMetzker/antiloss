@@ -13,7 +13,7 @@ export class UpdateIngredientService {
   async execute(ingredientId: string, input: UpdateIngredientInput) {
     const existing = await prisma.ingredient.findUnique({ where: { id: ingredientId } })
     if (!existing) {
-      throw new NotFoundError('Ingredient not found')
+      throw new NotFoundError('Ingrediente no encontrado')
     }
 
     const updated = await prisma.$transaction(async (tx) => {

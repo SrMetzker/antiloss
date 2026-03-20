@@ -9,7 +9,7 @@ export class DeleteProductService {
     })
 
     if (!product) {
-      throw new NotFoundError('Produto não encontrado!')
+      throw new NotFoundError('¡Producto no encontrado!')
     }
 
     await prisma.$transaction(async (tx) => {
@@ -41,6 +41,6 @@ export class DeleteProductService {
       })
     })
 
-    return { message: 'Produto Deletado com sucesso!' }
+    return { message: '¡Producto eliminado con éxito!' }
   }
 }

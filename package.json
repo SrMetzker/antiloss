@@ -1,5 +1,5 @@
 {
-  "name": "antiloss-monorepo",
+  "name": "stratto-monorepo",
   "version": "1.0.0",
   "private": true,
   "workspaces": [

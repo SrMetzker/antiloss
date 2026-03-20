@@ -30,7 +30,7 @@ app.use(errorHandler)
 
 // 404
 app.use((req, res) => {
-  res.status(404).json({ error: 'Não foi possível encontrar a rota solicitada!' })
+  res.status(404).json({ error: '¡No fue posible encontrar la ruta solicitada!' })
 })
 
 app.listen(port, '0.0.0.0', () => {

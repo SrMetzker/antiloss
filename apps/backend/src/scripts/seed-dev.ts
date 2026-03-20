@@ -7,9 +7,9 @@ async function main() {
   const starterPlan = await prisma.plan.create({
     data: {
       code: 'starter',
-      name: 'Iniciante',
-      description: 'Plano inicial para operacao basica',
-      priceCents: 1490,
+      name: 'STARTER',
+      description: 'Plan inicial para la operación básica',
+      priceCents: 1990,
       currency: 'EUR',
       billingCycle: 'MONTHLY',
       trialDays: 14,
@@ -22,9 +22,9 @@ async function main() {
   await prisma.plan.create({
     data: {
       code: 'pro',
-      name: 'Profissional',
-      description: 'Plano para bares e restaurantes em crescimento',
-      priceCents: 3490,
+      name: 'PRO',
+      description: 'Plan para el crecimiento de bares y restaurantes',
+      priceCents: 3990,
       currency: 'EUR',
       billingCycle: 'MONTHLY',
       trialDays: 14,
@@ -36,7 +36,7 @@ async function main() {
 
   const admin = await prisma.user.create({
     data: {
-      email: 'admin@anti-loss.com',
+      email: 'admin@stratto.com',
       password: passwordHash,
       name: 'Admin Sistema',
       role: 'ADMIN',
@@ -46,7 +46,7 @@ async function main() {
 
   const manager = await prisma.user.create({
     data: {
-      email: 'manager@anti-loss.com',
+      email: 'manager@stratto.com',
       password: passwordHash,
       name: 'Gerente Principal',
       role: 'MANAGER',
@@ -56,7 +56,7 @@ async function main() {
 
   const bartender = await prisma.user.create({
     data: {
-      email: 'bartender@anti-loss.com',
+      email: 'bartender@stratto.com',
       password: passwordHash,
       name: 'Bartender Demo',
       role: 'BARTENDER',
@@ -66,7 +66,7 @@ async function main() {
 
   const chef = await prisma.user.create({
     data: {
-      email: 'chef@anti-loss.com',
+      email: 'chef@stratto.com',
       password: passwordHash,
       name: 'Chef Demo',
       role: 'CHEF',
@@ -321,10 +321,10 @@ async function main() {
 
   console.log('Seed concluido com sucesso.')
   console.log('Credenciais:')
-  console.log('admin@anti-loss.com / 123456')
-  console.log('manager@anti-loss.com / 123456')
-  console.log('bartender@anti-loss.com / 123456')
-  console.log('chef@anti-loss.com / 123456')
+  console.log('admin@stratto.com / 123456')
+  console.log('manager@stratto.com / 123456')
+  console.log('bartender@stratto.com / 123456')
+  console.log('chef@stratto.com / 123456')
 }
 
 main()

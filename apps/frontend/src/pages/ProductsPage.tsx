@@ -152,7 +152,7 @@ export const ProductsPage: React.FC = () => {
                       {categoryLabel(product.category)}
                     </Badge>
                     <Badge variant={hasRecipe ? 'green' : 'red'}>
-                      {hasRecipe ? 'Com receita' : 'Sem receita'}
+                      {hasRecipe ? 'With recipe' : 'Without recipe'}
                     </Badge>
                   </div>
                   <p className="text-xs text-gray-500 mt-0.5">SKU: {product.sku}</p>
@@ -168,7 +168,7 @@ export const ProductsPage: React.FC = () => {
                   <button
                     onClick={() => navigate('/recipes', { state: { productId: product.id } })}
                     className="p-2 rounded-xl text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all"
-                    title="Cadastrar/editar receita"
+                    title="Create/edit recipe"
                   >
                     <BookOpen className="w-4 h-4" />
                   </button>

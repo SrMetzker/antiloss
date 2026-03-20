@@ -10,12 +10,12 @@ export const updateProduct = async (req: Request, res: Response, next: NextFunct
     const { name, sku, price, establishmentId } = req.body
 
     if (!id) {
-      throw new ValidationError('Não foi possível identificar o produto a ser atualizado!')
+      throw new ValidationError('¡No fue posible identificar el producto a actualizar!')
     }
 
     // Valida se pelo menos um campo foi fornecido
     if (!name && !sku && price === undefined && !establishmentId) {
-      throw new ValidationError('Pelo menos um campo deve ser fornecido para a atualização!')
+      throw new ValidationError('¡Al menos un campo debe ser proporcionado para la actualización!')
     }
 
     const updatedProduct = await service.execute(id as string, {

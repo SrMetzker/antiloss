@@ -28,11 +28,11 @@ export class MarkSubscriptionAsPaidService {
       (input.userEstablishmentIds.length === 1 ? input.userEstablishmentIds[0] : undefined)
 
     if (!selectedEstablishmentId) {
-      throw new AppError(400, 'Informe establishmentId para registrar pagamento')
+      throw new AppError(400, 'Informe el establishmentId para registrar el pago')
     }
 
     if (input.userRole !== 'ADMIN' && !input.userEstablishmentIds.includes(selectedEstablishmentId)) {
-      throw new AppError(403, 'Sem permissao para registrar pagamento deste estabelecimento')
+      throw new AppError(403, 'Sin permiso para registrar el pago de este establecimiento')
     }
 
     const subscription = await prisma.subscription.findUnique({
@@ -51,7 +51,7 @@ export class MarkSubscriptionAsPaidService {
     })
 
     if (!subscription) {
-      throw new AppError(404, 'Assinatura nao encontrada para o estabelecimento informado')
+      throw new AppError(404, 'Suscripción no encontrada para el establecimiento indicado')
     }
 
     const now = new Date()

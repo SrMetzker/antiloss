@@ -6,7 +6,7 @@ const service = new MarkSubscriptionAsPaidService()
 
 export const markSubscriptionAsPaid = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) throw new ValidationError('Usuario nao autenticado')
+    if (!req.user) throw new ValidationError('Usuario no autenticado')
 
     const { establishmentId, providerReference, amountCents } = req.body
 

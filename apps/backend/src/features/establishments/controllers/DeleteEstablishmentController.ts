@@ -9,7 +9,7 @@ export const deleteEstablishment = async (req: Request, res: Response, next: Nex
     const { id } = req.params
 
     if (!id) {
-      throw new ValidationError('Não foi possível identificar o estabelecimento a ser atualizado!')
+      throw new ValidationError('¡No fue posible identificar el establecimiento a eliminar!')
     }
 
     const establishment = await service.execute(id as string)

@@ -5,21 +5,21 @@ export default {
     extend: {
       colors: {
         bg: {
-          DEFAULT: '#0c0c0e',
-          surface: '#141417',
-          elevated: '#1c1c21',
-          border: '#2a2a32',
+          DEFAULT: '#07101E',
+          surface: '#0C1829',
+          elevated: '#142234',
+          border: '#1E3149',
         },
         amber: {
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
+          400: '#E4B963',
+          500: '#D9A441',
+          600: '#B67E2F',
         },
         brand: {
-          DEFAULT: '#f59e0b',
-          light: '#fcd34d',
-          dark: '#b45309',
-          muted: 'rgba(245,158,11,0.12)',
+          DEFAULT: '#0EA5E9',
+          light: '#38BDF8',
+          dark: '#0369A1',
+          muted: 'rgba(14,165,233,0.12)',
         },
       },
       fontFamily: {
@@ -27,7 +27,7 @@ export default {
         body: ['DM Sans', 'sans-serif'],
       },
       boxShadow: {
-        'glow-amber': '0 0 20px rgba(245,158,11,0.25)',
+        'glow-amber': '0 0 24px rgba(14,165,233,0.40)',
         'card': '0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3)',
       },
       animation: {

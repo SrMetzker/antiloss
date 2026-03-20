@@ -10,10 +10,10 @@ export const createEstablishment = async (req: Request, res: Response, next: Nex
     const createdBy = req.user?.userId ?? bodyCreatedBy
 
     if (!name) {
-      throw new ValidationError('O nome do estabelecimento é obrigatório!')
+      throw new ValidationError('¡El nombre del establecimiento es obligatorio!')
     }
     if (!createdBy) {
-      throw new ValidationError('Não foi possível identificar o usuário criador do estabelecimento!')
+      throw new ValidationError('¡No fue posible identificar al usuario creador del establecimiento!')
     }
 
     const establishment = await service.execute({ name, createdBy })

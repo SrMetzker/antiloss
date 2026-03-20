@@ -54,7 +54,7 @@ export const productsApi = {
   create: async (data: ProductFormData): Promise<Product> => {
     const { establishmentId, createdBy } = getContext()
     if (!establishmentId || !createdBy) {
-      throw new Error('Usuário não autenticado ou estabelecimento não selecionado')
+      throw new Error('User not authenticated or establishment not selected')
     }
 
     const payload = {

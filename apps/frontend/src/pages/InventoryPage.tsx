@@ -218,7 +218,7 @@ export const InventoryPage: React.FC = () => {
               })
             }}
             list="ingredient-options"
-            placeholder="Digite para buscar ou criar ingrediente"
+            placeholder="Type to search or create an ingredient"
             required
           />
 

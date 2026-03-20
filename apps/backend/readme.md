@@ -1,4 +1,4 @@
-# Anti-Loss - Sistema de Controle de Produtos
+# Stratto - Sistema de Controle de Produtos
 
 Este projeto é um sistema de controle de produtos para estabelecimentos, focado em prevenir perdas. Ele utiliza Node.js com Express para gerenciar operações de criação de produtos.
 

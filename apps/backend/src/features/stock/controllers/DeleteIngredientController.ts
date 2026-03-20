@@ -9,7 +9,7 @@ export const deleteIngredient = async (req: Request, res: Response, next: NextFu
     const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id
 
     if (!id) {
-      throw new ValidationError('Ingredient ID is required')
+      throw new ValidationError('El ID del ingrediente es obligatorio')
     }
 
     const result = await service.execute(id)

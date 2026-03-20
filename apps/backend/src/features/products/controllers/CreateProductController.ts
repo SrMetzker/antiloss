@@ -10,24 +10,24 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
     const createdBy = req.user?.userId ?? bodyCreatedBy
 
     if (!name) {
-      throw new ValidationError('O nome do produto é obrigatório!')
+      throw new ValidationError('¡El nombre del producto es obligatorio!')
     }
 
     if (price) {
       const priceNumber = parseFloat(price)
       if (isNaN(priceNumber) || priceNumber < 0) {
-        throw new ValidationError('O preço do produto deve ser um número válido e não pode ser negativo!')
+        throw new ValidationError('¡El precio del producto debe ser un número válido y no puede ser negativo!')
       }
     } else {
-      throw new ValidationError('O preço do produto é obrigatório!')
+      throw new ValidationError('¡El precio del producto es obligatorio!')
     }
 
     if (!establishmentId) {
-      throw new ValidationError('O ID do estabelecimento é obrigatório!')
+      throw new ValidationError('¡El ID del establecimiento es obligatorio!')
     }
 
     if (!createdBy) {
-      throw new ValidationError('Não foi possível identificar o usuário criador do produto!')
+      throw new ValidationError('¡No fue posible identificar al usuario creador del producto!')
     }
 
     const product = await service.execute({

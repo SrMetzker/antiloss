@@ -10,11 +10,11 @@ export const updateEstablishment = async (req: Request, res: Response, next: Nex
     const { name } = req.body
 
     if (!id) {
-      throw new ValidationError('Não foi possível identificar o estabelecimento a ser atualizado!')
+      throw new ValidationError('¡No fue posible identificar el establecimiento a actualizar!')
     }
 
     if (!name) {
-      throw new ValidationError('O nome do estabelecimento é obrigatório!')
+      throw new ValidationError('¡El nombre del establecimiento es obligatorio!')
     }
 
     const establishment = await service.execute(id as string, name)

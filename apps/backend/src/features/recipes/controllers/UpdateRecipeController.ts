@@ -10,11 +10,11 @@ export const updateRecipe = async (req: Request, res: Response, next: NextFuncti
     const { items } = req.body
 
     if (!productId) {
-      throw new ValidationError('O productId e obrigatorio!')
+      throw new ValidationError('¡El productId es obligatorio!')
     }
 
     if (!items || !Array.isArray(items) || items.length === 0) {
-      throw new ValidationError('Os itens da receita sao obrigatorios!')
+      throw new ValidationError('¡Los ítems de la receta son obligatorios!')
     }
 
     const recipe = await service.execute(productId as string, { items })

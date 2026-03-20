@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { GetRecipeByProductService } from '../services/GetRecipeByProductService'
+import { ValidationError } from '../../../utils/errors'
 
 const service = new GetRecipeByProductService()
 
@@ -8,7 +9,7 @@ export const getRecipeByProduct = async (req: Request, res: Response, next: Next
     const productId = Array.isArray(req.params.productId) ? req.params.productId[0] : req.params.productId
 
     if (!productId) {
-      throw new Error('productId is required')
+      throw new ValidationError('productId es obligatorio')
     }
 
     const recipe = await service.execute(productId)

@@ -38,10 +38,10 @@ const getPlanContext = async (establishmentId: string): Promise<PlanContext> => 
     })
 
     if (!establishment) {
-      throw new NotFoundError('Nao foi possivel identificar o estabelecimento informado')
+      throw new NotFoundError('No fue posible identificar el establecimiento indicado')
     }
 
-    throw new AppError(409, 'Estabelecimento sem assinatura/plano configurado')
+    throw new AppError(409, 'Establecimiento sin suscripción/plan configurado')
   }
 
   return {
@@ -67,7 +67,7 @@ export const enforceUserLimitForEstablishments = async (establishmentIds: string
       if (currentUsers >= context.maxUsers) {
         throw new AppError(
           422,
-          `Limite de usuarios atingido no plano ${context.planName} para ${context.establishmentName} (${context.maxUsers})`
+          `Límite de usuarios alcanzado en el plan ${context.planName} para ${context.establishmentName} (${context.maxUsers})`
         )
       }
     })
@@ -83,7 +83,7 @@ export const enforceProductLimit = async (establishmentId: string) => {
   if (currentProducts >= context.maxProducts) {
     throw new AppError(
       422,
-      `Limite de produtos atingido no plano ${context.planName} para ${context.establishmentName} (${context.maxProducts})`
+      `Límite de productos alcanzado en el plan ${context.planName} para ${context.establishmentName} (${context.maxProducts})`
     )
   }
 }
@@ -99,7 +99,7 @@ export const enforceTableLimit = async (establishmentId: string) => {
   if (currentTables >= context.maxTables) {
     throw new AppError(
       422,
-      `Limite de mesas atingido no plano ${context.planName} para ${context.establishmentName} (${context.maxTables})`
+      `Límite de mesas alcanzado en el plan ${context.planName} para ${context.establishmentName} (${context.maxTables})`
     )
   }
 }

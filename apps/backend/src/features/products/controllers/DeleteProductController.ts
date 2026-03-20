@@ -9,7 +9,7 @@ export const deleteProduct = async (req: Request, res: Response, next: NextFunct
     const { id } = req.params
 
     if (!id) {
-      throw new ValidationError('O ID do produto é obrigatório!')
+      throw new ValidationError('¡El ID del producto es obligatorio!')
     }
 
     const result = await service.execute(id as string)

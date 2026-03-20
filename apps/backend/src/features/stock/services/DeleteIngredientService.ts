@@ -5,7 +5,7 @@ export class DeleteIngredientService {
   async execute(ingredientId: string) {
     const existing = await prisma.ingredient.findUnique({ where: { id: ingredientId } })
     if (!existing) {
-      throw new NotFoundError('Ingredient not found')
+      throw new NotFoundError('Ingrediente no encontrado')
     }
 
     const recipeUsage = await prisma.recipeItem.findFirst({
@@ -13,7 +13,7 @@ export class DeleteIngredientService {
     })
 
     if (recipeUsage) {
-      throw new ValidationError('Nao e possivel excluir ingrediente vinculado a receita')
+      throw new ValidationError('No es posible eliminar un ingrediente vinculado a una receta')
     }
 
     await prisma.$transaction(async (tx) => {
@@ -24,6 +24,6 @@ export class DeleteIngredientService {
       await tx.ingredient.delete({ where: { id: ingredientId } })
     })
 
-    return { message: 'Ingredient deleted' }
+    return { message: 'Ingrediente eliminado' }
   }
 }

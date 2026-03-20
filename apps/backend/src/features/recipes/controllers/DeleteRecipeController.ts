@@ -9,7 +9,7 @@ export const deleteRecipe = async (req: Request, res: Response, next: NextFuncti
     const { productId } = req.params
 
     if (!productId) {
-      throw new ValidationError('O productId e obrigatorio!')
+      throw new ValidationError('¡El productId es obligatorio!')
     }
 
     const result = await service.execute(productId as string)

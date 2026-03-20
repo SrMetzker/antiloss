@@ -14,7 +14,7 @@ export class GetRecipeByProductService {
     })
 
     if (!recipe) {
-      throw new NotFoundError('Não foi encontrada uma receita para este produto!')
+      throw new NotFoundError('¡No se encontró una receta para este producto!')
     }
 
     return recipe

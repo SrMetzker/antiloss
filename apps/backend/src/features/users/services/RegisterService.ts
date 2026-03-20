@@ -15,7 +15,7 @@ interface RegisterInput {
 export class RegisterService {
   async execute(input: RegisterInput) {
     if (!input.email || !input.password || !input.name || !input.establishmentName) {
-      throw new ValidationError('Email, senha, nome e nome do estabelecimento sao obrigatorios')
+      throw new ValidationError('Email, contraseña, nombre y nombre del establecimiento son obligatorios')
     }
 
     await ensureDefaultPlans()
@@ -26,7 +26,7 @@ export class RegisterService {
     })
 
     if (existingUser) {
-      throw new ValidationError('Este email ja esta em uso')
+      throw new ValidationError('Este email ya está en uso')
     }
 
     const selectedPlan = await prisma.plan.findFirst({
@@ -43,7 +43,7 @@ export class RegisterService {
     })
 
     if (!selectedPlan) {
-      throw new InternalServerError('Nenhum plano de trial ativo foi configurado')
+      throw new InternalServerError('Ningún plan de prueba activo fue configurado')
     }
 
     const hashedPassword = await bcrypt.hash(input.password, 10)

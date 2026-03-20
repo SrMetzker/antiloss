@@ -10,8 +10,8 @@
 
   html {
     font-family: 'DM Sans', sans-serif;
-    background-color: #0c0c0e;
-    color: #f0f0f4;
+    background-color: #07101e;
+    color: #e9f0ff;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -32,14 +32,14 @@
     height: 4px;
   }
   ::-webkit-scrollbar-track {
-    background: #141417;
+    background: #0c1829;
   }
   ::-webkit-scrollbar-thumb {
-    background: #2a2a32;
+    background: #1e3149;
     border-radius: 2px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #f59e0b;
+    background: #0ea5e9;
   }
 
   input[type="number"]::-webkit-inner-spin-button,

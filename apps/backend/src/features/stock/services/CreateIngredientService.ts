@@ -17,7 +17,7 @@ export class CreateIngredientService {
     })
 
     if (!establishment) {
-      throw new NotFoundError('Estabelecimento nao encontrado')
+      throw new NotFoundError('Establecimiento no encontrado')
     }
 
     const ingredient = await prisma.$transaction(async (tx) => {

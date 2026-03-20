@@ -62,7 +62,7 @@ export class CreateUserService {
     })
 
     if (!user) {
-      throw new InternalServerError('Falha ao criar usuario')
+      throw new InternalServerError('Error al crear usuario')
     }
 
     return user

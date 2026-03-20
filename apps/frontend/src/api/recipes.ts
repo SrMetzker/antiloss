@@ -73,7 +73,7 @@ export const recipesApi = {
 
   create: async (data: RecipeFormData): Promise<Recipe> => {
     const { createdBy } = getContext()
-    if (!createdBy) throw new Error('Usuário não autenticado')
+    if (!createdBy) throw new Error('User not authenticated')
 
     const response = await apiClient.post<BackendRecipe>('/recipes', {
       productId: data.productId,
@@ -89,7 +89,7 @@ export const recipesApi = {
 
   update: async (productId: string, data: Partial<RecipeFormData>): Promise<Recipe> => {
     if (!data.ingredients || data.ingredients.length === 0) {
-      throw new Error('É necessário enviar ao menos um ingrediente')
+      throw new Error('At least one ingredient must be provided')
     }
 
     const response = await apiClient.put<BackendRecipe>(`/recipes/${productId}`, {

@@ -14,12 +14,12 @@ interface CreateOrderInput {
 export class CreateOrderService {
   async execute(input: CreateOrderInput) {
     if (!input.tableId) {
-      throw new ValidationError(`Não foi possível identificar o 'tableId' para a qual o pedido será criado!`)
+      throw new ValidationError(`¡No fue posible identificar el 'tableId' para el pedido!`)
     }
 
     const table = await prisma.table.findUnique({ where: { id: input.tableId } })
     if (!table) {
-      throw new NotFoundError('Não foi possível encontrar a mesa para a qual o pedido será criado!')
+      throw new NotFoundError('¡No fue posible encontrar la mesa para el pedido!')
     }
 
     const productIds = input.items.map((item) => item.productId)
@@ -35,7 +35,7 @@ export class CreateOrderService {
     })
 
     if (products.length !== productIds.length) {
-      throw new NotFoundError('One or more products not found')
+      throw new NotFoundError('Uno o más productos no encontrados')
     }
 
     // Valida itens e calcula total
@@ -43,9 +43,9 @@ export class CreateOrderService {
 
     for (const orderItem of input.items) {
       const product = products.find((p) => p.id === orderItem.productId)
-      if (!product) throw new NotFoundError(`Product ${orderItem.productId} not found`)
-      if (!product.recipe) throw new ValidationError(`Product ${product.name} has no recipe configured`)
-      if (orderItem.quantity <= 0) throw new ValidationError('Item quantity must be greater than zero')
+      if (!product) throw new NotFoundError(`Producto ${orderItem.productId} no encontrado`)
+      if (!product.recipe) throw new ValidationError(`Producto ${product.name} sin receta configurada`)
+      if (orderItem.quantity <= 0) throw new ValidationError('La cantidad del ítem debe ser mayor que cero')
 
       total += product.price * orderItem.quantity
     }

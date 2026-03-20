@@ -15,7 +15,7 @@ const ensureEstablishmentsForNonAdmin = (req: Request) => {
   if (isAdmin(req)) return
 
   if (!req.user?.establishmentIds.length) {
-    throw new AppError(403, 'Usuario sem vinculo de estabelecimento')
+    throw new AppError(403, 'Usuario sin vinculación a establecimiento')
   }
 }
 
@@ -29,7 +29,7 @@ export const authorizeRoles = (...roles: UserRole[]) => {
   return (req: Request, _res: Response, next: NextFunction) => {
     const userRole = req.user?.role
     if (!userRole || !roles.includes(userRole)) {
-      throw new AppError(400, 'Usuário sem permissão para acessar este recurso!')
+      throw new AppError(400, '¡Usuario sin permiso para acceder a este recurso!')
     }
     next()
   }
@@ -57,11 +57,11 @@ export const enforceEstablishmentScope = (source: 'query' | 'body' = 'query') =>
         return next()
       }
 
-      throw new AppError(400, 'establishmentId e obrigatorio para este usuario')
+      throw new AppError(400, 'establishmentId es obligatorio para este usuario')
     }
 
     if (!hasEstablishmentAccess(req, fieldValue)) {
-      throw new AppError(403, 'Sem acesso ao estabelecimento informado')
+      throw new AppError(403, 'Sin acceso al establecimiento indicado')
     }
 
     next()
@@ -74,7 +74,7 @@ export const enforceTableAccessFromBody = (field = 'tableId') => {
 
     const tableId = req.body?.[field] as string | undefined
     if (!tableId) {
-      throw new AppError(400, `${field} e obrigatorio`)
+      throw new AppError(400, `${field} es obligatorio`)
     }
 
     const table = await prisma.table.findUnique({
@@ -83,11 +83,11 @@ export const enforceTableAccessFromBody = (field = 'tableId') => {
     })
 
     if (!table) {
-      throw new AppError(404, 'Mesa nao encontrada')
+      throw new AppError(404, 'Mesa no encontrada')
     }
 
     if (!hasEstablishmentAccess(req, table.establishmentId)) {
-      throw new AppError(403, 'Sem acesso ao estabelecimento da mesa')
+      throw new AppError(403, 'Sin acceso al establecimiento de la mesa')
     }
 
     next()
@@ -107,11 +107,11 @@ export const enforceTableAccessFromQuery = (field = 'tableId') => {
     })
 
     if (!table) {
-      throw new AppError(404, 'Mesa nao encontrada')
+      throw new AppError(404, 'Mesa no encontrada')
     }
 
     if (!hasEstablishmentAccess(req, table.establishmentId)) {
-      throw new AppError(403, 'Sem acesso ao estabelecimento da mesa')
+      throw new AppError(403, 'Sin acceso al establecimiento de la mesa')
     }
 
     next()
@@ -124,7 +124,7 @@ export const enforceOrderAccessFromParam = (param = 'id') => {
 
     const orderId = req.params[param]
     if (!orderId) {
-      throw new AppError(400, `${param} e obrigatorio`)
+      throw new AppError(400, `${param} es obligatorio`)
     }
 
     const order = await prisma.order.findUnique({
@@ -139,11 +139,11 @@ export const enforceOrderAccessFromParam = (param = 'id') => {
     })
 
     if (!order) {
-      throw new AppError(404, 'Pedido nao encontrado')
+      throw new AppError(404, 'Pedido no encontrado')
     }
 
     if (!hasEstablishmentAccess(req, order.table.establishmentId)) {
-      throw new AppError(403, 'Sem acesso ao estabelecimento do pedido')
+      throw new AppError(403, 'Sin acceso al establecimiento del pedido')
     }
 
     next()
@@ -156,7 +156,7 @@ export const enforceProductAccessFromParam = (param = 'id') => {
 
     const productId = req.params[param]
     if (!productId) {
-      throw new AppError(400, `${param} e obrigatorio`)
+      throw new AppError(400, `${param} es obligatorio`)
     }
 
     const product = await prisma.product.findUnique({
@@ -165,11 +165,11 @@ export const enforceProductAccessFromParam = (param = 'id') => {
     })
 
     if (!product) {
-      throw new AppError(404, 'Produto nao encontrado')
+      throw new AppError(404, 'Producto no encontrado')
     }
 
     if (!hasEstablishmentAccess(req, product.establishmentId)) {
-      throw new AppError(403, 'Sem acesso ao estabelecimento do produto')
+      throw new AppError(403, 'Sin acceso al establecimiento del producto')
     }
 
     next()
@@ -182,7 +182,7 @@ export const enforceIngredientAccessFromParam = (param = 'id') => {
 
     const ingredientId = req.params[param]
     if (!ingredientId) {
-      throw new AppError(400, `${param} e obrigatorio`)
+      throw new AppError(400, `${param} es obligatorio`)
     }
 
     const ingredient = await prisma.ingredient.findUnique({
@@ -191,11 +191,11 @@ export const enforceIngredientAccessFromParam = (param = 'id') => {
     })
 
     if (!ingredient) {
-      throw new AppError(404, 'Ingrediente nao encontrado')
+      throw new AppError(404, 'Ingrediente no encontrado')
     }
 
     if (!hasEstablishmentAccess(req, ingredient.establishmentId)) {
-      throw new AppError(403, 'Sem acesso ao estabelecimento do ingrediente')
+      throw new AppError(403, 'Sin acceso al establecimiento del ingrediente')
     }
 
     next()
@@ -208,7 +208,7 @@ export const enforceRecipeAccessByProductParam = (param = 'productId') => {
 
     const productId = req.params[param]
     if (!productId) {
-      throw new AppError(400, `${param} e obrigatorio`)
+      throw new AppError(400, `${param} es obligatorio`)
     }
 
     const product = await prisma.product.findUnique({
@@ -217,11 +217,11 @@ export const enforceRecipeAccessByProductParam = (param = 'productId') => {
     })
 
     if (!product) {
-      throw new AppError(404, 'Produto nao encontrado')
+      throw new AppError(404, 'Producto no encontrado')
     }
 
     if (!hasEstablishmentAccess(req, product.establishmentId)) {
-      throw new AppError(403, 'Sem acesso ao estabelecimento do produto')
+      throw new AppError(403, 'Sin acceso al establecimiento del producto')
     }
 
     next()
@@ -234,7 +234,7 @@ export const enforceProductAccessFromBody = (field = 'productId') => {
 
     const productId = req.body?.[field] as string | undefined
     if (!productId) {
-      throw new AppError(400, `${field} e obrigatorio`)
+      throw new AppError(400, `${field} es obligatorio`)
     }
 
     const product = await prisma.product.findUnique({
@@ -243,11 +243,11 @@ export const enforceProductAccessFromBody = (field = 'productId') => {
     })
 
     if (!product) {
-      throw new AppError(404, 'Produto nao encontrado')
+      throw new AppError(404, 'Producto no encontrado')
     }
 
     if (!hasEstablishmentAccess(req, product.establishmentId)) {
-      throw new AppError(403, 'Sem acesso ao estabelecimento do produto')
+      throw new AppError(403, 'Sin acceso al establecimiento del producto')
     }
 
     next()

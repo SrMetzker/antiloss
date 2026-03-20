@@ -17,7 +17,7 @@ export class CreateTableService {
     })
 
     if (exists) {
-      throw new AppError(400, 'Table already exists for this establishment')
+      throw new AppError(400, 'La mesa ya existe en este establecimiento')
     }
 
     await enforceTableLimit(input.establishmentId)

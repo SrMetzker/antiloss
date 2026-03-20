@@ -15,7 +15,7 @@ interface CreateRecipeInput {
 export class CreateRecipeService {
   async execute(input: CreateRecipeInput) {
     if (!input.productId || !input.items || input.items.length === 0) {
-      throw new ValidationError('productId e items sao obrigatorios')
+      throw new ValidationError('productId y items son obligatorios')
     }
 
     const product = await prisma.product.findUnique({
@@ -23,7 +23,7 @@ export class CreateRecipeService {
     })
 
     if (!product) {
-      throw new NotFoundError('Produto nao encontrado')
+      throw new NotFoundError('Producto no encontrado')
     }
 
     const existingRecipe = await prisma.recipe.findUnique({
@@ -31,7 +31,7 @@ export class CreateRecipeService {
     })
 
     if (existingRecipe) {
-      throw new ValidationError('Produto ja possui receita cadastrada')
+      throw new ValidationError('El producto ya tiene una receta registrada')
     }
 
     const recipe = await prisma.$transaction(async (tx) => {

@@ -14,11 +14,11 @@ export class GetSubscriptionStatusService {
       (input.userEstablishmentIds.length === 1 ? input.userEstablishmentIds[0] : undefined)
 
     if (!selectedEstablishmentId) {
-      throw new AppError(400, 'Informe establishmentId para consultar assinatura')
+      throw new AppError(400, 'Informe el establishmentId para consultar la suscripción')
     }
 
     if (input.userRole !== 'ADMIN' && !input.userEstablishmentIds.includes(selectedEstablishmentId)) {
-      throw new AppError(403, 'Sem permissao para consultar assinatura deste estabelecimento')
+      throw new AppError(403, 'Sin permiso para consultar la suscripción de este establecimiento')
     }
 
     const subscription = await prisma.subscription.findUnique({
@@ -44,7 +44,7 @@ export class GetSubscriptionStatusService {
     })
 
     if (!subscription) {
-      throw new AppError(404, 'Assinatura nao encontrada para o estabelecimento informado')
+      throw new AppError(404, 'Suscripción no encontrada para el establecimiento indicado')
     }
 
     return subscription

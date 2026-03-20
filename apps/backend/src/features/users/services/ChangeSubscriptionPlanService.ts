@@ -15,15 +15,15 @@ export class ChangeSubscriptionPlanService {
       (input.userEstablishmentIds.length === 1 ? input.userEstablishmentIds[0] : undefined)
 
     if (!selectedEstablishmentId) {
-      throw new AppError(400, 'Informe o ID do estabelecimento para alterar o plano!')
+      throw new AppError(400, '¡Informe el ID del establecimiento para cambiar el plan!')
     }
 
     if (input.userRole !== 'ADMIN' && !input.userEstablishmentIds.includes(selectedEstablishmentId)) {
-      throw new AppError(403, 'Usuário sem permissão para alterar assinatura deste estabelecimento')
+      throw new AppError(403, 'Usuario sin permiso para modificar la suscripción de este establecimiento')
     }
 
     if (!input.planCode?.trim()) {
-      throw new AppError(400, 'O código do plano é obrigatório!')
+      throw new AppError(400, '¡El código del plan es obligatorio!')
     }
 
     const plan = await prisma.plan.findFirst({
@@ -37,7 +37,7 @@ export class ChangeSubscriptionPlanService {
     })
 
     if (!plan) {
-      throw new AppError(404, 'Plano não encontrado ou inativo')
+      throw new AppError(404, 'Plan no encontrado o inactivo')
     }
 
     const subscription = await prisma.subscription.findUnique({
@@ -46,7 +46,7 @@ export class ChangeSubscriptionPlanService {
     })
 
     if (!subscription) {
-      throw new AppError(404, 'Assinatura não encontrada para o estabelecimento informado')
+      throw new AppError(404, 'Suscripción no encontrada para el establecimiento indicado')
     }
 
     const updated = await prisma.subscription.update({

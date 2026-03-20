@@ -9,7 +9,7 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
     const { id } = req.params
 
     if (!id) {
-      throw new ValidationError('O ID do usuário é obrigatório!')
+      throw new ValidationError('¡El ID del usuario es obligatorio!')
     }
 
     const result = await service.execute(id as string)

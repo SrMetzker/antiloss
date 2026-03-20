@@ -9,7 +9,7 @@ export const createTable = async (req: Request, res: Response, next: NextFunctio
     const { number, establishmentId } = req.body
 
     if (number === undefined || !establishmentId) {
-      throw new ValidationError('number e establishmentId são obrigatórios')
+      throw new ValidationError('number y establishmentId son obligatorios')
     }
 
     const table = await service.execute({ number, establishmentId })

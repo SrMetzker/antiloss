@@ -16,7 +16,7 @@ export class CreateRecipeService {
   async execute(input: CreateRecipeInput) {
     const product = await prisma.product.findUnique({ where: { id: input.productId } })
     if (!product) {
-      throw new NotFoundError('Product not found')
+      throw new NotFoundError('Producto no encontrado')
     }
 
     const recipe = await prisma.recipe.create({

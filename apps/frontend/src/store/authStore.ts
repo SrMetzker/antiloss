@@ -37,7 +37,7 @@ export const useAuthStore = create<AuthStore>()(
       setActiveEstablishmentId: (id) => set({ activeEstablishmentId: id }),
     }),
     {
-      name: 'barflow-auth',
+      name: 'stratto-auth',
       partialize: (state) => ({
         user: state.user,
         token: state.token,

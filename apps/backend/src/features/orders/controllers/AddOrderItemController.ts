@@ -10,16 +10,16 @@ export const addOrderItem = async (req: Request, res: Response, next: NextFuncti
     const { productId, quantity } = req.body
 
     if (!id) {
-      throw new ValidationError('Nao foi possivel identificar o pedido')
+      throw new ValidationError('No fue posible identificar el pedido')
     }
 
     if (!productId) {
-      throw new ValidationError('productId e obrigatorio')
+      throw new ValidationError('productId es obligatorio')
     }
 
     const qty = Number(quantity ?? 1)
     if (!Number.isFinite(qty) || qty <= 0) {
-      throw new ValidationError('quantity deve ser maior que zero')
+      throw new ValidationError('quantity debe ser mayor que cero')
     }
 
     const order = await service.execute({
