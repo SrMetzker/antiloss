@@ -71,8 +71,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
         </div>
         {!collapsed && (
           <div>
-            <p className="font-display font-bold text-white text-lg leading-none">BarFlow</p>
-            <p className="text-xs text-gray-500 mt-0.5">Management</p>
+            <p className="font-display font-bold text-white text-lg leading-none">Stratto</p>
+            <p className="text-xs text-gray-500 mt-0.5">Controla tu stock sin pérdidas</p>
           </div>
         )}
       </div>

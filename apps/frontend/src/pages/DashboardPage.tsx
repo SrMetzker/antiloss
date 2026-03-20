@@ -93,19 +93,19 @@ export const DashboardPage: React.FC = () => {
             <AreaChart data={chartData}>
               <defs>
                 <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#0EA5E9" stopOpacity={0.40} />
+                  <stop offset="95%" stopColor="#0EA5E9" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2a2a32" vertical={false} />
-              <XAxis dataKey="date" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `€${v}`} width={50} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#1E3149" vertical={false} />
+              <XAxis dataKey="date" tick={{ fill: '#7B99C4', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#7B99C4', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `€${v}`} width={50} />
               <Tooltip
-                contentStyle={{ background: '#1c1c21', border: '1px solid #2a2a32', borderRadius: '12px', fontSize: '12px' }}
-                labelStyle={{ color: '#f5f5f5', fontWeight: 600 }}
+                contentStyle={{ background: '#0C1829', border: '1px solid #1E3149', borderRadius: '12px', fontSize: '12px' }}
+                labelStyle={{ color: '#E9F0FF', fontWeight: 600 }}
                 formatter={(v: number) => [formatCurrency(v), 'Sales']}
               />
-              <Area type="monotone" dataKey="sales" stroke="#f59e0b" strokeWidth={2} fill="url(#salesGrad)" dot={false} />
+              <Area type="monotone" dataKey="sales" stroke="#0EA5E9" strokeWidth={2.5} fill="url(#salesGrad)" dot={false} />
             </AreaChart>
           </ResponsiveContainer>
         </div>

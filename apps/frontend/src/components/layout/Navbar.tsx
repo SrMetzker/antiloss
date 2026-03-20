@@ -60,7 +60,7 @@ export const Navbar: React.FC = () => {
           <div className="w-8 h-8 rounded-xl bg-brand flex items-center justify-center">
             <Wine className="w-4 h-4 text-black" />
           </div>
-          <span className="font-display font-bold text-white text-lg">BarFlow</span>
+          <span className="font-display font-bold text-white text-lg">Stratto</span>
         </div>
         <div className="flex items-center gap-3">
           {lowStock > 0 && (

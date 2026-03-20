@@ -52,8 +52,8 @@ export const LoginPage: React.FC = () => {
           <div className="w-16 h-16 rounded-2xl bg-brand shadow-glow-amber flex items-center justify-center mb-4">
             <Wine className="w-8 h-8 text-black" />
           </div>
-          <h1 className="text-3xl font-display font-bold text-white">BarFlow</h1>
-          <p className="text-gray-400 text-sm mt-1">Bar Management System</p>
+          <h1 className="text-3xl font-display font-bold text-white">Stratto</h1>
+          <p className="text-gray-400 text-sm mt-1">Controla tu stock sin pérdidas</p>
         </div>
 
         {/* Form card */}

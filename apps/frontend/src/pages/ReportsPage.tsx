@@ -8,7 +8,7 @@ import {
   LineChart, Line, PieChart, Pie, Cell, Legend
 } from 'recharts'
 
-const COLORS = ['#f59e0b', '#3b82f6', '#22c55e', '#ec4899', '#8b5cf6']
+const COLORS = ['#0EA5E9', '#00F5D4', '#A855F7', '#2FA77C', '#D9A441']
 
 export const ReportsPage: React.FC = () => {
   const { data: reports, isLoading } = useReports()
@@ -89,14 +89,14 @@ export const ReportsPage: React.FC = () => {
         <div className="h-56">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dailyData} barSize={20}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2a2a32" vertical={false} />
-              <XAxis dataKey="date" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `€${v}`} width={52} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#1E3149" vertical={false} />
+              <XAxis dataKey="date" tick={{ fill: '#7B99C4', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#7B99C4', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `€${v}`} width={52} />
               <Tooltip
-                contentStyle={{ background: '#1c1c21', border: '1px solid #2a2a32', borderRadius: '12px', fontSize: '12px' }}
+                contentStyle={{ background: '#0C1829', border: '1px solid #1E3149', borderRadius: '12px', fontSize: '12px' }}
                 formatter={(v: number) => [formatCurrency(v), 'Sales']}
               />
-              <Bar dataKey="sales" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="sales" fill="#0EA5E9" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -108,14 +108,14 @@ export const ReportsPage: React.FC = () => {
         <div className="h-44">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={dailyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2a2a32" vertical={false} />
-              <XAxis dataKey="date" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#1E3149" vertical={false} />
+              <XAxis dataKey="date" tick={{ fill: '#7B99C4', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#7B99C4', fontSize: 11 }} axisLine={false} tickLine={false} />
               <Tooltip
-                contentStyle={{ background: '#1c1c21', border: '1px solid #2a2a32', borderRadius: '12px', fontSize: '12px' }}
+                contentStyle={{ background: '#0C1829', border: '1px solid #1E3149', borderRadius: '12px', fontSize: '12px' }}
                 formatter={(v: number) => [v, 'Orders']}
               />
-              <Line type="monotone" dataKey="orders" stroke="#3b82f6" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="orders" stroke="#A855F7" strokeWidth={2.5} dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -173,10 +173,10 @@ export const ReportsPage: React.FC = () => {
                   ))}
                 </Pie>
                 <Tooltip
-                  contentStyle={{ background: '#1c1c21', border: '1px solid #2a2a32', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ background: '#0C1829', border: '1px solid #1E3149', borderRadius: '12px', fontSize: '12px' }}
                 />
                 <Legend
-                  formatter={(value) => <span style={{ color: '#9ca3af', fontSize: '11px' }}>{value}</span>}
+                  formatter={(value) => <span style={{ color: '#7B99C4', fontSize: '11px' }}>{value}</span>}
                 />
               </PieChart>
             </ResponsiveContainer>
