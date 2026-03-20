@@ -9,6 +9,6 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env.DATABASE_URL || "postgresql://localhost:5432/anti_loss",
+    url: process.env.DATABASE_URL || "postgresql://localhost:5432/stratto",
   },
 });

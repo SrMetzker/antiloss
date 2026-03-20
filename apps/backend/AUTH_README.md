@@ -1,4 +1,4 @@
-# Anti-Loss API - Autenticação JWT
+# Stratto API - Autenticação JWT
 
 ## 🚀 Como usar a autenticação
 
@@ -50,7 +50,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 Crie um arquivo `.env` baseado no `.env.example`:
 
 ```env
-DATABASE_URL="postgresql://username:password@localhost:5432/anti_loss"
+DATABASE_URL="postgresql://username:password@localhost:5432/stratto"
 JWT_SECRET="sua-chave-secreta-super-segura-aqui"
 ```
 
