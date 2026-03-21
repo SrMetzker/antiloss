@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { Building2, Mail, ShieldCheck, User2, Wine } from 'lucide-react'
+import { Building2, Mail, ShieldCheck, User2 } from 'lucide-react'
 import { authApi, extractApiErrorMessage } from '@/api/auth'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -112,9 +112,7 @@ export const RegisterPage: React.FC = () => {
 
       <div className="w-full max-w-2xl relative animate-slide-up">
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-brand shadow-glow-amber flex items-center justify-center mb-4">
-            <Wine className="w-8 h-8 text-black" />
-          </div>
+          <img src="/logo.png" alt="Stratto" className="w-20 h-20 object-contain mb-4" />
           <h1 className="text-3xl font-display font-bold text-white">Create account</h1>
           <p className="text-gray-400 text-sm mt-1">Start your restaurant trial in minutes</p>
         </div>

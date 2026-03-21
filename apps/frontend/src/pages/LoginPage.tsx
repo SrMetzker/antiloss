@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate, Navigate, Link } from 'react-router-dom'
-import { Wine, Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { authApi, extractApiErrorMessage } from '@/api/auth'
 import { useAuthStore } from '@/store/authStore'
 import { Button } from '@/components/ui/Button'
@@ -49,9 +49,7 @@ export const LoginPage: React.FC = () => {
       <div className="w-full max-w-sm relative animate-slide-up">
         {/* Logo */}
         <div className="flex flex-col items-center mb-10">
-          <div className="w-16 h-16 rounded-2xl bg-brand shadow-glow-amber flex items-center justify-center mb-4">
-            <Wine className="w-8 h-8 text-black" />
-          </div>
+          <img src="/logo.png" alt="Stratto" className="w-20 h-20 object-contain mb-4" />
           <h1 className="text-3xl font-display font-bold text-white">Stratto</h1>
           <p className="text-gray-400 text-sm mt-1">Controla tu stock sin pérdidas</p>
         </div>
