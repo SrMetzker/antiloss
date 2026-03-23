@@ -4,7 +4,7 @@ import {
   Package, AlertTriangle, TrendingUp, UtensilsCrossed,
   Plus, Warehouse, BookOpen, ArrowRight
 } from 'lucide-react'
-import { useProducts, useIngredients, useReports } from '@/hooks'
+import { useProducts, useIngredients, useRecipes, useReports } from '@/hooks'
 import { StatCard, Card, EmptyState, PageLoader } from '@/components/ui/Card'
 import { formatCurrency, formatShortDate, getLocalDateKey, shiftDateKey } from '@/utils/format'
 import { useAuthStore } from '@/store/authStore'
@@ -17,6 +17,7 @@ export const DashboardPage: React.FC = () => {
   const { user } = useAuthStore()
   const { data: products, isLoading: loadingProducts } = useProducts()
   const { data: ingredients } = useIngredients()
+  const { data: recipes, isLoading: loadingRecipes } = useRecipes()
   const { data: reports, isLoading: loadingReports } = useReports()
 
   const lowStockProducts = products?.filter(
@@ -27,6 +28,9 @@ export const DashboardPage: React.FC = () => {
     (i) => i.currentStock <= i.minStock
   ) ?? []
 
+  const recipeProductIds = new Set((recipes ?? []).map((recipe) => recipe.productId))
+  const productsWithoutRecipe = (products ?? []).filter((product) => !recipeProductIds.has(product.id))
+
   const todayKey = getLocalDateKey()
   const yesterdayKey = shiftDateKey(todayKey, -1)
   const dailySalesByDate = new Map((reports?.dailySales ?? []).map((item) => [item.date, item]))
@@ -36,6 +40,7 @@ export const DashboardPage: React.FC = () => {
   const salesTrend = currentDaySales && yesterdaySales && yesterdaySales.total > 0
     ? ((todaySales.total - yesterdaySales.total) / yesterdaySales.total * 100).toFixed(1)
     : null
+  const averageTicketToday = todaySales.orderCount > 0 ? todaySales.total / todaySales.orderCount : 0
 
   const chartData = reports?.dailySales.slice(-7).map((d) => ({
     date: formatShortDate(d.date),
@@ -43,7 +48,7 @@ export const DashboardPage: React.FC = () => {
     orders: d.orderCount,
   })) ?? []
 
-  if (loadingProducts || loadingReports) return <PageLoader />
+  if (loadingProducts || loadingRecipes || loadingReports) return <PageLoader />
 
   return (
     <div className="p-4 md:p-6 max-w-5xl mx-auto">
@@ -56,7 +61,7 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
         <StatCard
           label="Today's Sales"
           value={todaySales ? formatCurrency(todaySales.total) : '—'}
@@ -65,19 +70,24 @@ export const DashboardPage: React.FC = () => {
           accent
         />
         <StatCard
-          label="Total Products"
-          value={products?.length ?? 0}
+          label="Orders Today"
+          value={todaySales.orderCount}
+          icon={<UtensilsCrossed className="w-5 h-5" />}
+        />
+        <StatCard
+          label="Average Ticket Today"
+          value={formatCurrency(averageTicketToday)}
+          icon={<TrendingUp className="w-5 h-5" />}
+        />
+        <StatCard
+          label="Products Without Recipe"
+          value={productsWithoutRecipe.length}
           icon={<Package className="w-5 h-5" />}
         />
         <StatCard
           label="Low Stock Products"
           value={lowStockProducts.length}
           icon={<AlertTriangle className="w-5 h-5" />}
-        />
-        <StatCard
-          label="Orders Today"
-          value={todaySales?.orderCount ?? 0}
-          icon={<UtensilsCrossed className="w-5 h-5" />}
         />
       </div>
 
