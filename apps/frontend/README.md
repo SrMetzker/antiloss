@@ -1,118 +1,123 @@
-# BarFlow — Bar & Restaurant Management System
+# Stratto — Frontend
 
-A production-ready, mobile-first frontend for bar/restaurant management built with React + Vite + TypeScript.
+SPA mobile-first para gestão de bares e restaurantes, construída com React + Vite + TypeScript.
 
-## ✨ Features
+## ✨ Funcionalidades
 
-- 🔐 **JWT Authentication** — Login with token persisted to localStorage + Axios interceptor
-- 📊 **Dashboard** — Sales charts, stock alerts, top products, quick actions
-- 🍽️ **Tables & Orders** — Visual table map, open/close orders, add/edit items in real-time
-- 📦 **Products** — Full CRUD with search, category filter, low-stock badges
-- 🍹 **Recipes** — Define ingredient usage per product
-- 📋 **Inventory** — Stock movements (IN/OUT/LOSS/ADJUSTMENT), current stock levels with visual bars
-- 📈 **Reports** — Sales charts, order volume, top products, stock losses
+- 🔐 **Autenticação JWT** — Login/cadastro com token em localStorage + interceptor Axios automático
+- 🏢 **Multi-estabelecimento** — Troca de estabelecimento ativo na sidebar; todos os dados são filtrados e recarregados automaticamente
+- 👥 **RBAC** — Controle de acesso por role (`ADMIN`, `MANAGER`, `BARTENDER`, `CHEF`)
+- 📊 **Dashboard** — Cards de vendas do dia, pedidos, ticket médio, produtos sem receita e ingredientes em baixo estoque (com alerta de severidade)
+- 🍽️ **Mesas & Pedidos** — Mapa visual de mesas, abertura/fechamento de pedidos, edição de itens em tempo real
+- 👨‍🍳 **Cozinha** — Fila de pedidos pendentes para a equipe de cozinha
+- 📦 **Produtos** — CRUD completo com busca e filtro por categoria
+- 🍹 **Receitas** — Definição de ingredientes e quantidades por produto
+- 📋 **Estoque** — Movimentações (Entrada/Saída/Perda/Ajuste), níveis com barra visual
+- 📈 **Relatórios** — Gráficos de vendas, volume de pedidos, top produtos, perdas de estoque
+- 👤 **Usuários** — Gerenciamento de usuários e permissões
+- 💳 **Assinatura** — Visualização de plano e limites de uso
 
 ## 🛠 Tech Stack
 
-| Layer | Tech |
-|-------|------|
-| UI Framework | React 18 + TypeScript |
-| Build Tool | Vite 5 |
-| Routing | React Router v6 |
-| Server State | TanStack Query v5 |
-| HTTP Client | Axios (with JWT interceptor) |
-| Global State | Zustand |
-| Styling | TailwindCSS |
-| Charts | Recharts |
-| Icons | Lucide React |
+| Camada         | Tecnologia                          |
+|----------------|-------------------------------------|
+| UI Framework   | React 18 + TypeScript               |
+| Build Tool     | Vite 5                              |
+| Roteamento     | React Router v6                     |
+| Server State   | TanStack Query v5                   |
+| HTTP Client    | Axios (com interceptor JWT)         |
+| Global State   | Zustand                             |
+| Estilização    | TailwindCSS                         |
+| Gráficos       | Recharts                            |
+| Ícones         | Lucide React                        |
 
-## 🚀 Getting Started
+## 🚀 Iniciando
 
 ```bash
-# 1. Install dependencies
+# 1. Instalar dependências (da raiz do monorepo)
 npm install
 
-# 2. Copy env file
+# 2. Copiar variáveis de ambiente
 cp .env.example .env
+# Editar .env: definir VITE_API_URL=http://localhost:3000
 
-# 3. Start development server
+# 3. Iniciar servidor de desenvolvimento
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173)
+Abrir [http://localhost:5173](http://localhost:5173)
 
-**Demo credentials:**
-- Email: `admin@barflow.com`
-- Password: `password`
-
-## 📁 Project Structure
+## 📁 Estrutura
 
 ```
 src/
-├── api/              # API functions (mock or real backend)
-│   ├── client.ts     # Axios instance with JWT interceptor
+├── api/                  # Funções de chamada à API
+│   ├── client.ts         # Instância Axios com interceptor JWT e redirect 401
 │   ├── auth.ts
+│   ├── establishments.ts
 │   ├── products.ts
 │   ├── orders.ts
 │   ├── inventory.ts
 │   ├── recipes.ts
-│   └── reports.ts
+│   ├── reports.ts        # Agregação client-side de relatórios
+│   ├── subscription.ts
+│   └── users.ts
 ├── components/
-│   ├── ui/           # Reusable UI components
+│   ├── ui/               # Componentes reutilizáveis
 │   │   ├── Button.tsx
-│   │   ├── Input.tsx (+ Select, Textarea)
-│   │   ├── Modal.tsx (+ ConfirmModal)
-│   │   ├── Card.tsx  (+ Badge, StatCard, EmptyState, ErrorState)
+│   │   ├── Input.tsx     # + Select, Textarea
+│   │   ├── Modal.tsx     # Suporta headerActions (slot para botões no cabeçalho)
+│   │   ├── Card.tsx      # + Badge, StatCard (com prop severity), EmptyState, ErrorState
 │   │   └── Toast.tsx
-│   └── layout/       # App shell
+│   └── layout/           # Shell da aplicação
 │       ├── Layout.tsx
-│       ├── Sidebar.tsx   (collapsible, desktop)
-│       ├── Navbar.tsx    (mobile top bar)
-│       └── BottomNav.tsx (mobile bottom nav)
-├── hooks/            # TanStack Query hooks
-│   └── index.ts
+│       ├── Sidebar.tsx   # Collapsible + seletor de estabelecimento
+│       ├── Navbar.tsx    # Topbar mobile
+│       └── BottomNav.tsx # Navegação inferior mobile
+├── hooks/
+│   └── index.ts          # Hooks TanStack Query (todos escopados por estabelecimento ativo)
 ├── pages/
 │   ├── LoginPage.tsx
+│   ├── RegisterPage.tsx
 │   ├── DashboardPage.tsx
 │   ├── TablesPage.tsx
+│   ├── KitchenPage.tsx
 │   ├── ProductsPage.tsx
 │   ├── RecipesPage.tsx
 │   ├── InventoryPage.tsx
-│   └── ReportsPage.tsx
+│   ├── ReportsPage.tsx
+│   ├── UsersPage.tsx
+│   ├── EstablishmentsPage.tsx
+│   └── SubscriptionPage.tsx
 ├── store/
-│   ├── authStore.ts   # Zustand auth + localStorage persist
-│   └── toastStore.ts  # Global toast notifications
+│   ├── authStore.ts      # Zustand: token JWT + estabelecimento ativo
+│   └── toastStore.ts     # Notificações globais
 ├── types/
-│   └── index.ts       # All TypeScript types
+│   └── index.ts          # Tipos TypeScript da aplicação
 └── utils/
-    ├── format.ts      # Currency, date, label formatters
-    └── mockData.ts    # In-memory mock data
+    ├── format.ts         # Formatadores de moeda, data (timezone-safe) e labels
+    ├── rbac.ts           # Helpers de verificação de role
+    └── mockData.ts       # Dados mock para desenvolvimento offline
 ```
-
-## 🔌 Connecting to a Real Backend
-
-1. Set `VITE_API_URL=http://your-api.com` in `.env`
-2. Replace mock API files in `src/api/` with real Axios calls
-3. The Axios client in `src/api/client.ts` already handles JWT headers and 401 redirects
 
 ## 🎨 Design System
 
-- **Font**: Outfit (headings) + DM Sans (body)
-- **Theme**: Dark — charcoal backgrounds with amber/gold accents
-- **Color tokens** defined in `tailwind.config.js` under `bg.*` and `brand.*`
+- **Fontes**: Outfit (títulos) + DM Sans (corpo)
+- **Tema**: Dark — fundo carvão com acentos âmbar/dourado
+- **Tokens de cor** definidos em `tailwind.config.js` nos namespaces `bg.*` e `brand.*`
+- **StatCard**: suporta prop `severity` (`default` | `warning` | `danger`) para feedback visual de alertas
 
-## 📱 Mobile UX
+## 📱 UX Mobile
 
-- Mobile-first layout with bottom navigation
-- Large touch targets (min 44px)
-- Touch-friendly order management
-- Bottom sheet modals on mobile
-- No horizontal overflow
+- Layout mobile-first com navegação inferior
+- Touch targets mínimos de 44px
+- Modais responsivos
+- Sem overflow horizontal
 
-## 🏗️ Building for Production
+## 🏗️ Build para Produção
 
 ```bash
 npm run build
 ```
 
-Output in `dist/` — serve with any static host (Vercel, Netlify, Nginx).
+Saída em `dist/` — servir com qualquer host estático (Vercel, Netlify, Nginx).

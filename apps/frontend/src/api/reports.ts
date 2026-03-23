@@ -1,8 +1,7 @@
 import { ordersApi } from '@/api/orders'
 import { inventoryApi } from '@/api/inventory'
 import type { DailySales, ReportSummary, TopProduct } from '@/types'
-
-const toDateKey = (value: string) => new Date(value).toISOString().slice(0, 10)
+import { getLocalDateKey } from '@/utils/format'
 
 export const reportsApi = {
   getSummary: async (): Promise<ReportSummary> => {
@@ -14,7 +13,7 @@ export const reportsApi = {
     const productMap = new Map<string, TopProduct>()
 
     for (const order of closedOrders) {
-      const day = toDateKey(order.createdAt)
+      const day = getLocalDateKey(order.createdAt)
       const currentDay = dailyMap.get(day) ?? { total: 0, orderCount: 0 }
       dailyMap.set(day, {
         total: currentDay.total + order.total,
@@ -53,7 +52,7 @@ export const reportsApi = {
         ingredientName: movement.ingredientName,
         quantity: movement.quantity,
         unit: movement.unit,
-        date: toDateKey(movement.createdAt),
+        date: getLocalDateKey(movement.createdAt),
       }))
 
     return {
