@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { DeleteUserService } from '../services/DeleteUserService'
 import { ValidationError } from '../../../utils/errors'
+import type { UserRole } from '../../../middleware/auth'
 
 const service = new DeleteUserService()
 
@@ -12,7 +13,8 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
       throw new ValidationError('¡El ID del usuario es obligatorio!')
     }
 
-    const result = await service.execute(id as string)
+    const requesterRole = req.user?.role
+    const result = await service.execute(id as string, { requesterRole: requesterRole as UserRole })
 
     res.json(result)
   } catch (error) {

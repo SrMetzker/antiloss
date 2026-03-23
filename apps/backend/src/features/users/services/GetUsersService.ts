@@ -1,7 +1,9 @@
 import { prisma } from '../../../config/database'
+import type { UserRole } from '../../../middleware/auth'
 
 interface GetUsersInput {
   establishmentId?: string
+  requesterRole?: UserRole | undefined
 }
 
 export class GetUsersService {
@@ -13,6 +15,12 @@ export class GetUsersService {
         some: {
           establishmentId: input.establishmentId
         }
+      }
+    }
+
+    if (input?.requesterRole !== 'ADMIN') {
+      where.role = {
+        not: 'ADMIN'
       }
     }
 

@@ -140,8 +140,12 @@ export const ordersApi = {
   },
 
   getOrdersByTable: async (tableId: string): Promise<Order[]> => {
+    const { establishmentId } = getContext()
     const response = await apiClient.get<BackendOrder[]>('/orders', {
-      params: { tableId },
+      params: {
+        tableId,
+        establishmentId: establishmentId ?? undefined,
+      },
     })
 
     return response.data.map(mapOrder)
@@ -195,8 +199,12 @@ export const ordersApi = {
   },
 
   getAllOrders: async (): Promise<Order[]> => {
-    const response = await apiClient.get<BackendOrder[]>('/orders')
     const { establishmentId } = getContext()
+    const response = await apiClient.get<BackendOrder[]>('/orders', {
+      params: {
+        establishmentId: establishmentId ?? undefined,
+      },
+    })
 
     const orders = response.data.map(mapOrder)
     if (!establishmentId) return orders
