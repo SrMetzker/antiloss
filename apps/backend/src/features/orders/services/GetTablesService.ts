@@ -10,6 +10,8 @@ export class GetTablesService {
         id: true,
         number: true,
         establishmentId: true,
+        capacity: true,
+        isReserved: true,
         orders: {
           where: { status: 'OPEN' },
           select: { id: true },
@@ -18,9 +20,14 @@ export class GetTablesService {
       }
     })
 
-    return tables.map(({ orders, ...table }) => ({
-      ...table,
-      activeOrderId: orders[0]?.id ?? null,
-    }))
+    return tables.map(({ orders, ...table }) => {
+      const activeOrderId = orders[0]?.id ?? null
+
+      return {
+        ...table,
+        activeOrderId,
+        status: activeOrderId ? 'occupied' : table.isReserved ? 'reserved' : 'free',
+      }
+    })
   }
 }

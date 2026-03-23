@@ -1529,6 +1529,7 @@ export const ProductScalarFieldEnum = {
   name: 'name',
   sku: 'sku',
   price: 'price',
+  category: 'category',
   establishmentId: 'establishmentId',
   createdAt: 'createdAt',
   createdBy: 'createdBy'
@@ -1589,6 +1590,8 @@ export const TableScalarFieldEnum = {
   id: 'id',
   number: 'number',
   establishmentId: 'establishmentId',
+  capacity: 'capacity',
+  isReserved: 'isReserved',
   createdAt: 'createdAt'
 } as const
 
@@ -1600,7 +1603,9 @@ export const OrderScalarFieldEnum = {
   tableId: 'tableId',
   status: 'status',
   total: 'total',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  closedAt: 'closedAt'
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
@@ -1757,6 +1762,20 @@ export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
 
 
 /**
+ * Reference to a field of type 'ProductCategory'
+ */
+export type EnumProductCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductCategory[]'
+ */
+export type ListEnumProductCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductCategory[]'>
+    
+
+
+/**
  * Reference to a field of type 'UnitType'
  */
 export type EnumUnitTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UnitType'>
@@ -1799,6 +1818,13 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'OrderStatus'
  */
 export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
@@ -1823,13 +1849,6 @@ export type EnumBillingCycleFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'BillingCycle[]'
  */
 export type ListEnumBillingCycleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BillingCycle[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

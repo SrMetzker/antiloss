@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import axios from 'axios'
-import { CheckCircle, Plus, ShoppingCart, Users } from 'lucide-react'
+import { CheckCircle, Pencil, Plus, ShoppingCart, Users } from 'lucide-react'
 import {
   useAddItemToOpenOrder,
   useCloseOrder,
@@ -11,15 +11,21 @@ import {
   useRemoveItemFromOpenOrder,
   useTableOrder,
   useTables,
+  useUpdateTable,
 } from '@/hooks'
 import { Button } from '@/components/ui/Button'
 import { EmptyState, PageLoader } from '@/components/ui/Card'
 import { ConfirmModal, Modal } from '@/components/ui/Modal'
-import { Input } from '@/components/ui/Input'
+import { Input, Select } from '@/components/ui/Input'
 import { formatCurrency } from '@/utils/format'
 import type { Table } from '@/types'
 
-const TableCard: React.FC<{ table: Table; onClick: () => void }> = ({ table, onClick }) => {
+const TableCard: React.FC<{
+  table: Table
+  onClick: () => void
+  onToggleReserve: () => void
+  togglingReserve: boolean
+}> = ({ table, onClick, onToggleReserve, togglingReserve }) => {
   const config = {
     free: { label: 'Free', color: 'text-green-400', dot: 'bg-green-400' },
     occupied: { label: 'Occupied', color: 'text-brand', dot: 'bg-brand' },
@@ -29,20 +35,48 @@ const TableCard: React.FC<{ table: Table; onClick: () => void }> = ({ table, onC
   const status = config[table.status]
 
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={onClick}
-      className="card p-4 text-left hover:border-brand/30 transition-colors"
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onClick()
+        }
+      }}
+      className="card p-3 text-left hover:border-brand/30 transition-colors cursor-pointer"
     >
       <div className="flex items-start justify-between mb-2">
         <span className="text-2xl font-display font-bold text-white">{table.number}</span>
         <span className={`w-2.5 h-2.5 rounded-full ${status.dot}`} />
       </div>
-      <div className="text-xs text-gray-400 flex items-center gap-1.5">
-        <Users className="w-3.5 h-3.5" />
-        Default capacity
+      <div className="text-xs text-gray-400 inline-flex items-center gap-1.5 whitespace-nowrap">
+        <Users className="w-3.5 h-3.5 shrink-0" />
+        {table.capacity} {table.capacity === 1 ? 'seat' : 'seats'}
       </div>
-      <p className={`text-xs font-semibold mt-1.5 ${status.color}`}>{status.label}</p>
-    </button>
+        <p className={`text-xs font-semibold ${status.color}`}>{status.label}</p>
+      <div className="mt-3 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            title={table.status === 'reserved' ? 'Release reservation' : 'Reserve table'}
+            onClick={(event) => {
+              event.stopPropagation()
+              onToggleReserve()
+            }}
+            disabled={table.status === 'occupied' || togglingReserve}
+            className={`p-1 rounded-lg font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
+              table.status === 'reserved'
+                ? 'text-blue-400 bg-blue-400/10'
+                : 'text-gray-500 hover:text-blue-400 hover:bg-blue-400/10'
+            }`}
+          >
+            Reserve
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -189,10 +223,6 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
 
   return (
     <div className="flex flex-col h-full">
-      <div className="mb-4">
-        <h3 className="font-display font-bold text-white">Table {table.number}</h3>
-      </div>
-
       {order ? (
         <>
           <div className="flex-1 overflow-y-auto space-y-2">
@@ -364,17 +394,57 @@ const OrderPanel: React.FC<{ table: Table; onClose: () => void }> = ({ table, on
 export const TablesPage: React.FC = () => {
   const { data: tables, isLoading } = useTables()
   const createTableMutation = useCreateTable()
+  const updateTableMutation = useUpdateTable()
 
   const [selectedTable, setSelectedTable] = useState<Table | null>(null)
+  const [editingTable, setEditingTable] = useState<Table | null>(null)
   const [showCreateTable, setShowCreateTable] = useState(false)
   const [newTableNumber, setNewTableNumber] = useState<number>(0)
+  const [newTableCapacity, setNewTableCapacity] = useState<number>(4)
+  const [editTableCapacity, setEditTableCapacity] = useState<number>(4)
+  const [editTableReserved, setEditTableReserved] = useState<'yes' | 'no'>('no')
 
   const freeTables = tables?.filter((item) => item.status === 'free').length ?? 0
   const occupiedTables = tables?.filter((item) => item.status === 'occupied').length ?? 0
+  const reservedTables = tables?.filter((item) => item.status === 'reserved').length ?? 0
 
   const handleCreateTable = async () => {
-    await createTableMutation.mutateAsync(newTableNumber)
+    await createTableMutation.mutateAsync({
+      number: newTableNumber,
+      capacity: newTableCapacity,
+    })
     setShowCreateTable(false)
+    setNewTableNumber(0)
+    setNewTableCapacity(4)
+  }
+
+  const handleToggleReserve = async (table: Table) => {
+    if (table.status === 'occupied') return
+
+    await updateTableMutation.mutateAsync({
+      tableId: table.id,
+      data: { isReserved: table.status !== 'reserved' },
+    })
+  }
+
+  const openEditTable = (table: Table) => {
+    setEditingTable(table)
+    setEditTableCapacity(table.capacity)
+    setEditTableReserved(table.status === 'reserved' ? 'yes' : 'no')
+  }
+
+  const handleSaveTableEdit = async () => {
+    if (!editingTable) return
+
+    await updateTableMutation.mutateAsync({
+      tableId: editingTable.id,
+      data: {
+        capacity: editTableCapacity,
+        isReserved: editTableReserved === 'yes',
+      },
+    })
+
+    setEditingTable(null)
   }
 
   if (isLoading) return <PageLoader />
@@ -387,6 +457,7 @@ export const TablesPage: React.FC = () => {
           <div className="flex gap-4 mt-2">
             <span className="text-xs text-gray-400"><span className="text-green-400 font-bold">{freeTables}</span> free</span>
             <span className="text-xs text-gray-400"><span className="text-brand font-bold">{occupiedTables}</span> occupied</span>
+            <span className="text-xs text-gray-400"><span className="text-blue-400 font-bold">{reservedTables}</span> reserved</span>
           </div>
         </div>
         <Button icon={<Plus className="w-4 h-4" />} onClick={() => setShowCreateTable(true)}>
@@ -403,6 +474,8 @@ export const TablesPage: React.FC = () => {
               key={table.id}
               table={table}
               onClick={() => setSelectedTable(table)}
+              onToggleReserve={() => void handleToggleReserve(table)}
+              togglingReserve={updateTableMutation.isPending}
             />
           ))}
         </div>
@@ -411,7 +484,19 @@ export const TablesPage: React.FC = () => {
       <Modal
         isOpen={Boolean(selectedTable)}
         onClose={() => setSelectedTable(null)}
-        title=""
+        title={selectedTable ? `Table ${selectedTable.number}` : 'Table'}
+        headerActions={
+          selectedTable ? (
+            <button
+              type="button"
+              title="Edit table"
+              onClick={() => openEditTable(selectedTable)}
+              className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-bg-elevated transition-colors"
+            >
+              <Pencil className="w-4 h-4" />
+            </button>
+          ) : null
+        }
         size="lg"
       >
         {selectedTable ? <OrderPanel table={selectedTable} onClose={() => setSelectedTable(null)} /> : null}
@@ -438,6 +523,46 @@ export const TablesPage: React.FC = () => {
           min={1}
           value={newTableNumber}
           onChange={(event) => setNewTableNumber(Number(event.target.value) || 0)}
+        />
+        <Input
+          label="Capacity"
+          type="number"
+          min={1}
+          value={newTableCapacity}
+          onChange={(event) => setNewTableCapacity(Number(event.target.value) || 1)}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={Boolean(editingTable)}
+        onClose={() => setEditingTable(null)}
+        title={editingTable ? `Edit table ${editingTable.number}` : 'Edit table'}
+        size="sm"
+        footer={
+          <Button
+            fullWidth
+            onClick={() => void handleSaveTableEdit()}
+            loading={updateTableMutation.isPending}
+          >
+            Save changes
+          </Button>
+        }
+      >
+        <Input
+          label="Capacity"
+          type="number"
+          min={1}
+          value={editTableCapacity}
+          onChange={(event) => setEditTableCapacity(Number(event.target.value) || 1)}
+        />
+        <Select
+          label="Reserved"
+          value={editTableReserved}
+          onChange={(event) => setEditTableReserved(event.target.value as 'yes' | 'no')}
+          options={[
+            { value: 'no', label: 'No' },
+            { value: 'yes', label: 'Yes' },
+          ]}
         />
       </Modal>
     </div>

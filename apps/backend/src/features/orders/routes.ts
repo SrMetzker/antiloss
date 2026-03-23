@@ -7,6 +7,7 @@ import { closeOrder } from './controllers/CloseOrderController'
 import { addOrderItem } from './controllers/AddOrderItemController'
 import { removeOrderItem } from './controllers/RemoveOrderItemController'
 import { getKitchenOrders } from './controllers/GetKitchenOrdersController'
+import { updateTable } from './controllers/UpdateTableController'
 import {
 	authorizeRoles,
 	enforceEstablishmentScope,
@@ -19,6 +20,7 @@ const router = Router()
 
 router.get('/tables', authorizeRoles('ADMIN', 'MANAGER', 'BARTENDER'), enforceEstablishmentScope('query'), getTables)
 router.post('/tables', authorizeRoles('ADMIN', 'MANAGER', 'BARTENDER'), enforceEstablishmentScope('body'), createTable)
+router.patch('/tables/:id', authorizeRoles('ADMIN', 'MANAGER', 'BARTENDER'), enforceEstablishmentScope('body'), updateTable)
 
 router.get('/', authorizeRoles('ADMIN', 'MANAGER', 'BARTENDER'), enforceEstablishmentScope('query'), enforceTableAccessFromQuery('tableId'), getOrders)
 router.get('/kitchen', authorizeRoles('ADMIN', 'MANAGER', 'CHEF'), enforceEstablishmentScope('query'), getKitchenOrders)

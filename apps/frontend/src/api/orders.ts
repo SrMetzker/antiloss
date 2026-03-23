@@ -6,6 +6,9 @@ type BackendTable = {
   id: string
   number: number
   establishmentId: string
+  capacity: number
+  isReserved: boolean
+  status?: 'free' | 'occupied' | 'reserved'
   activeOrderId?: string | null
 }
 
@@ -15,6 +18,8 @@ type BackendOrder = {
   status: 'OPEN' | 'CLOSED' | 'CANCELED'
   total: number
   createdAt: string
+  updatedAt: string
+  closedAt?: string | null
   table?: BackendTable
   items: Array<{
     id: string
@@ -23,6 +28,19 @@ type BackendOrder = {
     price: number
     product?: { name: string }
   }>
+}
+
+const mapTable = (table: BackendTable): Table => {
+  const status = table.status ?? (table.activeOrderId ? 'occupied' : table.isReserved ? 'reserved' : 'free')
+
+  return {
+    id: table.id,
+    number: table.number,
+    establishmentId: table.establishmentId,
+    capacity: table.capacity,
+    status,
+    ...(table.activeOrderId ? { activeOrderId: table.activeOrderId } : {}),
+  }
 }
 
 const mapOrder = (order: BackendOrder): Order => ({
@@ -41,8 +59,8 @@ const mapOrder = (order: BackendOrder): Order => ({
   })),
   total: order.total,
   createdAt: order.createdAt,
-  updatedAt: order.createdAt,
-  closedAt: order.status === 'CLOSED' ? order.createdAt : undefined,
+  updatedAt: order.updatedAt,
+  ...(order.closedAt ? { closedAt: order.closedAt } : {}),
 })
 
 const getContext = () => {
@@ -63,36 +81,62 @@ export const ordersApi = {
       params: establishmentId ? { establishmentId } : undefined,
     })
 
-    const tables = response.data.map((table) => ({
-      id: table.id,
-      number: table.number,
-      establishmentId: table.establishmentId,
-      capacity: 4,
-      status: table.activeOrderId ? 'occupied' as const : 'free' as const,
-      activeOrderId: table.activeOrderId ?? undefined,
-    }))
+    const tables = response.data.map(mapTable)
 
     return tables
   },
 
-  createTable: async (number: number): Promise<Table> => {
+  createTable: async (payload: { number: number; capacity?: number }): Promise<Table> => {
     const { establishmentId } = getContext()
     if (!establishmentId) {
       throw new Error('Establishment not selected')
     }
 
-    const response = await apiClient.post<BackendTable>('/orders/tables', {
-      number,
+    const requestBody: {
+      number: number
+      establishmentId: string
+      capacity?: number
+    } = {
+      number: payload.number,
       establishmentId,
-    })
-
-    return {
-      id: response.data.id,
-      number: response.data.number,
-      establishmentId: response.data.establishmentId,
-      capacity: 4,
-      status: 'free',
     }
+
+    if (payload.capacity !== undefined) {
+      requestBody.capacity = payload.capacity
+    }
+
+    const response = await apiClient.post<BackendTable>('/orders/tables', requestBody)
+
+    return mapTable(response.data)
+  },
+
+  updateTable: async (
+    tableId: string,
+    payload: { capacity?: number; isReserved?: boolean }
+  ): Promise<Table> => {
+    const { establishmentId } = getContext()
+    if (!establishmentId) {
+      throw new Error('Establishment not selected')
+    }
+
+    const requestBody: {
+      establishmentId: string
+      capacity?: number
+      isReserved?: boolean
+    } = {
+      establishmentId,
+    }
+
+    if (payload.capacity !== undefined) {
+      requestBody.capacity = payload.capacity
+    }
+
+    if (payload.isReserved !== undefined) {
+      requestBody.isReserved = payload.isReserved
+    }
+
+    const response = await apiClient.patch<BackendTable>(`/orders/tables/${tableId}`, requestBody)
+    return mapTable(response.data)
   },
 
   getOrdersByTable: async (tableId: string): Promise<Order[]> => {

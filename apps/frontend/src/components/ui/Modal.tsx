@@ -5,6 +5,7 @@ interface ModalProps {
   isOpen: boolean
   onClose: () => void
   title?: string
+  headerActions?: React.ReactNode
   children: React.ReactNode
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
   footer?: React.ReactNode
@@ -22,6 +23,7 @@ export const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   title,
+  headerActions,
   children,
   size = 'md',
   footer,
@@ -73,12 +75,15 @@ export const Modal: React.FC<ModalProps> = ({
         {title && (
           <div className="flex items-center justify-between px-5 py-4 border-b border-bg-border flex-shrink-0">
             <h2 className="text-lg font-display font-bold text-white">{title}</h2>
-            <button
-              onClick={onClose}
-              className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-bg-elevated transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-2">
+              {headerActions}
+              <button
+                onClick={onClose}
+                className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-bg-elevated transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         )}
 
