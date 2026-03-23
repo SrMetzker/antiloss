@@ -5,6 +5,7 @@ interface UpdateProductInput {
   name?: string
   sku?: string
   price?: number
+  category?: 'SPIRITS' | 'BEER' | 'WINE' | 'COCKTAILS' | 'SOFT_DRINKS' | 'FOOD' | 'OTHER'
   establishmentId?: string
 }
 
@@ -25,7 +26,8 @@ export class UpdateProductService {
       data: {
         ...(input.name && { name: input.name }),
         ...(input.sku && { sku: input.sku }),
-        ...(input.price && { price: input.price }),
+        ...(input.price !== undefined && { price: input.price }),
+        ...(input.category !== undefined && { category: input.category }),
         ...(input.establishmentId && { establishmentId: input.establishmentId })
       },
       include: {

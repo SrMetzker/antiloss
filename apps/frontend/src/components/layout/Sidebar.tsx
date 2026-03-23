@@ -12,7 +12,6 @@ import {
   Users,
   CreditCard,
   LogOut,
-  Wine,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
@@ -66,9 +65,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
     >
       {/* Logo */}
       <div className={`flex items-center gap-3 px-4 py-5 border-b border-bg-border ${collapsed ? 'justify-center' : ''}`}>
-        <div className="w-9 h-9 rounded-xl bg-brand flex items-center justify-center flex-shrink-0">
-          <Wine className="w-5 h-5 text-black" />
-        </div>
+        <img
+          src="/logo.png"
+          alt="Stratto"
+          className={`flex-shrink-0 object-contain ${collapsed ? 'w-9 h-9 rounded-xl' : 'w-10 h-10 rounded-xl'}`}
+        />
         {!collapsed && (
           <div>
             <p className="font-display font-bold text-white text-lg leading-none">Stratto</p>

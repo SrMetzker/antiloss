@@ -53,6 +53,7 @@ model Product {
   name            String
   sku             String?
   price           Float
+  category        ProductCategory @default(OTHER)
   establishmentId String
   createdAt       DateTime @default(now())
   createdBy       String
@@ -62,6 +63,16 @@ model Product {
 
   establishment Establishment   @relation(fields: [establishmentId], references: [id])
   stockMovements StockMovement[]
+}
+
+enum ProductCategory {
+  SPIRITS
+  BEER
+  WINE
+  COCKTAILS
+  SOFT_DRINKS
+  FOOD
+  OTHER
 }
 
 model Recipe {
@@ -138,6 +149,8 @@ model Table {
   id              String   @id @default(uuid())
   number          Int
   establishmentId String
+  capacity        Int      @default(4)
+  isReserved      Boolean  @default(false)
   createdAt       DateTime @default(now())
 
   orders Order[]
@@ -146,11 +159,13 @@ model Table {
 }
 
 model Order {
-  id        String   @id @default(uuid())
+  id        String      @id @default(uuid())
   tableId   String
   status    OrderStatus
   total     Float
-  createdAt DateTime @default(now())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  closedAt  DateTime?
 
   table Table @relation(fields: [tableId], references: [id])
 

@@ -120,6 +120,7 @@ export const ProductScalarFieldEnum = {
   name: 'name',
   sku: 'sku',
   price: 'price',
+  category: 'category',
   establishmentId: 'establishmentId',
   createdAt: 'createdAt',
   createdBy: 'createdBy'
@@ -180,6 +181,8 @@ export const TableScalarFieldEnum = {
   id: 'id',
   number: 'number',
   establishmentId: 'establishmentId',
+  capacity: 'capacity',
+  isReserved: 'isReserved',
   createdAt: 'createdAt'
 } as const
 
@@ -191,7 +194,9 @@ export const OrderScalarFieldEnum = {
   tableId: 'tableId',
   status: 'status',
   total: 'total',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  closedAt: 'closedAt'
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]

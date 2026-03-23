@@ -122,7 +122,10 @@ export class CloseOrderService {
 
       return tx.order.update({
         where: { id: order.id },
-        data: { status: 'CLOSED' },
+        data: {
+          status: 'CLOSED',
+          closedAt: new Date(),
+        },
         include: {
           table: true,
           items: {

@@ -186,12 +186,26 @@ export const useTables = () =>
 export const useCreateTable = () => {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (number: number) => ordersApi.createTable(number),
+    mutationFn: (data: { number: number; capacity?: number }) => ordersApi.createTable(data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['tables'] })
       toast.success('Table created')
     },
     onError: onErrorMessage('Failed to create table'),
+  })
+}
+
+export const useUpdateTable = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ tableId, data }: { tableId: string; data: { capacity?: number; isReserved?: boolean } }) =>
+      ordersApi.updateTable(tableId, data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['tables'] })
+      qc.invalidateQueries({ queryKey: ['table-order'] })
+      toast.success('Table updated')
+    },
+    onError: onErrorMessage('Failed to update table'),
   })
 }
 

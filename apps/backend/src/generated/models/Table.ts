@@ -28,16 +28,20 @@ export type AggregateTable = {
 
 export type TableAvgAggregateOutputType = {
   number: number | null
+  capacity: number | null
 }
 
 export type TableSumAggregateOutputType = {
   number: number | null
+  capacity: number | null
 }
 
 export type TableMinAggregateOutputType = {
   id: string | null
   number: number | null
   establishmentId: string | null
+  capacity: number | null
+  isReserved: boolean | null
   createdAt: Date | null
 }
 
@@ -45,6 +49,8 @@ export type TableMaxAggregateOutputType = {
   id: string | null
   number: number | null
   establishmentId: string | null
+  capacity: number | null
+  isReserved: boolean | null
   createdAt: Date | null
 }
 
@@ -52,6 +58,8 @@ export type TableCountAggregateOutputType = {
   id: number
   number: number
   establishmentId: number
+  capacity: number
+  isReserved: number
   createdAt: number
   _all: number
 }
@@ -59,16 +67,20 @@ export type TableCountAggregateOutputType = {
 
 export type TableAvgAggregateInputType = {
   number?: true
+  capacity?: true
 }
 
 export type TableSumAggregateInputType = {
   number?: true
+  capacity?: true
 }
 
 export type TableMinAggregateInputType = {
   id?: true
   number?: true
   establishmentId?: true
+  capacity?: true
+  isReserved?: true
   createdAt?: true
 }
 
@@ -76,6 +88,8 @@ export type TableMaxAggregateInputType = {
   id?: true
   number?: true
   establishmentId?: true
+  capacity?: true
+  isReserved?: true
   createdAt?: true
 }
 
@@ -83,6 +97,8 @@ export type TableCountAggregateInputType = {
   id?: true
   number?: true
   establishmentId?: true
+  capacity?: true
+  isReserved?: true
   createdAt?: true
   _all?: true
 }
@@ -177,6 +193,8 @@ export type TableGroupByOutputType = {
   id: string
   number: number
   establishmentId: string
+  capacity: number
+  isReserved: boolean
   createdAt: Date
   _count: TableCountAggregateOutputType | null
   _avg: TableAvgAggregateOutputType | null
@@ -207,6 +225,8 @@ export type TableWhereInput = {
   id?: Prisma.StringFilter<"Table"> | string
   number?: Prisma.IntFilter<"Table"> | number
   establishmentId?: Prisma.StringFilter<"Table"> | string
+  capacity?: Prisma.IntFilter<"Table"> | number
+  isReserved?: Prisma.BoolFilter<"Table"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   orders?: Prisma.OrderListRelationFilter
 }
@@ -215,6 +235,8 @@ export type TableOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   number?: Prisma.SortOrder
   establishmentId?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
+  isReserved?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   orders?: Prisma.OrderOrderByRelationAggregateInput
 }
@@ -227,6 +249,8 @@ export type TableWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.TableWhereInput | Prisma.TableWhereInput[]
   number?: Prisma.IntFilter<"Table"> | number
   establishmentId?: Prisma.StringFilter<"Table"> | string
+  capacity?: Prisma.IntFilter<"Table"> | number
+  isReserved?: Prisma.BoolFilter<"Table"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   orders?: Prisma.OrderListRelationFilter
 }, "id" | "number_establishmentId">
@@ -235,6 +259,8 @@ export type TableOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   number?: Prisma.SortOrder
   establishmentId?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
+  isReserved?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TableCountOrderByAggregateInput
   _avg?: Prisma.TableAvgOrderByAggregateInput
@@ -250,6 +276,8 @@ export type TableScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Table"> | string
   number?: Prisma.IntWithAggregatesFilter<"Table"> | number
   establishmentId?: Prisma.StringWithAggregatesFilter<"Table"> | string
+  capacity?: Prisma.IntWithAggregatesFilter<"Table"> | number
+  isReserved?: Prisma.BoolWithAggregatesFilter<"Table"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Table"> | Date | string
 }
 
@@ -257,6 +285,8 @@ export type TableCreateInput = {
   id?: string
   number: number
   establishmentId: string
+  capacity?: number
+  isReserved?: boolean
   createdAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutTableInput
 }
@@ -265,6 +295,8 @@ export type TableUncheckedCreateInput = {
   id?: string
   number: number
   establishmentId: string
+  capacity?: number
+  isReserved?: boolean
   createdAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTableInput
 }
@@ -273,6 +305,8 @@ export type TableUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.IntFieldUpdateOperationsInput | number
   establishmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  isReserved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutTableNestedInput
 }
@@ -281,6 +315,8 @@ export type TableUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.IntFieldUpdateOperationsInput | number
   establishmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  isReserved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTableNestedInput
 }
@@ -289,6 +325,8 @@ export type TableCreateManyInput = {
   id?: string
   number: number
   establishmentId: string
+  capacity?: number
+  isReserved?: boolean
   createdAt?: Date | string
 }
 
@@ -296,6 +334,8 @@ export type TableUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.IntFieldUpdateOperationsInput | number
   establishmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  isReserved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -303,6 +343,8 @@ export type TableUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.IntFieldUpdateOperationsInput | number
   establishmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  isReserved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -315,17 +357,22 @@ export type TableCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   number?: Prisma.SortOrder
   establishmentId?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
+  isReserved?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type TableAvgOrderByAggregateInput = {
   number?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
 }
 
 export type TableMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   number?: Prisma.SortOrder
   establishmentId?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
+  isReserved?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -333,11 +380,14 @@ export type TableMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   number?: Prisma.SortOrder
   establishmentId?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
+  isReserved?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type TableSumOrderByAggregateInput = {
   number?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
 }
 
 export type TableScalarRelationFilter = {
@@ -351,6 +401,10 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type TableCreateNestedOneWithoutOrdersInput = {
@@ -371,6 +425,8 @@ export type TableCreateWithoutOrdersInput = {
   id?: string
   number: number
   establishmentId: string
+  capacity?: number
+  isReserved?: boolean
   createdAt?: Date | string
 }
 
@@ -378,6 +434,8 @@ export type TableUncheckedCreateWithoutOrdersInput = {
   id?: string
   number: number
   establishmentId: string
+  capacity?: number
+  isReserved?: boolean
   createdAt?: Date | string
 }
 
@@ -401,6 +459,8 @@ export type TableUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.IntFieldUpdateOperationsInput | number
   establishmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  isReserved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -408,6 +468,8 @@ export type TableUncheckedUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.IntFieldUpdateOperationsInput | number
   establishmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  isReserved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -446,6 +508,8 @@ export type TableSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   number?: boolean
   establishmentId?: boolean
+  capacity?: boolean
+  isReserved?: boolean
   createdAt?: boolean
   orders?: boolean | Prisma.Table$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.TableCountOutputTypeDefaultArgs<ExtArgs>
@@ -455,6 +519,8 @@ export type TableSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   number?: boolean
   establishmentId?: boolean
+  capacity?: boolean
+  isReserved?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["table"]>
 
@@ -462,6 +528,8 @@ export type TableSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   number?: boolean
   establishmentId?: boolean
+  capacity?: boolean
+  isReserved?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["table"]>
 
@@ -469,10 +537,12 @@ export type TableSelectScalar = {
   id?: boolean
   number?: boolean
   establishmentId?: boolean
+  capacity?: boolean
+  isReserved?: boolean
   createdAt?: boolean
 }
 
-export type TableOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "number" | "establishmentId" | "createdAt", ExtArgs["result"]["table"]>
+export type TableOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "number" | "establishmentId" | "capacity" | "isReserved" | "createdAt", ExtArgs["result"]["table"]>
 export type TableInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | Prisma.Table$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.TableCountOutputTypeDefaultArgs<ExtArgs>
@@ -489,6 +559,8 @@ export type $TablePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     number: number
     establishmentId: string
+    capacity: number
+    isReserved: boolean
     createdAt: Date
   }, ExtArgs["result"]["table"]>
   composites: {}
@@ -917,6 +989,8 @@ export interface TableFieldRefs {
   readonly id: Prisma.FieldRef<"Table", 'String'>
   readonly number: Prisma.FieldRef<"Table", 'Int'>
   readonly establishmentId: Prisma.FieldRef<"Table", 'String'>
+  readonly capacity: Prisma.FieldRef<"Table", 'Int'>
+  readonly isReserved: Prisma.FieldRef<"Table", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Table", 'DateTime'>
 }
     

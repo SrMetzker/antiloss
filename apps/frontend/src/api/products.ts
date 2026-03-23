@@ -1,15 +1,53 @@
 import apiClient from '@/api/client'
 import { useAuthStore } from '@/store/authStore'
-import type { Product, ProductFormData } from '@/types'
+import type { Product, ProductCategory, ProductFormData } from '@/types'
+
+type BackendProductCategory =
+  | 'SPIRITS'
+  | 'BEER'
+  | 'WINE'
+  | 'COCKTAILS'
+  | 'SOFT_DRINKS'
+  | 'FOOD'
+  | 'OTHER'
 
 type BackendProduct = {
   id: string
   name: string
   price: number
   sku?: string | null
+  category: BackendProductCategory
   establishmentId: string
   createdAt: string
   stockMovements?: Array<{ quantity: number; type: string }>
+}
+
+const fromBackendCategory = (category: BackendProductCategory): ProductCategory => {
+  const map: Record<BackendProductCategory, ProductCategory> = {
+    SPIRITS: 'spirits',
+    BEER: 'beer',
+    WINE: 'wine',
+    COCKTAILS: 'cocktails',
+    SOFT_DRINKS: 'soft_drinks',
+    FOOD: 'food',
+    OTHER: 'other',
+  }
+
+  return map[category]
+}
+
+const toBackendCategory = (category: ProductCategory): BackendProductCategory => {
+  const map: Record<ProductCategory, BackendProductCategory> = {
+    spirits: 'SPIRITS',
+    beer: 'BEER',
+    wine: 'WINE',
+    cocktails: 'COCKTAILS',
+    soft_drinks: 'SOFT_DRINKS',
+    food: 'FOOD',
+    other: 'OTHER',
+  }
+
+  return map[category]
 }
 
 const mapProduct = (product: BackendProduct): Product => ({
@@ -17,7 +55,7 @@ const mapProduct = (product: BackendProduct): Product => ({
   name: product.name,
   price: product.price,
   sku: product.sku ?? '',
-  category: 'other',
+  category: fromBackendCategory(product.category),
   establishmentId: product.establishmentId,
   createdAt: product.createdAt,
   updatedAt: product.createdAt,
@@ -61,6 +99,7 @@ export const productsApi = {
       name: data.name,
       sku: data.sku,
       price: data.price,
+      category: toBackendCategory(data.category),
       establishmentId,
       createdBy,
     }
@@ -75,6 +114,7 @@ export const productsApi = {
     if (data.name !== undefined) payload.name = data.name
     if (data.sku !== undefined) payload.sku = data.sku
     if (data.price !== undefined) payload.price = data.price
+    if (data.category !== undefined) payload.category = toBackendCategory(data.category)
 
     const response = await apiClient.put<BackendProduct>(`/products/${id}`, payload)
     return mapProduct(response.data)

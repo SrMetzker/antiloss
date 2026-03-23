@@ -13,10 +13,10 @@ type BackendIngredient = {
 
 type BackendStockMovement = {
   id: string
-  type: 'IN' | 'OUT' | 'ADJUSTMENT'
+  type: 'IN' | 'OUT' | 'SALE' | 'LOSS' | 'ADJUSTMENT'
   quantity: number
   ingredientId: string
-  note?: string
+  note?: string | null
   createdBy: string
   createdAt: string
   ingredient: BackendIngredient
@@ -62,7 +62,7 @@ const mapStockMovement = (movement: BackendStockMovement): StockMovement => ({
   type: movement.type,
   quantity: movement.quantity,
   unit: unitMap[movement.ingredient.unit],
-  reason: movement.note,
+  reason: movement.note ?? undefined,
   createdBy: movement.createdBy,
   createdAt: movement.createdAt,
 })
@@ -147,17 +147,14 @@ export const inventoryApi = {
       createdBy,
     })
 
-    return {
-      id: `local-${Date.now()}`,
-      ingredientId: ingredient.id,
-      ingredientName: ingredient.name,
-      type: data.type,
-      quantity: data.quantity,
-      unit: ingredient.unit,
-      reason: data.reason,
-      createdBy,
-      createdAt: new Date().toISOString(),
+    const movements = await inventoryApi.getMovements()
+    const persistedMovement = movements.find((item) => item.ingredientId === ingredient.id)
+
+    if (!persistedMovement) {
+      throw new Error('Stock movement was updated but no persisted movement was returned')
     }
+
+    return persistedMovement
   },
 
   createIngredient: async (data: Omit<Ingredient, 'id'>): Promise<Ingredient> => {

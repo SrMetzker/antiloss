@@ -7,12 +7,24 @@ export class GetKitchenOrdersService {
         status: 'OPEN',
         table: {
           establishmentId
+        },
+        items: {
+          some: {
+            product: {
+              category: 'FOOD'
+            }
+          }
         }
       },
       orderBy: { createdAt: 'asc' },
       include: {
         table: true,
         items: {
+          where: {
+            product: {
+              category: 'FOOD'
+            }
+          },
           include: {
             product: true
           }

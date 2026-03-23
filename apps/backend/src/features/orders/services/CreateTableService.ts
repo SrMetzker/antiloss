@@ -5,6 +5,8 @@ import { enforceTableLimit } from '../../../utils/planLimits'
 interface CreateTableInput {
   number: number
   establishmentId: string
+  capacity?: number
+  isReserved?: boolean
 }
 
 export class CreateTableService {
@@ -26,6 +28,8 @@ export class CreateTableService {
       data: {
         number: input.number,
         establishmentId: input.establishmentId,
+        capacity: input.capacity ?? 4,
+        isReserved: input.isReserved ?? false,
         createdAt: new Date()
       }
     })

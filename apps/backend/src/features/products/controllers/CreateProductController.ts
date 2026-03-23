@@ -4,22 +4,36 @@ import { ValidationError } from '../../../utils/errors'
 
 const service = new CreateProductService()
 
+const VALID_CATEGORIES = new Set([
+  'SPIRITS',
+  'BEER',
+  'WINE',
+  'COCKTAILS',
+  'SOFT_DRINKS',
+  'FOOD',
+  'OTHER',
+])
+
 export const createProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, sku, price, establishmentId, createdBy: bodyCreatedBy } = req.body
+    const { name, sku, price, category, establishmentId, createdBy: bodyCreatedBy } = req.body
     const createdBy = req.user?.userId ?? bodyCreatedBy
 
     if (!name) {
       throw new ValidationError('¡El nombre del producto es obligatorio!')
     }
 
-    if (price) {
-      const priceNumber = parseFloat(price)
-      if (isNaN(priceNumber) || priceNumber < 0) {
-        throw new ValidationError('¡El precio del producto debe ser un número válido y no puede ser negativo!')
-      }
-    } else {
+    if (price === undefined) {
       throw new ValidationError('¡El precio del producto es obligatorio!')
+    }
+
+    const priceNumber = parseFloat(String(price))
+    if (isNaN(priceNumber) || priceNumber < 0) {
+      throw new ValidationError('¡El precio del producto debe ser un número válido y no puede ser negativo!')
+    }
+
+    if (category !== undefined && !VALID_CATEGORIES.has(String(category))) {
+      throw new ValidationError('¡La categoría del producto no es válida!')
     }
 
     if (!establishmentId) {
@@ -33,7 +47,8 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
     const product = await service.execute({
       name,
       sku,
-      price,
+      price: priceNumber,
+      category,
       establishmentId,
       createdBy
     })
