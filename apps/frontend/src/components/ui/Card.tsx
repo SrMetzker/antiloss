@@ -128,12 +128,40 @@ interface StatCardProps {
   icon: React.ReactNode
   trend?: { value: string; positive: boolean }
   accent?: boolean
+  severity?: 'default' | 'warning' | 'danger'
 }
 
-export const StatCard: React.FC<StatCardProps> = ({ label, value, icon, trend, accent }) => (
-  <div className={`stat-card ${accent ? 'border-brand/30 bg-brand-muted' : ''}`}>
+export const StatCard: React.FC<StatCardProps> = ({ label, value, icon, trend, accent, severity = 'default' }) => {
+  const severityMap: Record<NonNullable<StatCardProps['severity']>, { container: string; icon: string; value: string }> = {
+    default: {
+      container: '',
+      icon: 'bg-bg-elevated text-gray-400',
+      value: 'text-white',
+    },
+    warning: {
+      container: 'border-amber-500/35 bg-amber-500/8',
+      icon: 'bg-amber-500/15 text-amber-300',
+      value: 'text-amber-200',
+    },
+    danger: {
+      container: 'border-red-500/35 bg-red-500/8',
+      icon: 'bg-red-500/15 text-red-300',
+      value: 'text-red-200',
+    },
+  }
+
+  const styles = accent
+    ? {
+      container: 'border-brand/30 bg-brand-muted',
+      icon: 'bg-brand/20 text-brand',
+      value: 'text-brand',
+    }
+    : severityMap[severity]
+
+  return (
+  <div className={`stat-card ${styles.container}`}>
     <div className="flex items-start justify-between">
-      <div className={`p-2.5 rounded-xl ${accent ? 'bg-brand/20 text-brand' : 'bg-bg-elevated text-gray-400'}`}>
+      <div className={`p-2.5 rounded-xl ${styles.icon}`}>
         {icon}
       </div>
       {trend && (
@@ -144,9 +172,10 @@ export const StatCard: React.FC<StatCardProps> = ({ label, value, icon, trend, a
     </div>
     <div>
       <p className="label mb-1">{label}</p>
-      <p className={`text-2xl font-display font-bold ${accent ? 'text-brand' : 'text-white'}`}>
+      <p className={`text-2xl font-display font-bold ${styles.value}`}>
         {value}
       </p>
     </div>
   </div>
 )
+}

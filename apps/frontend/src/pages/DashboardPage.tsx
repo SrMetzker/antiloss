@@ -20,13 +20,15 @@ export const DashboardPage: React.FC = () => {
   const { data: recipes, isLoading: loadingRecipes } = useRecipes()
   const { data: reports, isLoading: loadingReports } = useReports()
 
-  const lowStockProducts = products?.filter(
-    (p) => p.stock !== undefined && p.lowStockThreshold !== undefined && p.stock <= p.lowStockThreshold
-  ) ?? []
-
   const lowStockIngredients = ingredients?.filter(
     (i) => i.currentStock <= i.minStock
   ) ?? []
+  const lowStockSeverity =
+    lowStockIngredients.length === 0
+      ? 'default'
+      : lowStockIngredients.length <= 2
+        ? 'warning'
+        : 'danger'
 
   const recipeProductIds = new Set((recipes ?? []).map((recipe) => recipe.productId))
   const productsWithoutRecipe = (products ?? []).filter((product) => !recipeProductIds.has(product.id))
@@ -85,9 +87,10 @@ export const DashboardPage: React.FC = () => {
           icon={<Package className="w-5 h-5" />}
         />
         <StatCard
-          label="Low Stock Products"
-          value={lowStockProducts.length}
+          label="Low Stock Ingredients"
+          value={lowStockIngredients.length}
           icon={<AlertTriangle className="w-5 h-5" />}
+          severity={lowStockSeverity}
         />
       </div>
 
