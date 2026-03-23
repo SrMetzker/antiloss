@@ -6,7 +6,7 @@ import {
 } from 'lucide-react'
 import { useProducts, useIngredients, useReports } from '@/hooks'
 import { StatCard, Card, EmptyState, PageLoader } from '@/components/ui/Card'
-import { formatCurrency, formatShortDate } from '@/utils/format'
+import { formatCurrency, formatShortDate, getLocalDateKey, shiftDateKey } from '@/utils/format'
 import { useAuthStore } from '@/store/authStore'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
@@ -27,9 +27,13 @@ export const DashboardPage: React.FC = () => {
     (i) => i.currentStock <= i.minStock
   ) ?? []
 
-  const todaySales = reports?.dailySales[reports.dailySales.length - 1]
-  const yesterdaySales = reports?.dailySales[reports.dailySales.length - 2]
-  const salesTrend = todaySales && yesterdaySales && yesterdaySales.total > 0
+  const todayKey = getLocalDateKey()
+  const yesterdayKey = shiftDateKey(todayKey, -1)
+  const dailySalesByDate = new Map((reports?.dailySales ?? []).map((item) => [item.date, item]))
+  const currentDaySales = dailySalesByDate.get(todayKey)
+  const todaySales = currentDaySales ?? { date: todayKey, total: 0, orderCount: 0 }
+  const yesterdaySales = dailySalesByDate.get(yesterdayKey)
+  const salesTrend = currentDaySales && yesterdaySales && yesterdaySales.total > 0
     ? ((todaySales.total - yesterdaySales.total) / yesterdaySales.total * 100).toFixed(1)
     : null
 

@@ -1,3 +1,29 @@
+const parseDateInput = (dateString: string): Date => {
+  const dateOnlyMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateString)
+
+  if (dateOnlyMatch) {
+    const [, year, month, day] = dateOnlyMatch
+    return new Date(Number(year), Number(month) - 1, Number(day))
+  }
+
+  return new Date(dateString)
+}
+
+export const getLocalDateKey = (value: string | Date = new Date()): string => {
+  const date = value instanceof Date ? value : parseDateInput(value)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
+}
+
+export const shiftDateKey = (dateKey: string, days: number): string => {
+  const date = parseDateInput(dateKey)
+  date.setDate(date.getDate() + days)
+  return getLocalDateKey(date)
+}
+
 export const formatCurrency = (amount: number, currency = 'EUR'): string => {
   return new Intl.NumberFormat('en-IE', {
     style: 'currency',
@@ -11,14 +37,14 @@ export const formatDate = (dateString: string): string => {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-  }).format(new Date(dateString))
+  }).format(parseDateInput(dateString))
 }
 
 export const formatTime = (dateString: string): string => {
   return new Intl.DateTimeFormat('en-IE', {
     hour: '2-digit',
     minute: '2-digit',
-  }).format(new Date(dateString))
+  }).format(parseDateInput(dateString))
 }
 
 export const formatDateTime = (dateString: string): string => {
@@ -26,7 +52,7 @@ export const formatDateTime = (dateString: string): string => {
 }
 
 export const formatRelativeTime = (dateString: string): string => {
-  const diff = Date.now() - new Date(dateString).getTime()
+  const diff = Date.now() - parseDateInput(dateString).getTime()
   const minutes = Math.floor(diff / 60000)
   const hours = Math.floor(diff / 3600000)
   const days = Math.floor(diff / 86400000)
@@ -41,7 +67,7 @@ export const formatShortDate = (dateString: string): string => {
   return new Intl.DateTimeFormat('en-IE', {
     day: '2-digit',
     month: 'short',
-  }).format(new Date(dateString))
+  }).format(parseDateInput(dateString))
 }
 
 export const slugify = (text: string): string =>
