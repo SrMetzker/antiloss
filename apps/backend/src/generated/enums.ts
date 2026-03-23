@@ -19,6 +19,19 @@ export const UserRole = {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
+export const ProductCategory = {
+  SPIRITS: 'SPIRITS',
+  BEER: 'BEER',
+  WINE: 'WINE',
+  COCKTAILS: 'COCKTAILS',
+  SOFT_DRINKS: 'SOFT_DRINKS',
+  FOOD: 'FOOD',
+  OTHER: 'OTHER'
+} as const
+
+export type ProductCategory = (typeof ProductCategory)[keyof typeof ProductCategory]
+
+
 export const UnitType = {
   UNIT: 'UNIT',
   ML: 'ML',

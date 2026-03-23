@@ -6,6 +6,7 @@ interface CreateProductInput {
   name: string
   sku: string
   price: number
+  category?: 'SPIRITS' | 'BEER' | 'WINE' | 'COCKTAILS' | 'SOFT_DRINKS' | 'FOOD' | 'OTHER'
   establishmentId: string
   createdBy: string
 }
@@ -27,6 +28,7 @@ export class CreateProductService {
         name: input.name,
         sku: input.sku,
         price: input.price,
+        category: input.category ?? 'OTHER',
         establishmentId: input.establishmentId,
         createdAt: new Date(),
         createdBy: input.createdBy
