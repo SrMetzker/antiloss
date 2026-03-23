@@ -5,11 +5,11 @@ const service = new GetStockMovementsService()
 
 export const getStockMovements = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { productId } = req.query
+    const { productId, establishmentId } = req.query
 
     const stockMovements = await service.execute({
       productId: productId as string,
-      establishmentId: req.user?.establishmentIds[0] as string
+      establishmentId: establishmentId as string
     })
 
     res.json(stockMovements)

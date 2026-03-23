@@ -3,6 +3,26 @@ import { useAuthStore } from '@/store/authStore'
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
+const getPersistedToken = (): string | null => {
+  const runtimeToken = useAuthStore.getState().token
+  if (runtimeToken) return runtimeToken
+
+  try {
+    const raw = localStorage.getItem('stratto-auth')
+    if (!raw) return null
+
+    const parsed = JSON.parse(raw) as {
+      state?: {
+        token?: string | null
+      }
+    }
+
+    return parsed.state?.token ?? null
+  } catch {
+    return null
+  }
+}
+
 export const apiClient = axios.create({
   baseURL: BASE_URL,
   headers: { 'Content-Type': 'application/json' },
@@ -11,7 +31,7 @@ export const apiClient = axios.create({
 
 // ─── Request interceptor: attach JWT ─────────────────────────────────────────
 apiClient.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token
+  const token = getPersistedToken()
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -29,7 +49,9 @@ apiClient.interceptors.response.use(
       return Promise.reject(error)
     }
 
-    if (error.response?.status === 401 || error.response?.status === 403) {
+    // 403 também é usado para regras de permissão do domínio (RBAC/scope).
+    // Deslogar em todo 403 causava perda de sessão indevida.
+    if (error.response?.status === 401) {
       useAuthStore.getState().logout()
       window.location.href = '/login'
     }
