@@ -8,6 +8,7 @@ import { reportsApi } from '@/api/reports'
 import { usersApi } from '@/api/users'
 import { establishmentsApi } from '@/api/establishments'
 import { toast } from '@/store/toastStore'
+import { useAuthStore } from '@/store/authStore'
 import type {
   EstablishmentCreateInput,
   EstablishmentUpdateInput,
@@ -40,9 +41,14 @@ const onErrorMessage = (message: string) => (error: unknown) => {
   toast.error(fallback)
 }
 
+const useActiveEstablishmentId = () => useAuthStore((state) => state.activeEstablishmentId)
+
 // Products
 export const useProducts = () =>
-  useQuery({ queryKey: ['products'], queryFn: productsApi.getAll })
+  {
+    const activeEstablishmentId = useActiveEstablishmentId()
+    return useQuery({ queryKey: ['products', activeEstablishmentId], queryFn: productsApi.getAll })
+  }
 
 export const useCreateProduct = () => {
   const qc = useQueryClient()
@@ -83,10 +89,16 @@ export const useDeleteProduct = () => {
 
 // Inventory
 export const useIngredients = () =>
-  useQuery({ queryKey: ['ingredients'], queryFn: inventoryApi.getIngredients })
+  {
+    const activeEstablishmentId = useActiveEstablishmentId()
+    return useQuery({ queryKey: ['ingredients', activeEstablishmentId], queryFn: inventoryApi.getIngredients })
+  }
 
 export const useStockMovements = () =>
-  useQuery({ queryKey: ['movements'], queryFn: inventoryApi.getMovements })
+  {
+    const activeEstablishmentId = useActiveEstablishmentId()
+    return useQuery({ queryKey: ['movements', activeEstablishmentId], queryFn: inventoryApi.getMovements })
+  }
 
 export const useCreateMovement = () => {
   const qc = useQueryClient()
@@ -140,7 +152,10 @@ export const useDeleteIngredient = () => {
 
 // Recipes
 export const useRecipes = () =>
-  useQuery({ queryKey: ['recipes'], queryFn: recipesApi.getAll })
+  {
+    const activeEstablishmentId = useActiveEstablishmentId()
+    return useQuery({ queryKey: ['recipes', activeEstablishmentId], queryFn: recipesApi.getAll })
+  }
 
 export const useCreateRecipe = () => {
   const qc = useQueryClient()
@@ -181,7 +196,10 @@ export const useDeleteRecipe = () => {
 
 // Tables / Orders
 export const useTables = () =>
-  useQuery({ queryKey: ['tables'], queryFn: ordersApi.getTables, refetchInterval: 15000 })
+  {
+    const activeEstablishmentId = useActiveEstablishmentId()
+    return useQuery({ queryKey: ['tables', activeEstablishmentId], queryFn: ordersApi.getTables, refetchInterval: 15000 })
+  }
 
 export const useCreateTable = () => {
   const qc = useQueryClient()
@@ -210,11 +228,14 @@ export const useUpdateTable = () => {
 }
 
 export const useTableOrder = (tableId: string | null) =>
-  useQuery({
-    queryKey: ['table-order', tableId],
-    queryFn: () => ordersApi.getOrderByTable(tableId!),
-    enabled: Boolean(tableId),
-  })
+  {
+    const activeEstablishmentId = useActiveEstablishmentId()
+    return useQuery({
+      queryKey: ['table-order', activeEstablishmentId, tableId],
+      queryFn: () => ordersApi.getOrderByTable(tableId!),
+      enabled: Boolean(tableId),
+    })
+  }
 
 export const useCreateOrder = () => {
   const qc = useQueryClient()
@@ -276,14 +297,23 @@ export const useRemoveItemFromOpenOrder = () => {
 }
 
 export const useAllOrders = () =>
-  useQuery({ queryKey: ['orders'], queryFn: ordersApi.getAllOrders })
+  {
+    const activeEstablishmentId = useActiveEstablishmentId()
+    return useQuery({ queryKey: ['orders', activeEstablishmentId], queryFn: ordersApi.getAllOrders })
+  }
 
 export const useKitchenOrders = () =>
-  useQuery({ queryKey: ['kitchen-orders'], queryFn: ordersApi.getKitchenOrders, refetchInterval: 10000 })
+  {
+    const activeEstablishmentId = useActiveEstablishmentId()
+    return useQuery({ queryKey: ['kitchen-orders', activeEstablishmentId], queryFn: ordersApi.getKitchenOrders, refetchInterval: 10000 })
+  }
 
 // Reports
 export const useReports = () =>
-  useQuery({ queryKey: ['reports'], queryFn: reportsApi.getSummary })
+  {
+    const activeEstablishmentId = useActiveEstablishmentId()
+    return useQuery({ queryKey: ['reports', activeEstablishmentId], queryFn: reportsApi.getSummary })
+  }
 
 // Establishments
 export const useEstablishments = () =>
@@ -328,7 +358,10 @@ export const useDeleteEstablishment = () => {
 
 // Users
 export const useUsers = () =>
-  useQuery({ queryKey: ['users'], queryFn: usersApi.getAll })
+  {
+    const activeEstablishmentId = useActiveEstablishmentId()
+    return useQuery({ queryKey: ['users', activeEstablishmentId], queryFn: usersApi.getAll })
+  }
 
 export const useCreateUser = () => {
   const qc = useQueryClient()

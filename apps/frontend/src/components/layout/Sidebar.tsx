@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   LayoutDashboard,
   ChefHat,
@@ -46,11 +47,18 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
   const { user, logout, activeEstablishmentId, setActiveEstablishmentId } = useAuthStore()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const visibleNavItems = navItems.filter((item) => hasAnyRole(user?.role, item.allowedRoles))
 
   const handleLogout = () => {
     logout()
     navigate('/login', { replace: true })
+  }
+
+  const handleEstablishmentChange = (establishmentId: string) => {
+    setActiveEstablishmentId(establishmentId)
+    void queryClient.invalidateQueries()
+    void queryClient.refetchQueries({ type: 'active' })
   }
 
   return (
@@ -129,7 +137,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
             {(user?.establishments?.length ?? 0) > 0 && (
               <select
                 value={activeEstablishmentId ?? ''}
-                onChange={(event) => setActiveEstablishmentId(event.target.value)}
+                onChange={(event) => handleEstablishmentChange(event.target.value)}
                 className="input-field !py-2 !text-xs"
               >
                 {user?.establishments?.map((item) => (
