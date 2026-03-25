@@ -9,6 +9,7 @@
     "start:prod": "node dist/server.js",
     "migrate:deploy": "prisma migrate deploy",
     "seed:dev": "ts-node src/scripts/seed-dev.ts",
+    "reset:user": "ts-node src/scripts/reset-user-access.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
