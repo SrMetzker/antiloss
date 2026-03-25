@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { toast } from '@/store/toastStore'
 import { getDefaultRouteForRole } from '@/utils/rbac'
+import { ContactBar } from '@/components/ui/ContactBar'
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate()
@@ -111,6 +112,12 @@ export const LoginPage: React.FC = () => {
             Sign up
           </Link>
         </p>
+
+        <ContactBar
+          email="sr.metzker.lucas@gmail.com"
+          whatsapp="34624250681"
+          whatsappMessage="¡Hola! Necesito ayuda con Stratto."
+        />
       </div>
     </div>
   )

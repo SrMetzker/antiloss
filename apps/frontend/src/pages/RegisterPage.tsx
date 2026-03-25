@@ -8,6 +8,7 @@ import { useAuthStore } from '@/store/authStore'
 import { toast } from '@/store/toastStore'
 import type { PublicPlan } from '@/types'
 import { getDefaultRouteForRole } from '@/utils/rbac'
+import { ContactBar } from '@/components/ui/ContactBar'
 
 const formatPrice = (priceCents: number, currency: string) => {
   return new Intl.NumberFormat('pt-PT', {
@@ -222,6 +223,12 @@ export const RegisterPage: React.FC = () => {
             </div>
           </form>
         </div>
+
+        <ContactBar
+          email="sr.metzker.lucas@gmail.com"
+          whatsapp="34624250681"
+          whatsappMessage="¡Hola! Necesito ayuda con Stratto."
+        />
       </div>
     </div>
   )
