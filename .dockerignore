@@ -1,0 +1,32 @@
+# Dependencies and package manager caches
+**/node_modules
+**/.pnpm-store
+**/.npm
+
+# Build and tool caches
+**/dist
+**/build
+**/.cache
+**/.turbo
+**/.vite
+**/coverage
+**/*.tsbuildinfo
+
+# Env files
+**/.env
+**/.env.*
+!**/.env.example
+
+# Git/IDE/system
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Logs
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
