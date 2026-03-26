@@ -6,6 +6,7 @@ import { deleteUser } from './controllers/DeleteUserController'
 import { login } from './controllers/LoginController'
 import { register } from './controllers/RegisterController'
 import { listPublicPlans } from './controllers/ListPublicPlansController'
+import { captureLead } from './controllers/CaptureLeadController'
 import { getSubscriptionStatus } from './controllers/GetSubscriptionStatusController'
 import { markSubscriptionAsPaid } from './controllers/MarkSubscriptionAsPaidController'
 import { changeSubscriptionPlan } from './controllers/ChangeSubscriptionPlanController'
@@ -18,6 +19,7 @@ const router = Router()
 router.post('/login', login)
 router.post('/register', register)
 router.get('/plans/public', listPublicPlans)
+router.post('/lead', captureLead)
 
 router.use(authenticateToken)
 

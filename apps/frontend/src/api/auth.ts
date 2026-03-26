@@ -118,6 +118,15 @@ export const authApi = {
     return toAuthResponse(response.data)
   },
 
+  captureLead: async (payload: {
+    name: string
+    email: string
+    phone?: string
+    establishmentName: string
+  }): Promise<void> => {
+    await apiClient.post('/users/lead', payload)
+  },
+
   getPublicPlans: async (): Promise<PublicPlan[]> => {
     const response = await apiClient.get<PublicPlan[]>('/users/plans/public')
     return response.data

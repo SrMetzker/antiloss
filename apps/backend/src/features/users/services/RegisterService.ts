@@ -8,6 +8,7 @@ interface RegisterInput {
   email: string
   password: string
   name: string
+  phone?: string
   establishmentName: string
   planCode?: string
 }
@@ -57,6 +58,7 @@ export class RegisterService {
           email: input.email,
           password: hashedPassword,
           name: input.name,
+          ...(input.phone ? { phone: input.phone } : {}),
           role: 'MANAGER',
           createdBy: 'self-signup'
         },

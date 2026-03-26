@@ -60,6 +60,7 @@ export interface RegisterPayload {
   email: string
   password: string
   name: string
+  phone?: string
   establishmentName: string
   planCode?: string
 }
