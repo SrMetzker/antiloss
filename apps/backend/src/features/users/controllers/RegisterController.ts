@@ -6,7 +6,7 @@ const service = new RegisterService()
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password, name, establishmentName, planCode } = req.body
+    const { email, password, name, phone, establishmentName, planCode } = req.body
 
     if (!email) throw new ValidationError('El email es obligatorio')
     if (!password) throw new ValidationError('La contraseña es obligatoria')
@@ -17,6 +17,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       email,
       password,
       name,
+      ...(typeof phone === 'string' && phone.trim() ? { phone: phone.trim() } : {}),
       establishmentName,
       planCode
     })

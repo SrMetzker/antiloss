@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { toast } from '@/store/toastStore'
 import { getDefaultRouteForRole } from '@/utils/rbac'
+import { ContactBar } from '@/components/ui/ContactBar'
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate()
@@ -46,15 +47,18 @@ export const LoginPage: React.FC = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand/3 rounded-full blur-[100px]" />
       </div>
 
-      <div className="w-full max-w-sm relative animate-slide-up">
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-10">
-          <img src="/logo.png" alt="Stratto" className="w-20 h-20 object-contain mb-4" />
-          <h1 className="text-3xl font-display font-bold text-white">Stratto</h1>
-          <p className="text-gray-400 text-sm mt-1">Controla tu stock sin pérdidas</p>
+      <div className="w-full max-w-md relative animate-slide-up">
+        {/* Branding above the form card, with logo next to title and slogan */}
+        <div className="flex items-center justify-center gap-4 mb-8">
+          <img src="/logo.png" alt="Stratto" className="w-20 h-20 object-contain" />
+          <div className="text-left">
+            <h1 className="text-3xl font-display font-bold text-white leading-none">Stratto</h1>
+            <p className="text-gray-400 text-xs mt-2 max-w-[210px]">
+              Controla tu stock sin pérdidas.
+            </p>
+          </div>
         </div>
 
-        {/* Form card */}
         <div className="card p-6">
           <h2 className="font-display font-bold text-white text-xl mb-6">Sign in</h2>
 
@@ -102,15 +106,18 @@ export const LoginPage: React.FC = () => {
           </form>
         </div>
 
-        <p className="text-center text-xs text-gray-500 mt-4">
-          Use your credentials to sign in.
-        </p>
-        <p className="text-center text-xs text-gray-400 mt-2">
+        <p className="text-center text-xs text-gray-400 mt-4">
           Don't have an account yet?{' '}
           <Link to="/register" className="text-brand hover:text-brand-light transition-colors">
             Sign up
           </Link>
         </p>
+
+        <ContactBar
+          email="sr.metzker.lucas@gmail.com"
+          whatsapp="34624250681"
+          whatsappMessage="¡Hola! Necesito ayuda con Stratto."
+        />
       </div>
     </div>
   )
